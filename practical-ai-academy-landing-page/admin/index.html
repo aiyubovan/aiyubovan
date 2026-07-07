@@ -54,18 +54,31 @@
     <button class="btn ghost small hidden" id="signout">Sign out</button>
   </div>
 
-  <!-- ============ LOGIN ============ -->
+  <!-- ============ LOGIN / REGISTER ============ -->
   <div id="authView" class="card" style="max-width:420px;margin:8vh auto 0;">
-    <h2>Admin Login</h2>
-    <label>Email</label>
-    <input type="email" id="authEmail" autocomplete="username" placeholder="you@example.com">
-    <label>Password</label>
-    <input type="password" id="authPass" autocomplete="current-password" placeholder="••••••••">
-    <div class="row" style="margin-top:18px;">
-      <button class="btn" id="loginBtn">Log in</button>
-      <button class="btn ghost" id="registerBtn">First-time register</button>
-    </div>
-    <p class="muted" style="margin-top:14px;">Only pre-approved AIYUBOVAN emails can use this panel. First time: register, then click the confirmation link sent to your email, then log in.</p>
+
+    <form id="loginForm" method="post" action="#">
+      <h2>Admin Login</h2>
+      <label for="loginEmail">Email</label>
+      <input type="email" id="loginEmail" name="email" autocomplete="username email" required placeholder="you@example.com">
+      <label for="loginPass">Password</label>
+      <input type="password" id="loginPass" name="password" autocomplete="current-password" required placeholder="••••••••">
+      <div style="margin-top:18px;"><button class="btn" type="submit" style="width:100%;">Log in</button></div>
+      <p class="muted" style="margin-top:14px;text-align:center;">First time here?
+        <a href="#" id="showRegister" style="color:var(--gold);font-weight:700;">Create your admin account</a></p>
+    </form>
+
+    <form id="registerForm" method="post" action="#" class="hidden">
+      <h2>First-time Register</h2>
+      <label for="regEmail">Email</label>
+      <input type="email" id="regEmail" name="email" autocomplete="username email" required placeholder="you@example.com">
+      <label for="regPass">Choose a password (8+ characters)</label>
+      <input type="password" id="regPass" name="new-password" autocomplete="new-password" required minlength="8" placeholder="••••••••">
+      <div style="margin-top:18px;"><button class="btn" type="submit" style="width:100%;">Register</button></div>
+      <p class="muted" style="margin-top:10px;">After registering, click the confirmation link sent to your email, then log in. Only pre-approved AIYUBOVAN emails are accepted.</p>
+      <p class="muted" style="text-align:center;"><a href="#" id="showLogin" style="color:var(--gold);font-weight:700;">← Back to login</a></p>
+    </form>
+
   </div>
 
   <!-- ============ DASHBOARD ============ -->
@@ -137,17 +150,24 @@ const esc = (s) => String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</
 function allowed(email) {
   return ALLOWED_EMAILS.includes(String(email || '').trim().toLowerCase());
 }
-$('loginBtn').onclick = async () => {
-  const email = $('authEmail').value.trim(), password = $('authPass').value;
+$('showRegister').onclick = (e) => { e.preventDefault(); $('loginForm').classList.add('hidden'); $('registerForm').classList.remove('hidden'); };
+$('showLogin').onclick = (e) => { e.preventDefault(); $('registerForm').classList.add('hidden'); $('loginForm').classList.remove('hidden'); };
+
+$('loginForm').onsubmit = async (e) => {
+  e.preventDefault();
+  const email = $('loginEmail').value.trim(), password = $('loginPass').value;
   if (!allowed(email)) return toast('This email is not approved for admin access.', true);
   const { error } = await db.auth.signInWithPassword({ email, password });
   if (error) return toast(error.message, true);
 };
-$('registerBtn').onclick = async () => {
-  const email = $('authEmail').value.trim(), password = $('authPass').value;
+$('registerForm').onsubmit = async (e) => {
+  e.preventDefault();
+  const email = $('regEmail').value.trim(), password = $('regPass').value;
   if (!allowed(email)) return toast('This email is not approved for admin access.', true);
-  if (password.length < 8) return toast('Password needs at least 8 characters.', true);
-  const { error } = await db.auth.signUp({ email, password });
+  const { error } = await db.auth.signUp({
+    email, password,
+    options: { emailRedirectTo: window.location.origin },
+  });
   if (error) return toast(error.message, true);
   toast('Check your email and click the confirmation link, then log in.');
 };
