@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics>
+<script src="./site-content.js"></script>
+</helmet>
+  <!-- ================= TESTIMONIALS ================= -->
+  <section style="max-width:1140px;margin:0 auto;padding:60px 20px;">
+    <div style="text-align:center;max-width:680px;margin:0 auto;">
+      <div style="color:#FBD20A;font-size:13px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;">Testimonials</div>
+      <h2 style="font-size:clamp(27px,6vw,42px);font-weight:900;line-height:1.26;letter-spacing:-.5px;margin:14px 0 0;">What people say about learning with Ruwantha</h2>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px;margin-top:38px;">
+      <sc-for list="{{ visibleTestimonials }}" as="t" hint-placeholder-count="6">
+        <div class="pa-card" style="display:flex;flex-direction:column;background:linear-gradient(155deg,rgba(101,10,52,.20),rgba(133,0,0,.09) 45%,rgba(12,12,15,.55));border:1px solid rgba(245,245,247,.17);border-radius:20px;box-shadow:inset 0 1px 0 rgba(255,255,255,.14),inset 0 -1px 1px rgba(0,0,0,.3),0 22px 46px -30px rgba(0,0,0,.9);padding:26px 24px;">
+          <div style="color:#FBD20A;font-size:15px;letter-spacing:-1px;margin-bottom:12px;">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+          <p style="margin:0 0 20px;font-size:15.5px;line-height:1.62;color:rgba(245,245,247,.96);flex:1;">&ldquo;{{ t.quote }}&rdquo;</p>
+          <div style="display:flex;align-items:center;gap:13px;">
+            <div style="flex:none;width:44px;height:44px;border-radius:50%;background:linear-gradient(150deg,#650A34,#850000);border:1px solid rgba(251,210,10,.35);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:16px;color:#FBD20A;">{{ t.initial }}</div>
+            <div>
+              <div style="font-size:15px;font-weight:700;">{{ t.name }}</div>
+              <div style="font-size:13px;color:rgba(245,245,247,.55);">{{ t.role }}, {{ t.city }}</div>
+            </div>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+    <sc-if value="{{ hasHiddenReviews }}" hint-placeholder-val="{{ false }}">
+      <div style="text-align:center;margin-top:30px;">
+        <button onClick="{{ toggleReviews }}" style="cursor:pointer;font-family:inherit;font-size:15px;font-weight:700;color:#FBD20A;background:transparent;border:1px solid rgba(251,210,10,.45);border-radius:999px;padding:12px 26px;transition:background .2s;" style-hover="background:rgba(251,210,10,.12);">{{ reviewsToggleLabel }}</button>
+      </div>
+    </sc-if>
+    <div style="text-align:center;margin-top:28px;">
+      <span style="font-size:15px;color:rgba(245,245,247,.62);">Want more proof? </span>
+      <a href="https://www.youtube.com/@AIYUBOVAN" target="_blank" rel="noopener" style="display:inline-block;padding:10px 4px;margin:-6px 0;font-size:15px;font-weight:700;color:#FBD20A;text-decoration:none;"><span style="border-bottom:1px solid rgba(251,210,10,.4);padding-bottom:2px;">Check my YouTube channel</span></a>
+    </div>
+  </section>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { showAllReviews: false };
+  componentDidMount() {
+    if (!window.PA_CONTENT) this._t = setTimeout(() => this.forceUpdate(), 400);
+  }
+  componentWillUnmount() { if (this._t) clearTimeout(this._t); }
+  renderVals() {
+    // Reviews are edited in site-content.js (testimonials list)
+    const C = window.PA_CONTENT || {};
+    const testimonials = C.testimonials || [];
+    return {
+      visibleTestimonials: this.state.showAllReviews ? testimonials : testimonials.slice(0, 6),
+      hasHiddenReviews: testimonials.length > 6,
+      reviewsToggleLabel: this.state.showAllReviews
+        ? 'Show fewer reviews'
+        : 'Show all ' + testimonials.length + ' reviews',
+      toggleReviews: () => this.setState((s) => ({ showAllReviews: !s.showAllReviews })),
+    };
+  }
+}
+</script>
+</body>
+</html>

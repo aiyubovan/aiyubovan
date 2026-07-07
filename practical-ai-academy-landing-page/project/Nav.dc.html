@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics>
+<script src="./site-content.js"></script>
+<style>
+  .pa-navlink:hover{background:rgba(251,210,10,.15);color:#FBD20A !important;}
+  [style*="253, 226, 92"]{position:relative;overflow:hidden;transition:transform .28s cubic-bezier(.2,.7,.2,1),box-shadow .28s ease,filter .28s ease;}
+  [style*="253, 226, 92"]:hover{transform:translateY(-2px) scale(1.015);box-shadow:0 22px 52px -12px rgba(251,210,10,.72);filter:brightness(1.06);}
+  [style*="253, 226, 92"]::after{content:"";position:absolute;top:0;bottom:0;left:-75%;width:55%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.6),transparent);transform:skewX(-18deg);transition:left .6s ease;pointer-events:none;}
+  [style*="253, 226, 92"]:hover::after{left:145%;}
+  @media(min-width:900px){
+    .pa-navlinks{display:flex !important;}
+    .pa-navcta{display:inline-flex !important;}
+    .pa-burger{display:none !important;}
+    .pa-mobilemenu{display:none !important;}
+  }
+  @media(max-width:600px){
+    .pa-cdrow{gap:4px !important;}
+    .pa-cdbox{min-width:38px !important;padding:2px 6px 3px !important;border-radius:8px !important;}
+    .pa-cdnum{font-size:13.5px !important;}
+    .pa-cdunit{font-size:9px !important;}
+    .pa-cdlabel{font-size:11px !important;letter-spacing:.3px !important;}
+    .pa-cdwrap{padding:5px 10px !important;gap:5px 10px !important;}
+  }
+</style>
+</helmet>
+<nav style="position:fixed;top:0;left:0;right:0;z-index:100;background:linear-gradient(180deg,rgba(10,10,12,.97),rgba(10,10,12,.93));border-bottom:1px solid rgba(245,245,247,.08);font-family:'Noto Sans','Noto Sans Sinhala',system-ui,-apple-system,sans-serif;">
+  <div style="max-width:1200px;margin:0 auto;padding:11px 18px;display:flex;align-items:center;justify-content:space-between;gap:14px;">
+    <a href="{{ homeHref }}" onClick="{{ closeMenu }}" style="display:flex;align-items:center;text-decoration:none;flex:none;padding:6px 12px;border-radius:13px;background:linear-gradient(180deg,rgba(245,245,247,.09),rgba(245,245,247,.02));border:1px solid rgba(245,245,247,.13);box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 6px 18px -10px rgba(0,0,0,.8);">
+      <img src="assets/logo.webp" alt="AIYUBOVAN" style="height:36px;width:auto;display:block;filter:drop-shadow(0 1px 2px rgba(0,0,0,.55));">
+    </a>
+
+    <div style="display:none;align-items:center;gap:3px;background:linear-gradient(180deg,rgba(245,245,247,.09),rgba(245,245,247,.03));border:1px solid rgba(245,245,247,.14);border-radius:999px;padding:5px;box-shadow:inset 0 1px 0 rgba(255,255,255,.1),0 8px 22px -14px rgba(0,0,0,.9);" class="pa-navlinks">
+      <a href="{{ homeHref }}" class="pa-navlink" style="text-decoration:none;font-size:14.5px;font-weight:600;color:rgba(245,245,247,.9);padding:8px 15px;border-radius:999px;transition:background .2s,color .2s;">Home</a>
+      <span style="width:1px;height:20px;background:rgba(245,245,247,.14);flex:none;"></span>
+      <a href="Courses.dc.html" class="pa-navlink" style="text-decoration:none;font-size:14.5px;font-weight:600;color:rgba(245,245,247,.9);padding:8px 15px;border-radius:999px;transition:background .2s,color .2s;">Courses</a>
+      <span style="width:1px;height:20px;background:rgba(245,245,247,.14);flex:none;"></span>
+      <a href="One-to-One Consultation.dc.html" class="pa-navlink" style="text-decoration:none;font-size:14.5px;font-weight:600;color:rgba(245,245,247,.9);padding:8px 15px;border-radius:999px;transition:background .2s,color .2s;">One-to-One Consultation</a>
+      <span style="width:1px;height:20px;background:rgba(245,245,247,.14);flex:none;"></span>
+      <a href="https://ko-fi.com/aiyubovan" target="_blank" rel="noopener" class="pa-navlink" style="text-decoration:none;font-size:14.5px;font-weight:600;color:rgba(245,245,247,.9);padding:8px 15px;border-radius:999px;transition:background .2s,color .2s;">Shop</a>
+    </div>
+
+    <div style="display:flex;align-items:center;gap:12px;flex:none;">
+      <sc-if value="{{ regOpen }}" hint-placeholder-val="{{ true }}">
+        <a href="{{ registerHref }}" style="display:none;align-items:center;justify-content:center;background:linear-gradient(180deg,#FDE25C,#FBD20A);color:#2A0512;font-weight:800;font-size:14.5px;border-radius:999px;padding:11px 20px;text-decoration:none;box-shadow:0 10px 26px -10px rgba(251,210,10,.55);" class="pa-navcta">දැන්ම ලියාපදිංචි වන්න</a>
+      </sc-if>
+      <button onClick="{{ toggleMenu }}" aria-label="Menu" style="display:flex;flex-direction:column;justify-content:center;gap:5px;width:42px;height:42px;padding:0 11px;background:rgba(245,245,247,.05);border:1px solid rgba(245,245,247,.13);border-radius:12px;cursor:pointer;" class="pa-burger">
+        <span style="display:block;height:2px;background:#F5F5F7;border-radius:2px;"></span>
+        <span style="display:block;height:2px;background:#F5F5F7;border-radius:2px;"></span>
+        <span style="display:block;height:2px;background:#F5F5F7;border-radius:2px;"></span>
+      </button>
+    </div>
+  </div>
+
+  <sc-if value="{{ showCdBar }}">
+    <div style="border-top:1px solid rgba(240,64,60,.28);background:linear-gradient(90deg,rgba(101,10,52,.6),rgba(133,0,0,.4) 50%,rgba(101,10,52,.6));">
+      <div class="pa-cdwrap" style="max-width:1200px;margin:0 auto;padding:6px 14px;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:8px 14px;">
+        <span class="pa-cdlabel" style="font-size:12.5px;font-weight:800;letter-spacing:.5px;color:#FF9B94;">{{ cdLabel }}</span>
+        <sc-if value="{{ showCd }}">
+        <div class="pa-cdrow" style="display:flex;align-items:center;gap:6px;">
+          <span class="pa-cdbox" style="display:inline-flex;flex-direction:column;align-items:center;min-width:46px;background:rgba(12,12,15,.6);border:1px solid rgba(240,64,60,.4);border-radius:9px;padding:3px 8px 4px;">
+            <span class="pa-cdnum" style="font-size:16px;font-weight:900;color:#FBD20A;font-variant-numeric:tabular-nums;line-height:1.2;">{{ cdDays }}</span>
+            <span class="pa-cdunit" style="font-size:10px;font-weight:700;color:rgba(245,245,247,.6);line-height:1.2;">දින</span>
+          </span>
+          <span class="pa-cdbox" style="display:inline-flex;flex-direction:column;align-items:center;min-width:46px;background:rgba(12,12,15,.6);border:1px solid rgba(240,64,60,.4);border-radius:9px;padding:3px 8px 4px;">
+            <span class="pa-cdnum" style="font-size:16px;font-weight:900;color:#FBD20A;font-variant-numeric:tabular-nums;line-height:1.2;">{{ cdHrs }}</span>
+            <span class="pa-cdunit" style="font-size:10px;font-weight:700;color:rgba(245,245,247,.6);line-height:1.2;">පැය</span>
+          </span>
+          <span class="pa-cdbox" style="display:inline-flex;flex-direction:column;align-items:center;min-width:46px;background:rgba(12,12,15,.6);border:1px solid rgba(240,64,60,.4);border-radius:9px;padding:3px 8px 4px;">
+            <span class="pa-cdnum" style="font-size:16px;font-weight:900;color:#FBD20A;font-variant-numeric:tabular-nums;line-height:1.2;">{{ cdMins }}</span>
+            <span class="pa-cdunit" style="font-size:10px;font-weight:700;color:rgba(245,245,247,.6);line-height:1.2;">මිනිත්තු</span>
+          </span>
+          <span class="pa-cdbox" style="display:inline-flex;flex-direction:column;align-items:center;min-width:46px;background:rgba(12,12,15,.6);border:1px solid rgba(240,64,60,.4);border-radius:9px;padding:3px 8px 4px;">
+            <span class="pa-cdnum" style="font-size:16px;font-weight:900;color:#FBD20A;font-variant-numeric:tabular-nums;line-height:1.2;">{{ cdSecs }}</span>
+            <span class="pa-cdunit" style="font-size:10px;font-weight:700;color:rgba(245,245,247,.6);line-height:1.2;">තත්පර</span>
+          </span>
+        </div>
+        </sc-if>
+        <sc-if value="{{ regClosed }}">
+          <span style="display:inline-flex;align-items:center;gap:7px;background:rgba(240,64,60,.12);color:#FF9B94;font-weight:700;font-size:12.5px;border:1px solid rgba(240,64,60,.4);border-radius:999px;padding:4px 13px;">
+            <span style="width:5px;height:5px;border-radius:50%;background:#FF5A52;box-shadow:0 0 8px rgba(255,90,82,.9);"></span>
+            ඊළඟ කණ්ඩායම: {{ nextBatch }}
+          </span>
+        </sc-if>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ menuOpen }}">
+    <div style="border-top:1px solid rgba(245,245,247,.08);background:rgba(12,12,16,.98);padding:12px 18px 20px;display:flex;flex-direction:column;gap:4px;" class="pa-mobilemenu">
+      <a href="{{ homeHref }}" onClick="{{ closeMenu }}" style="text-decoration:none;font-size:16px;font-weight:600;color:#F5F5F7;padding:13px 6px;border-bottom:1px solid rgba(245,245,247,.06);">Home</a>
+      <a href="Courses.dc.html" onClick="{{ closeMenu }}" style="text-decoration:none;font-size:16px;font-weight:600;color:#F5F5F7;padding:13px 6px;border-bottom:1px solid rgba(245,245,247,.06);">Courses</a>
+      <a href="One-to-One Consultation.dc.html" onClick="{{ closeMenu }}" style="text-decoration:none;font-size:16px;font-weight:600;color:#F5F5F7;padding:13px 6px;border-bottom:1px solid rgba(245,245,247,.06);">One-to-One Consultation</a>
+      <a href="https://ko-fi.com/aiyubovan" target="_blank" rel="noopener" onClick="{{ closeMenu }}" style="text-decoration:none;font-size:16px;font-weight:600;color:#F5F5F7;padding:13px 6px;border-bottom:1px solid rgba(245,245,247,.06);">Shop</a>
+      <sc-if value="{{ regOpen }}" hint-placeholder-val="{{ true }}">
+        <a href="{{ registerHref }}" onClick="{{ closeMenu }}" style="margin-top:12px;text-align:center;background:linear-gradient(180deg,#FDE25C,#FBD20A);color:#2A0512;font-weight:800;font-size:16px;border-radius:999px;padding:14px 20px;text-decoration:none;">දැන්ම ලියාපදිංචි වන්න</a>
+      </sc-if>
+
+    </div>
+  </sc-if>
+</nav>
+<div aria-hidden="true" class="pa-navspacer" style="height:71px;"></div>
+<sc-if value="{{ showCdBar }}"><div aria-hidden="true" class="pa-navspacer-cd" style="height:52px;"></div></sc-if>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:&quot;100%&quot;,&quot;height&quot;:64},&quot;homeHref&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;#home&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;registerHref&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;#pricing&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;showCountdown&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;}}">
+class Component extends DCLogic {
+  state = { menuOpen: false };
+  componentDidMount() {
+    // site-content.js may finish loading just after first render
+    if (!window.PA_CONTENT) {
+      this._t = setTimeout(() => this.forceUpdate(), 400);
+    }
+    // live countdown tick
+    this._tick = setInterval(() => this.forceUpdate(), 1000);
+
+    // The fixed header's real height varies (countdown bar wraps on small
+    // screens), so measure it and keep the content spacer + anchor-scroll
+    // offset in sync. The static spacers remain as a no-JS fallback; once
+    // this rule is live the measured spacer takes over.
+    this._navSync = () => {
+      const nav = document.querySelector('nav');
+      if (!nav) return;
+      const h = Math.ceil(nav.getBoundingClientRect().height);
+      if (!h || h === this._lastNavH) return;
+      this._lastNavH = h;
+      let st = document.getElementById('pa-nav-sync');
+      if (!st) {
+        st = document.createElement('style');
+        st.id = 'pa-nav-sync';
+        document.head.appendChild(st);
+      }
+      st.textContent =
+        '.pa-navspacer{height:' + h + 'px !important;}' +
+        '.pa-navspacer-cd{display:none !important;}' +
+        'html{scroll-padding-top:' + (h + 14) + 'px !important;}';
+    };
+    this._navSync();
+    window.addEventListener('resize', this._navSync);
+    this._navSyncTick = setInterval(this._navSync, 500);
+  }
+  componentWillUnmount() {
+    if (this._t) clearTimeout(this._t);
+    if (this._tick) clearInterval(this._tick);
+    if (this._navSyncTick) clearInterval(this._navSyncTick);
+    if (this._navSync) window.removeEventListener('resize', this._navSync);
+  }
+  renderVals() {
+    const S = (window.PA_CONTENT && window.PA_CONTENT.settings) || {};
+    const regOpen = S.registrationOpen !== false;
+
+    // Countdown bar (Sri Lanka time). Shown only on pages that pass
+    // show-countdown="true" to this Nav.
+    //  - registration CLOSED -> counts down to registrationOpensOn
+    //  - registration OPEN   -> counts down to registrationClosesOn;
+    //    once that moment passes, shows "registration has ended".
+    const cdAllowed = String(this.props.showCountdown) === 'true';
+    const parseLK = (v) => {
+      let iso = String(v).trim().replace(' ', 'T');
+      if (iso.length <= 10) iso += 'T00:00';
+      if (iso.length === 16) iso += ':00';
+      return new Date(iso + '+05:30').getTime();
+    };
+    let showCd = false, showCdBar = false, cdLabel = '';
+    let cdDays = '0', cdHrs = '00', cdMins = '00', cdSecs = '00';
+    const targetVal = regOpen ? S.registrationClosesOn : S.registrationOpensOn;
+    if (cdAllowed && targetVal) {
+      const target = parseLK(targetVal);
+      const diff = target - Date.now();
+      if (isFinite(target) && diff > 0) {
+        const pad = (n) => String(n).padStart(2, '0');
+        const s = Math.floor(diff / 1000);
+        cdDays = String(Math.floor(s / 86400));
+        cdHrs = pad(Math.floor((s % 86400) / 3600));
+        cdMins = pad(Math.floor((s % 3600) / 60));
+        cdSecs = pad(s % 60);
+        showCd = true;
+        showCdBar = true;
+        cdLabel = regOpen ? 'ලියාපදිංචිය අවසන් වෙන්නේ' : 'ලියාපදිංචිය විවෘත වෙන්නේ';
+      } else if (isFinite(target) && regOpen) {
+        // registration window ran out
+        showCdBar = true;
+        cdLabel = 'ලියාපදිංචිය අවසන් වී ඇත';
+      }
+    }
+
+    return {
+      regOpen,
+      regClosed: !regOpen,
+      showCd, showCdBar, cdLabel, cdDays, cdHrs, cdMins, cdSecs,
+      nextBatch: S.nextBatchDate || '2026 අගෝස්තු 21',
+      homeHref: this.props.homeHref || '#home',
+      registerHref: this.props.registerHref || '#pricing',
+      menuOpen: this.state.menuOpen,
+      toggleMenu: () => this.setState((s) => ({ menuOpen: !s.menuOpen })),
+      closeMenu: () => this.setState({ menuOpen: false }),
+    };
+  }
+}
+</script>
+</body>
+</html>

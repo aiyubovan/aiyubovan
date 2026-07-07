@@ -1,0 +1,20 @@
+# Security headers — applied automatically when this folder is deployed on
+# Netlify or Cloudflare Pages. For Vercel/nginx/Apache, copy these into the
+# equivalent config (vercel.json / server block / .htaccess).
+#
+# CSP notes:
+# - 'unsafe-inline' is required because the design system uses inline styles
+#   and scripts throughout.
+# - 'unsafe-eval' is required by support.js (the page runtime uses new Function).
+# - Only Cal.com and Google Fonts are allowed as external sources; everything
+#   else is blocked, so an injected script tag pointing anywhere else won't run.
+# - IMPORTANT: after deploying, open every page once with DevTools console open
+#   and confirm there are no CSP violation errors before announcing the site.
+
+/*
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: SAMEORIGIN
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=()
+  Strict-Transport-Security: max-age=31536000; includeSubDomains
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://app.cal.com https://tally.so; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://app.cal.com https://tally.so; frame-src https://app.cal.com https://cal.com https://tally.so; connect-src 'self' https://app.cal.com https://*.cal.com https://tally.so; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'; upgrade-insecure-requests

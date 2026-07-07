@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics>
+<script src="./site-content.js"></script>
+</helmet>
+  <!-- ================= PRICING ================= -->
+  <section id="pricing" style="position:relative;overflow:hidden;padding:64px 20px;">
+    <div style="position:absolute;inset:0;pointer-events:none;background:radial-gradient(55% 60% at 50% 40%,rgba(101,10,52,.4),transparent 70%);"></div>
+    <div style="position:relative;max-width:640px;margin:0 auto;">
+      <div style="text-align:center;">
+        <div style="color:#FBD20A;font-size:13px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;">Enrollment</div>
+        <h2 style="font-size:clamp(27px,6vw,42px);font-weight:900;line-height:1.26;letter-spacing:-.5px;margin:14px 0 26px;">හැමදේම ඇතුළත් සරල එකම මිලක්.</h2>
+      </div>
+
+      <div style="position:relative;overflow:hidden;background:linear-gradient(155deg,rgba(101,10,52,.5),rgba(133,0,0,.24) 55%,rgba(12,12,15,.65));border:1px solid rgba(251,210,10,.3);border-radius:28px;box-shadow:inset 0 1px 0 rgba(255,255,255,.17),inset 0 -1px 1px rgba(0,0,0,.32),0 40px 90px -40px rgba(0,0,0,1),0 0 60px -30px rgba(251,210,10,.4);padding:clamp(28px,6vw,44px);">
+        <div style="position:absolute;right:-50px;top:-50px;width:220px;height:220px;pointer-events:none;background:radial-gradient(circle,rgba(251,210,10,.2),transparent 62%);"></div>
+        <div style="position:relative;text-align:center;">
+          <sc-if value="{{ regClosed }}">
+            <div style="margin-bottom:20px;">
+              <div style="display:inline-flex;flex-direction:column;align-items:center;gap:3px;border:3px solid rgba(240,64,60,.85);border-radius:16px;background:rgba(240,64,60,.09);padding:12px 24px;transform:rotate(-3deg);box-shadow:0 0 0 4px rgba(240,64,60,.18),0 14px 34px -16px rgba(0,0,0,.8);">
+                <span style="font-size:11.5px;font-weight:800;letter-spacing:2.5px;color:#FF6B63;text-transform:uppercase;">Next batch starts on</span>
+                <span style="font-size:22px;font-weight:900;color:#FF6B63;letter-spacing:.5px;">{{ nextBatch }}</span>
+              </div>
+            </div>
+          </sc-if>
+          <div style="display:inline-block;font-size:15px;font-weight:700;letter-spacing:.3px;color:rgba(245,245,247,.96);background:rgba(245,245,247,.06);border:1px solid rgba(245,245,247,.14);border-radius:999px;padding:6px 14px;">සම්පූර්ණ පාඨමාලාව සඳහා</div>
+          <div style="margin-top:20px;font-size:18px;color:rgba(245,245,247,.96);">තනි තනිව ඉගැන්වූවා නම් වටිනාකම</div>
+          <div style="font-size:30px;font-weight:700;color:rgba(245,245,247,.62);text-decoration:line-through;text-decoration-color:rgba(251,210,10,.6);">Rs. 45,000</div>
+          <div style="display:flex;align-items:baseline;justify-content:center;gap:8px;margin-top:6px;">
+            <span style="font-size:20px;font-weight:700;color:#FBD20A;">Rs.</span>
+            <span style="font-size:clamp(52px,13vw,74px);font-weight:900;line-height:1;color:#FBD20A;letter-spacing:-2px;">9,900</span>
+          </div>
+          <div style="font-size:16px;color:rgba(245,245,247,.96);margin-top:6px;">සම්පූර්ණ සති 10 පාඨමාලාව සඳහාම එකවර ගෙවීම</div>
+        </div>
+
+        <div style="position:relative;height:1px;background:rgba(245,245,247,.12);margin:26px 0;"></div>
+
+        <div style="position:relative;display:flex;flex-direction:column;gap:13px;">
+          <sc-for list="{{ pricingIncludes }}" as="p" hint-placeholder-count="6">
+            <div style="display:flex;align-items:flex-start;gap:12px;">
+              <span style="flex:none;width:22px;height:22px;border-radius:50%;background:rgba(251,210,10,.14);display:flex;align-items:center;justify-content:center;margin-top:1px;">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#FBD20A" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+              </span>
+              <span style="font-size:16.5px;font-weight:600;line-height:1.6;color:rgba(245,245,247,.95);">{{ p }}</span>
+            </div>
+          </sc-for>
+        </div>
+
+        <sc-if value="{{ regOpen }}" hint-placeholder-val="{{ true }}">
+          <div style="position:relative;">
+            <a href="Application Guide.dc.html#apply" style="display:flex;align-items:center;justify-content:center;margin-top:28px;background:linear-gradient(180deg,#FDE25C,#FBD20A);color:#2A0512;font-weight:800;font-size:18px;border-radius:999px;padding:18px 30px;text-decoration:none;box-shadow:0 16px 38px -12px rgba(251,210,10,.6);">දැන්ම ලියාපදිංචි වන්න</a>
+            <p style="text-align:center;margin:16px 0 0;font-size:15.5px;font-weight:600;color:#FBD20A;">කණ්ඩායම පිරුණු වහාම ලියාපදිංචිය අවසන් වේ.</p>
+            <p style="text-align:center;margin:6px 0 0;font-size:15px;color:rgba(245,245,247,.96);">Card මගින් හෝ Bank Transfer මගින් පහසුවෙන් ගෙවන්න.</p>
+          </div>
+        </sc-if>
+        <sc-if value="{{ regClosed }}">
+          <div style="position:relative;">
+            <span style="display:flex;align-items:center;justify-content:center;margin-top:28px;background:rgba(245,245,247,.06);color:rgba(245,245,247,.5);font-weight:800;font-size:18px;border:1px solid rgba(245,245,247,.14);border-radius:999px;padding:18px 30px;cursor:not-allowed;">ලියාපදිංචිය දැන් වසා ඇත</span>
+            <p style="text-align:center;margin:16px 0 0;font-size:15.5px;font-weight:700;color:#FF7B72;">ඊළඟ කණ්ඩායම {{ nextBatch }} පටන් ගන්නවා. Course එක පටන් ගන්න සති දෙකකට කලින් ලියාපදිංචිය නැවත විවෘත වෙනවා.</p>
+          </div>
+        </sc-if>
+      </div>
+    </div>
+  </section>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  componentDidMount() {
+    if (!window.PA_CONTENT) this._t = setTimeout(() => this.forceUpdate(), 400);
+  }
+  componentWillUnmount() { if (this._t) clearTimeout(this._t); }
+  renderVals() {
+    const C = window.PA_CONTENT || {};
+    const S = C.settings || {};
+    const regOpen = S.registrationOpen !== false;
+    return {
+      pricingIncludes: C.pricingIncludes || [],
+      regOpen, regClosed: !regOpen,
+      nextBatch: S.nextBatchDate || '',
+    };
+  }
+}
+</script>
+</body>
+</html>

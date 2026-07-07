@@ -1,0 +1,16 @@
+# macOS
+.DS_Store
+
+# Original Claude Design export (14MB zip)
+*.zip
+
+# Design-time files kept out of the public repo:
+# - original uncompressed images
+# - personal screenshots from design sessions (privacy)
+practical-ai-academy-landing-page/design-archive/
+
+# 900KB compiled design snapshot (not used by the live site)
+practical-ai-academy-landing-page/project/Practical AI Academy.html
+
+# Claude Code local settings
+.claude/settings.local.json

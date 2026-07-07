@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700;800;900&family=Noto+Sans+Sinhala:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:#0A0A0C;color:#F5F5F7;font-family:'Noto Sans','Noto Sans Sinhala',system-ui,-apple-system,sans-serif;-webkit-font-smoothing:antialiased;}
+  ::selection{background:#FBD20A;color:#2A0512;}
+  a{color:inherit;}
+</style>
+</helmet>
+<div style="min-height:100vh;display:flex;flex-direction:column;">
+  <dc-import name="Nav" home-href="Practical AI Academy.dc.html#home" register-href="Application Guide.dc.html#apply" hint-size="100%,64px"></dc-import>
+
+  <main style="flex:1;position:relative;overflow:hidden;padding:56px 20px 72px;">
+    <div style="position:absolute;inset:0;pointer-events:none;background:radial-gradient(70% 30% at 50% 0%,rgba(101,10,52,.4),transparent 68%);"></div>
+    <div style="position:relative;max-width:780px;margin:0 auto;">
+      <div style="color:#FBD20A;font-size:12.5px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;">Legal</div>
+      <h1 style="margin:12px 0 0;font-size:clamp(30px,7vw,46px);font-weight:900;line-height:1.1;letter-spacing:-.8px;">Terms &amp; Conditions</h1>
+      <p style="margin:12px 0 0;font-size:14px;color:rgba(245,245,247,.5);">Last updated: {{ updated }}</p>
+      <div style="margin:20px 0 0;background:linear-gradient(155deg,rgba(101,10,52,.18),rgba(12,12,15,.5));border:1px solid rgba(245,245,247,.14);border-radius:14px;box-shadow:inset 0 1px 0 rgba(255,255,255,.08);padding:16px 18px;font-size:14px;line-height:1.6;color:rgba(245,245,247,.6);">This is placeholder text so you can see the layout. Please replace each section with your finalized wording before going live.</p>
+
+      <div style="margin-top:34px;display:flex;flex-direction:column;gap:30px;">
+        <sc-for list="{{ sections }}" as="s" hint-placeholder-count="9">
+          <div>
+            <h2 style="margin:0 0 10px;font-size:clamp(19px,4.4vw,23px);font-weight:800;color:#F5F5F7;">{{ s.h }}</h2>
+            <p style="margin:0;font-size:clamp(15px,3.6vw,16.5px);line-height:1.72;color:rgba(245,245,247,.68);">{{ s.p }}</p>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </main>
+
+  <dc-import name="Footer" hint-size="100%,360px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      updated: '1 July 2026',
+      sections: [
+        { h: '1. Acceptance of Terms', p: 'By enrolling in Practical AI Academy or using any AIYUBOVAN service, you agree to these terms. If you do not agree, please do not register. Placeholder text, replace with your final wording.' },
+        { h: '2. Enrollment and Access', p: 'Enrollment gives you access to the live sessions, recordings and materials for the batch you join. Access is personal to you and should not be shared with others. Placeholder text.' },
+        { h: '3. Payments and Pricing', p: 'All prices are shown in Sri Lankan Rupees. Payment can be made by card or bank transfer, and your seat is confirmed once payment is received. Placeholder text.' },
+        { h: '4. Refund Policy', p: 'You may request a full refund within the first two weeks of the course, no questions asked. After this period, fees are non refundable. Placeholder text.' },
+        { h: '5. Use of Course Materials', p: 'Recordings, notes and resources are for your personal learning only. You may not resell, redistribute or publish them without written permission. Placeholder text.' },
+        { h: '6. Intellectual Property', p: 'All course content, branding and materials remain the property of AIYUBOVAN. Placeholder text, replace with your final wording.' },
+        { h: '7. Community Conduct', p: 'We expect respectful behaviour in the WhatsApp community and live sessions. We may remove anyone who is abusive or disruptive. Placeholder text.' },
+        { h: '8. Limitation of Liability', p: 'The course provides education and guidance. Results depend on your own effort, and we cannot guarantee specific outcomes. Placeholder text.' },
+        { h: '9. Changes to These Terms', p: 'We may update these terms from time to time. The latest version will always be available on this page. Placeholder text.' },
+        { h: '10. Contact', p: 'For any questions about these terms, please reach out through the contact details on our main page. Placeholder text.' },
+      ],
+    };
+  }
+}
+</script>
+</body>
+</html>

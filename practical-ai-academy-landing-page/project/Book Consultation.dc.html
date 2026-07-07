@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://app.cal.com" crossorigin>
+<link rel="dns-prefetch" href="https://app.cal.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700;800;900&family=Noto+Sans+Sinhala:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script>
+// Boot the Cal.com embed engine as early as possible so the script downloads
+// in parallel with the page instead of after the runtime mounts.
+(function (C, A, L) {
+  let p = function (a, ar) { a.q.push(ar); };
+  let d = C.document;
+  C.Cal = C.Cal || function () {
+    let cal = C.Cal;
+    let ar = arguments;
+    if (!cal.loaded) {
+      cal.ns = {};
+      cal.q = cal.q || [];
+      d.head.appendChild(d.createElement("script")).src = A;
+      cal.loaded = true;
+    }
+    if (ar[0] === L) {
+      const api = function () { p(api, arguments); };
+      const namespace = ar[1];
+      api.q = api.q || [];
+      if (typeof namespace === "string") {
+        cal.ns[namespace] = cal.ns[namespace] || api;
+        p(cal.ns[namespace], ar);
+        p(cal, ["initNamespace", namespace]);
+      } else p(cal, ar);
+      return;
+    }
+    p(cal, ar);
+  };
+})(window, "https://app.cal.com/embed/embed.js", "init");
+window.Cal("init", "consultation", { origin: "https://app.cal.com" });
+</script>
+<style>
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:#0A0A0C;color:#F5F5F7;font-family:'Noto Sans','Noto Sans Sinhala',system-ui,-apple-system,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden;}
+  ::selection{background:#FBD20A;color:#2A0512;}
+  a{color:inherit;}
+  .pa-backlink{transition:color .2s,transform .2s;}
+  .pa-backlink:hover{color:#FBD20A !important;}
+  .pa-backlink:hover svg{transform:translateX(-3px);}
+  .pa-backlink svg{transition:transform .2s;}
+  @media(min-width:1020px){
+    .pa-book{grid-template-columns:minmax(0,420px) minmax(0,1fr) !important;gap:clamp(32px,4.5vw,64px) !important;align-items:start;}
+    .pa-book-copy{position:sticky;top:100px;}
+    .pa-book-jump{display:none !important;}
+  }
+  @media(max-width:430px){
+    .pa-book-jump{width:100%;}
+  }
+  #cal-booking-embed{width:100%;min-height:620px;overflow:auto;}
+  #cal-booking-embed iframe{border-radius:18px;}
+</style>
+</helmet>
+<div style="min-height:100vh;display:flex;flex-direction:column;">
+  <dc-import name="Nav" home-href="Practical AI Academy.dc.html#home" register-href="Application Guide.dc.html#apply" hint-size="100%,64px"></dc-import>
+
+  <main style="flex:1;position:relative;overflow:hidden;padding:clamp(36px,7vw,64px) 20px 88px;">
+    <div style="position:absolute;inset:0;pointer-events:none;background:radial-gradient(60% 55% at 50% 12%,rgba(133,0,0,.5),transparent 70%),radial-gradient(44% 42% at 14% 86%,rgba(101,10,52,.42),transparent 68%);"></div>
+    <div style="position:absolute;left:22%;top:2%;width:520px;height:520px;max-width:92vw;transform:translateX(-50%);pointer-events:none;background:radial-gradient(circle,rgba(251,210,10,.12),rgba(251,210,10,.03) 42%,transparent 62%);"></div>
+
+    <div class="pa-book" style="position:relative;display:grid;grid-template-columns:1fr;gap:40px;max-width:1180px;margin:0 auto;">
+
+      <!-- ===== LEFT: BRAND COPY ===== -->
+      <div class="pa-book-copy">
+        <a href="Practical AI Academy.dc.html" class="pa-backlink" style="display:inline-flex;align-items:center;gap:9px;text-decoration:none;font-size:14.5px;font-weight:700;color:rgba(245,245,247,.68);margin-bottom:30px;">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+          මුල් පිටුවට ආපහු යන්න
+        </a>
+
+        <div style="display:inline-flex;align-items:center;gap:9px;background:rgba(251,210,10,.08);border:1px solid rgba(251,210,10,.28);border-radius:999px;padding:7px 15px;margin-bottom:20px;">
+          <span style="width:7px;height:7px;border-radius:50%;background:#FBD20A;box-shadow:0 0 12px rgba(251,210,10,.9);"></span>
+          <span style="font-size:12.5px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#FBD20A;">One-to-One Consultation</span>
+        </div>
+
+        <h1 style="margin:0;font-size:clamp(30px,7vw,44px);font-weight:900;line-height:1.18;letter-spacing:-.5px;">ඔයාටම විශේෂිත, පෞද්ගලික AI මගපෙන්වීමක්.</h1>
+
+        <p style="margin:20px 0 0;font-size:clamp(16.5px,4vw,18.5px);line-height:1.85;color:rgba(245,245,247,.94);">මේක ඔයාට විතරක් වෙන් වුණු Private Session එකක්. ඔයාගේ ඉලක්ක මොනවාද, ඔයා පාවිච්චි කරන Tools මොනවාද, ඒවා ඔයාගේ රස්සාවට, ඉගෙනීමට, ව්‍යාපාරයට ගැලපෙන විදිහට පාවිච්චි කරගන්නේ කොහොමද කියලා අපි එකට කතා කරලා සොයාගනිමු.</p>
+
+        <p style="margin:18px 0 0;font-size:clamp(16.5px,4vw,18.5px);line-height:1.85;color:rgba(245,245,247,.94);">Google Meet හරහා, පැයක් පුරාවට, සම්පූර්ණයෙන්ම සිංහලෙන්.</p>
+
+        <div style="display:flex;align-items:baseline;gap:9px;margin-top:28px;">
+          <span style="font-size:16px;color:rgba(245,245,247,.85);">සැසියකට</span>
+          <span style="font-size:18px;font-weight:700;color:#FBD20A;">රු.</span>
+          <span style="font-size:clamp(44px,11vw,58px);font-weight:900;color:#FBD20A;line-height:1;letter-spacing:-2px;">6,250</span>
+          <span style="font-size:18px;font-weight:700;color:#FBD20A;">යි</span>
+        </div>
+
+        <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:26px;">
+          <span style="font-size:14px;font-weight:600;color:rgba(245,245,247,.92);background:rgba(245,245,247,.04);border:1px solid rgba(245,245,247,.1);border-radius:999px;padding:8px 15px;">Google Meet හරහා</span>
+          <span style="font-size:14px;font-weight:600;color:rgba(245,245,247,.92);background:rgba(245,245,247,.04);border:1px solid rgba(245,245,247,.1);border-radius:999px;padding:8px 15px;">පැයක Session එකක්</span>
+          <span style="font-size:14px;font-weight:600;color:rgba(245,245,247,.92);background:rgba(245,245,247,.04);border:1px solid rgba(245,245,247,.1);border-radius:999px;padding:8px 15px;">සම්පූර්ණයෙන්ම සිංහලෙන්</span>
+        </div>
+
+        <a href="#cal-booking-embed" class="pa-book-jump" style="display:inline-flex;align-items:center;justify-content:center;gap:9px;margin-top:28px;background:linear-gradient(180deg,#FDE25C,#FBD20A);color:#2A0512;font-weight:800;font-size:16.5px;border-radius:999px;padding:16px 30px;text-decoration:none;box-shadow:0 14px 34px -10px rgba(251,210,10,.55);">
+          වෙලාවක් තෝරගන්න
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M19 12l-7 7-7-7"/></svg>
+        </a>
+      </div>
+
+      <!-- ===== RIGHT: CAL.COM INLINE BOOKING ===== -->
+      <div style="position:relative;background:linear-gradient(155deg,rgba(101,10,52,.30),rgba(133,0,0,.14) 50%,rgba(12,12,15,.62));border:1px solid rgba(245,245,247,.18);border-radius:26px;box-shadow:inset 0 1px 0 rgba(255,255,255,.14),inset 0 -1px 1px rgba(0,0,0,.3),0 36px 84px -38px rgba(0,0,0,1);padding:clamp(14px,2.4vw,24px);">
+        <div style="position:absolute;right:-50px;top:-50px;width:220px;height:220px;pointer-events:none;background:radial-gradient(circle,rgba(251,210,10,.14),transparent 62%);"></div>
+        <div id="cal-booking-embed" style="position:relative;">
+          <div id="cal-booking-loading" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;min-height:620px;color:rgba(245,245,247,.6);font-size:15px;">
+            <span style="width:34px;height:34px;border-radius:50%;border:3px solid rgba(251,210,10,.2);border-top-color:#FBD20A;animation:pa-spin 1s linear infinite;"></span>
+            Calendar එක Load වෙනවා...
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <dc-import name="Footer" hint-size="100%,360px"></dc-import>
+</div>
+<style>@keyframes pa-spin{to{transform:rotate(360deg);}}</style>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  componentDidMount() {
+    // Cal.com embed engine normally boots from the early <script> in the
+    // helmet (so it downloads in parallel with the page). This is only a
+    // fallback for the case where helmet scripts didn't execute.
+    if (!window.Cal) {
+      (function (C, A, L) {
+        let p = function (a, ar) { a.q.push(ar); };
+        let d = C.document;
+        C.Cal = C.Cal || function () {
+          let cal = C.Cal;
+          let ar = arguments;
+          if (!cal.loaded) {
+            cal.ns = {};
+            cal.q = cal.q || [];
+            d.head.appendChild(d.createElement("script")).src = A;
+            cal.loaded = true;
+          }
+          if (ar[0] === L) {
+            const api = function () { p(api, arguments); };
+            const namespace = ar[1];
+            api.q = api.q || [];
+            if (typeof namespace === "string") {
+              cal.ns[namespace] = cal.ns[namespace] || api;
+              p(cal.ns[namespace], ar);
+              p(cal, ["initNamespace", namespace]);
+            } else p(cal, ar);
+            return;
+          }
+          p(cal, ar);
+        };
+      })(window, "https://app.cal.com/embed/embed.js", "init");
+      window.Cal("init", "consultation", { origin: "https://app.cal.com" });
+    }
+
+    window.Cal.ns.consultation("inline", {
+      elementOrSelector: "#cal-booking-embed",
+      config: { layout: "month_view", theme: "dark" },
+      calLink: "aiyubovan/consultation",
+    });
+
+    // Dark theme + AIYUBOVAN gold as the Cal brand color
+    window.Cal.ns.consultation("ui", {
+      theme: "dark",
+      cssVarsPerTheme: { dark: { "cal-brand": "#FBD20A" } },
+      hideEventTypeDetails: false,
+      layout: "month_view",
+    });
+
+    // mobile "jump to calendar" button — the runtime swallows same-page hash
+    // scrolling and can replace nodes on re-render, so delegate from document
+    document.addEventListener("click", (e) => {
+      const a = e.target.closest && e.target.closest(".pa-book-jump");
+      if (!a) return;
+      e.preventDefault();
+      const el = document.getElementById("cal-booking-embed");
+      // smooth scrolling gets cancelled by the embed's continuous
+      // auto-resize, so jump instantly — reliable on every device
+      if (el) el.scrollIntoView({ behavior: "instant", block: "start" });
+    });
+
+    // remove the placeholder spinner once the embed iframe arrives
+    this._calWatch = setInterval(() => {
+      const box = document.getElementById("cal-booking-embed");
+      const loading = document.getElementById("cal-booking-loading");
+      if (box && loading && box.querySelector("iframe")) {
+        loading.remove();
+        clearInterval(this._calWatch);
+      }
+    }, 300);
+  }
+  componentWillUnmount() {
+    if (this._calWatch) clearInterval(this._calWatch);
+  }
+}
+</script>
+</body>
+</html>

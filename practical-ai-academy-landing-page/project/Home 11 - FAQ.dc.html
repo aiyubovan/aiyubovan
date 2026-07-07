@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics>
+<script src="./site-content.js"></script>
+</helmet>
+  <!-- ================= FAQ ================= -->
+  <section style="max-width:820px;margin:0 auto;padding:56px 20px;">
+    <div style="text-align:center;">
+      <div style="color:#FBD20A;font-size:13px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;">FAQ</div>
+      <h2 style="font-size:clamp(27px,6vw,42px);font-weight:900;line-height:1.26;letter-spacing:-.5px;margin:14px 0 0;">ඔයාට තියෙන ප්‍රශ්න වලට උත්තර.</h2>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:12px;margin-top:34px;">
+      <sc-for list="{{ faqs }}" as="f" hint-placeholder-count="8">
+        <div class="pa-card" style="background:linear-gradient(155deg,rgba(101,10,52,.16),rgba(12,12,15,.5));border:1px solid rgba(245,245,247,.17);border-radius:16px;box-shadow:inset 0 1px 0 rgba(255,255,255,.12),inset 0 -1px 1px rgba(0,0,0,.26);overflow:hidden;">
+          <button onClick="{{ f.toggle }}" style="width:100%;display:flex;align-items:center;justify-content:space-between;gap:16px;text-align:left;background:transparent;border:none;cursor:pointer;font-family:inherit;color:#F5F5F7;padding:20px 22px;">
+            <span style="font-size:18.5px;font-weight:700;line-height:1.55;">{{ f.q }}</span>
+            <span style="flex:none;width:30px;height:30px;border-radius:50%;background:rgba(251,210,10,.12);border:1px solid rgba(251,210,10,.3);color:#FBD20A;font-size:20px;font-weight:700;display:flex;align-items:center;justify-content:center;line-height:1;">{{ f.sign }}</span>
+          </button>
+          <sc-if value="{{ f.open }}">
+            <div style="padding:0 22px 22px;font-size:16.5px;line-height:1.8;color:rgba(245,245,247,.96);">{{ f.a }}</div>
+          </sc-if>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { openFaqs: {} };
+  componentDidMount() {
+    if (!window.PA_CONTENT) this._t = setTimeout(() => this.forceUpdate(), 400);
+  }
+  componentWillUnmount() { if (this._t) clearTimeout(this._t); }
+  renderVals() {
+    // Questions and answers are edited in site-content.js (faqs list)
+    const C = window.PA_CONTENT || {};
+    const faqs = (C.faqs || []).map((f, i) => ({
+      q: f.q, a: f.a,
+      open: !!this.state.openFaqs[i],
+      sign: this.state.openFaqs[i] ? '\u2212' : '+',
+      toggle: () => this.setState((s) => ({ openFaqs: { ...s.openFaqs, [i]: !s.openFaqs[i] } })),
+    }));
+    return { faqs };
+  }
+}
+</script>
+</body>
+</html>

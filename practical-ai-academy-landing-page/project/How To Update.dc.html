@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700;800;900&family=Noto+Sans+Sinhala:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;}
+  body{margin:0;background:#0A0A0C;color:#F5F5F7;font-family:'Noto Sans','Noto Sans Sinhala',system-ui,sans-serif;-webkit-font-smoothing:antialiased;}
+  ::selection{background:#FBD20A;color:#2A0512;}
+</style>
+</helmet>
+
+<div style="position:relative;overflow:hidden;min-height:100vh;">
+  <div style="position:absolute;inset:0;pointer-events:none;background:radial-gradient(70% 40% at 50% -4%,rgba(101,10,52,.55),transparent 68%);"></div>
+
+  <div style="position:relative;max-width:860px;margin:0 auto;padding:56px 20px 80px;">
+
+    <a href="Practical AI Academy.dc.html" style="display:inline-flex;align-items:center;gap:8px;color:rgba(245,245,247,.6);text-decoration:none;font-size:14px;font-weight:600;margin-bottom:28px;">&#8592; Back to homepage</a>
+
+    <div style="color:#FBD20A;font-size:13px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;">Owner's Manual</div>
+    <h1 style="margin:14px 0 0;font-size:clamp(30px,6vw,46px);font-weight:900;line-height:1.2;letter-spacing:-.5px;">How to update your site yourself</h1>
+    <p style="margin:16px 0 0;font-size:17px;line-height:1.8;color:rgba(245,245,247,.85);max-width:640px;">Everything you change regularly lives in two easy places. You never need to touch the design files, and you can't break the layout from here.</p>
+
+    <!-- 1. Registration -->
+    <div style="margin-top:44px;background:linear-gradient(155deg,rgba(101,10,52,.24),rgba(12,12,15,.55));border:1px solid rgba(245,245,247,.18);border-radius:22px;padding:clamp(24px,5vw,38px);">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <span style="flex:none;width:34px;height:34px;border-radius:50%;background:rgba(251,210,10,.12);border:1px solid rgba(251,210,10,.4);display:flex;align-items:center;justify-content:center;font-weight:900;color:#FBD20A;">1</span>
+        <h2 style="margin:0;font-size:23px;font-weight:800;">Open or close registration</h2>
+      </div>
+      <p style="margin:16px 0 0;font-size:16px;line-height:1.8;color:rgba(245,245,247,.85);">Open <strong style="color:#FBD20A;">site-content.js</strong>. Right at the top there is a <strong>settings</strong> block:</p>
+      <pre style="margin:14px 0 0;background:rgba(12,12,15,.7);border:1px solid rgba(245,245,247,.12);border-radius:14px;padding:16px 18px;overflow-x:auto;font-family:ui-monospace,Menlo,monospace;font-size:13.5px;line-height:1.7;color:#F5F5F7;">settings: {
+  registrationOpen: <span style="color:#FF7B72;">false</span>,          &#8592; true = open, false = closed
+  nextBatchDate: <span style="color:#FBD20A;">'2026 අගෝස්තු 21'</span>,  &#8592; the date visitors see
+  registrationOpensOn: <span style="color:#FBD20A;">'2026-08-07 09:00'</span>,  &#8592; when registration OPENS (Sri Lanka time)
+  registrationClosesOn: <span style="color:#FBD20A;">'2026-08-20 23:59'</span>, &#8592; when registration ENDS
+},</pre>
+      <p style="margin:14px 0 0;font-size:15px;line-height:1.7;color:rgba(245,245,247,.85);"><strong style="color:#FBD20A;">registrationOpensOn</strong> is the day and time you will OPEN registration — while registration is closed, the bar counts down to that moment. <strong style="color:#FBD20A;">registrationClosesOn</strong> is the day and time registration ENDS — while registration is open, the bar counts down to that instead, and after it passes the bar says "ලියාපදිංචිය අවසන් වී ඇත". The countdown bar appears only on the Home, What You Will Learn, and Application Guide pages. Format: <span style="font-family:ui-monospace,Menlo,monospace;">'YYYY-MM-DD HH:MM'</span> in Sri Lanka time.</p>
+      <div style="display:flex;flex-direction:column;gap:10px;margin-top:14px;">
+        <div style="background:rgba(12,12,15,.55);border:1px solid rgba(245,245,247,.12);border-radius:14px;padding:16px 18px;font-size:15px;line-height:1.7;color:rgba(245,245,247,.85);">
+          When you set it to <strong style="color:#FF7B72;">false</strong>, every "දැන්ම ලියාපදිංචි වන්න" button — homepage, nav bar, and application page — turns into a grey "ලියාපදිංචිය දැන් වසා ඇත" state, and a red <strong style="color:#FF7B72;">NEXT BATCH STARTS ON</strong> stamp with your date appears on the price card, hero, application page and nav. Set it back to <strong style="color:#FBD20A;">true</strong> two weeks before the batch and everything returns to normal — one word, whole site.
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. Lists -->
+    <div style="margin-top:22px;background:linear-gradient(155deg,rgba(101,10,52,.24),rgba(12,12,15,.55));border:1px solid rgba(245,245,247,.18);border-radius:22px;padding:clamp(24px,5vw,38px);">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <span style="flex:none;width:34px;height:34px;border-radius:50%;background:rgba(251,210,10,.12);border:1px solid rgba(251,210,10,.4);display:flex;align-items:center;justify-content:center;font-weight:900;color:#FBD20A;">2</span>
+        <h2 style="margin:0;font-size:23px;font-weight:800;">Add or edit cards and text (site-content.js)</h2>
+      </div>
+      <p style="margin:16px 0 0;font-size:16px;line-height:1.8;color:rgba(245,245,247,.85);">Open the file <strong style="color:#FBD20A;">site-content.js</strong>. It holds every list on the homepage: <strong>What Is Included</strong>, the <strong>10 week curriculum</strong>, the <strong>pricing checklist</strong>, <strong>testimonials</strong>, and the <strong>FAQ</strong>. Each section has instructions right above it.</p>
+      <p style="margin:14px 0 0;font-size:15px;line-height:1.8;color:rgba(245,245,247,.72);">Testimonials never make the page long: add as many as you like — visitors see the first 6, and a <strong style="color:#FBD20A;">"Show all reviews"</strong> button reveals the rest. Keep your best 6 at the top of the list.</p>
+
+      <p style="margin:18px 0 8px;font-size:15px;font-weight:800;color:rgba(245,245,247,.95);">Example — add a new "What Is Included" card:</p>
+      <pre style="margin:0;background:rgba(12,12,15,.7);border:1px solid rgba(245,245,247,.12);border-radius:14px;padding:16px 18px;overflow-x:auto;font-family:ui-monospace,Menlo,monospace;font-size:13.5px;line-height:1.7;color:#F5F5F7;">included: [
+  'ඕනෑම වෙලාවක නැවත බලන්න පුළුවන් Live Recordings',
+  ...
+  <span style="color:#FBD20A;">'ඔයාගේ අලුත් වාක්‍යය මෙතනට',</span>   &#8592; add your line here
+],</pre>
+
+      <p style="margin:18px 0 8px;font-size:15px;font-weight:800;color:rgba(245,245,247,.95);">Example — add a new FAQ:</p>
+      <pre style="margin:0;background:rgba(12,12,15,.7);border:1px solid rgba(245,245,247,.12);border-radius:14px;padding:16px 18px;overflow-x:auto;font-family:ui-monospace,Menlo,monospace;font-size:13.5px;line-height:1.7;color:#F5F5F7;"><span style="color:#FBD20A;">{ q: 'ප්‍රශ්නය මෙතන', a: 'උත්තරය මෙතන' },</span></pre>
+
+      <div style="margin-top:18px;background:rgba(240,64,60,.08);border:1px solid rgba(240,64,60,.35);border-radius:14px;padding:14px 18px;font-size:15px;line-height:1.7;color:rgba(245,245,247,.9);">
+        <strong style="color:#FF7B72;">Three golden rules:</strong> keep text inside 'single quotes' &middot; end every item with a comma &middot; if your text needs a quote mark, write \' instead of '.
+      </div>
+    </div>
+
+    <!-- 3. Notes -->
+    <div style="margin-top:22px;background:linear-gradient(155deg,rgba(101,10,52,.24),rgba(12,12,15,.55));border:1px solid rgba(245,245,247,.18);border-radius:22px;padding:clamp(24px,5vw,38px);">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <span style="flex:none;width:34px;height:34px;border-radius:50%;background:rgba(251,210,10,.12);border:1px solid rgba(251,210,10,.4);display:flex;align-items:center;justify-content:center;font-weight:900;color:#FBD20A;">3</span>
+        <h2 style="margin:0;font-size:23px;font-weight:800;">Good to know</h2>
+      </div>
+      <ul style="margin:16px 0 0;padding-left:20px;display:flex;flex-direction:column;gap:10px;font-size:16px;line-height:1.75;color:rgba(245,245,247,.85);">
+        <li>The "What Is Included" section never makes the page endless — once the cards grow past a certain height, that section gets its own smooth inner scroll with a gold scrollbar.</li>
+        <li>The price (Rs. 9,900) and any other single piece of text can be edited by clicking directly on it in the editor.</li>
+        <li>After editing site-content.js, refresh the homepage to see your changes.</li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+</x-dc>
+</body>
+</html>

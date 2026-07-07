@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics>
+<script src="./site-content.js"></script>
+</helmet>
+  <!-- ================= HERO ================= -->
+  <section id="home" style="position:relative;overflow:hidden;padding:96px 20px 76px;">
+    <div style="position:absolute;inset:0;pointer-events:none;background:radial-gradient(70% 48% at 50% -4%,rgba(101,10,52,.62),transparent 68%),radial-gradient(46% 40% at 84% 8%,rgba(133,0,0,.42),transparent 66%),radial-gradient(40% 34% at 12% 22%,rgba(101,10,52,.30),transparent 70%);"></div>
+    <div style="position:absolute;left:50%;top:-60px;width:560px;height:560px;max-width:92vw;transform:translateX(-50%);pointer-events:none;background:radial-gradient(circle,rgba(251,210,10,.16),rgba(251,210,10,.04) 42%,transparent 62%);"></div>
+    <div style="position:absolute;inset:0;pointer-events:none;opacity:.5;background-image:linear-gradient(rgba(245,245,247,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(245,245,247,.035) 1px,transparent 1px);background-size:46px 46px;mask-image:radial-gradient(70% 60% at 50% 10%,#000,transparent 75%);-webkit-mask-image:radial-gradient(70% 60% at 50% 10%,#000,transparent 75%);"></div>
+
+    <div class="pa-hero" style="position:relative;max-width:820px;margin:0 auto;text-align:center;">
+    <div>
+      <div style="display:inline-flex;align-items:center;gap:9px;background:rgba(251,210,10,.08);border:1px solid rgba(251,210,10,.28);border-radius:999px;padding:7px 15px;margin-bottom:22px;">
+        <span style="width:7px;height:7px;border-radius:50%;background:#FBD20A;box-shadow:0 0 12px rgba(251,210,10,.9);"></span>
+        <span style="font-size:12.5px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#FBD20A;">Live Online Course, In Sinhala</span>
+      </div>
+      <h1 style="margin:0;font-size:clamp(34px,8.4vw,60px);line-height:1.06;font-weight:900;letter-spacing:-1px;">
+        Learn to use AI to <br>save hours every day <br>and <span style="color:#FBD20A;">work smarter.</span>
+      </h1>
+      <p class="pa-hero-sub" style="margin:22px auto 0;max-width:640px;font-size:clamp(18px,4.4vw,22px);line-height:1.85;color:rgba(245,245,247,.92);">
+        Practical AI Academy කියන්නේ ලංකාවේ අපිටම හදපු, සිංහලෙන් උගන්වන, ප්‍රායෝගිකව AI පාවිච්චි කරන හැටි මුල ඉඳන්ම කියලා දෙන Live Course එකක්. කිසිම අමාරු වචන නෑ, පැටලිලි නෑ, පළවෙනි දවසේ ඉඳන්ම ඔයාගේ වැඩ වලට පාවිච්චි කරන්න පුළුවන් ඇත්තම ප්‍රායෝගික දේවල් විතරයි අපි මේ Course එකේ උගන්වන්නේ!
+      </p>
+
+      <div class="pa-hero-row" style="display:flex;flex-wrap:wrap;justify-content:center;gap:13px;margin-top:30px;">
+        <sc-if value="{{ regOpen }}" hint-placeholder-val="{{ true }}">
+          <a href="Application Guide.dc.html#apply" style="display:inline-flex;align-items:center;justify-content:center;background:linear-gradient(180deg,#FDE25C,#FBD20A);color:#2A0512;font-weight:800;font-size:16.5px;border:none;border-radius:999px;padding:16px 30px;text-decoration:none;box-shadow:0 14px 34px -10px rgba(251,210,10,.55);">දැන්ම ලියාපදිංචි වන්න</a>
+        </sc-if>
+        <sc-if value="{{ regClosed }}">
+          <span class="pa-reg-off" style="display:inline-flex;align-items:center;justify-content:center;background:rgba(245,245,247,.06);color:rgba(245,245,247,.5);font-weight:800;font-size:16.5px;border:1px solid rgba(245,245,247,.14);border-radius:999px;padding:16px 30px;cursor:not-allowed;">ලියාපදිංචිය දැන් වසා ඇත</span>
+        </sc-if>
+        <a href="What You Will Learn.dc.html" class="pa-ghost" style="display:inline-flex;align-items:center;justify-content:center;background:rgba(245,245,247,.04);color:#F5F5F7;font-weight:600;font-size:16.5px;border:1px solid rgba(245,245,247,.24);border-radius:999px;padding:16px 30px;text-decoration:none;">ඉගෙන ගන්න දේවල් බලන්න</a>
+      </div>
+
+      <sc-if value="{{ regClosed }}">
+        <div class="pa-hero-row" style="display:flex;justify-content:center;margin-top:18px;">
+          <span style="display:inline-flex;align-items:center;gap:9px;background:rgba(240,64,60,.10);border:1px solid rgba(240,64,60,.45);border-radius:999px;padding:9px 18px;font-size:14.5px;font-weight:700;color:#FF7B72;">
+            <span style="width:7px;height:7px;border-radius:50%;background:#FF5A52;box-shadow:0 0 10px rgba(255,90,82,.9);"></span>
+            ඊළඟ කණ්ඩායම පටන් ගන්නේ: {{ nextBatch }}
+          </span>
+        </div>
+      </sc-if>
+
+      <div class="pa-hero-row" style="display:flex;align-items:center;justify-content:center;gap:8px;margin-top:22px;color:rgba(245,245,247,.55);font-size:14px;">
+        <span style="color:#FBD20A;font-size:15px;letter-spacing:-1px;">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+        <span>Trusted by thousands of Sri Lankan learners.</span>
+      </div>
+
+      <div class="pa-hero-row" style="display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-top:26px;">
+        <span style="font-size:15px;font-weight:600;color:rgba(245,245,247,.92);background:rgba(245,245,247,.04);border:1px solid rgba(245,245,247,.1);border-radius:999px;padding:9px 16px;">සති 10යි</span>
+        <span style="font-size:15px;font-weight:600;color:rgba(245,245,247,.92);background:rgba(245,245,247,.04);border:1px solid rgba(245,245,247,.1);border-radius:999px;padding:9px 16px;">Zoom හරහා Live</span>
+        <span style="font-size:15px;font-weight:600;color:rgba(245,245,247,.92);background:rgba(245,245,247,.04);border:1px solid rgba(245,245,247,.1);border-radius:999px;padding:9px 16px;">මුල සිට සරලව</span>
+        <span style="font-size:15px;font-weight:600;color:rgba(245,245,247,.92);background:rgba(245,245,247,.04);border:1px solid rgba(245,245,247,.1);border-radius:999px;padding:9px 16px;">සිංහල මාධ්‍යයෙන්</span>
+      </div>
+    </div>
+
+    <div class="pa-hero-img">
+      <div style="position:absolute;left:50%;bottom:-9%;transform:translateX(-50%);width:118%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,rgba(251,210,10,.26),rgba(133,0,0,.20) 52%,transparent 72%);"></div>
+      <div style="position:absolute;left:50%;bottom:0;transform:translateX(-50%);width:100%;aspect-ratio:1;border-radius:50%;border:1px solid rgba(251,210,10,.34);background:radial-gradient(circle at 50% 28%,rgba(101,10,52,.4),rgba(12,12,15,.12) 72%);"></div>
+      <img src="assets/ruwantha-point.webp" fetchpriority="high" decoding="async" alt="Ruwantha pointing at the headline" style="position:relative;display:block;width:82%;-webkit-mask-image:radial-gradient(ellipse 59% 30.3% at 50% 68.7%,#000 99%,transparent 100%),linear-gradient(#000,#000);-webkit-mask-size:100% 100%,100% 68.7%;-webkit-mask-repeat:no-repeat;mask-image:radial-gradient(ellipse 59% 30.3% at 50% 68.7%,#000 99%,transparent 100%),linear-gradient(#000,#000);mask-size:100% 100%,100% 68.7%;mask-repeat:no-repeat;filter:drop-shadow(0 20px 40px rgba(0,0,0,.55));">
+    </div>
+    </div>
+    </div>
+  </section>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  componentDidMount() {
+    // site-content.js may finish loading just after first render
+    if (!window.PA_CONTENT) this._t = setTimeout(() => this.forceUpdate(), 400);
+  }
+  componentWillUnmount() { if (this._t) clearTimeout(this._t); }
+  renderVals() {
+    const S = (window.PA_CONTENT && window.PA_CONTENT.settings) || {};
+    const regOpen = S.registrationOpen !== false;
+    return { regOpen, regClosed: !regOpen, nextBatch: S.nextBatchDate || '' };
+  }
+}
+</script>
+</body>
+</html>
