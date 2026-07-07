@@ -14,9 +14,9 @@
   *{box-sizing:border-box;}
   body{margin:0;background:var(--bg);color:var(--fg);font-family:'Noto Sans','Noto Sans Sinhala',system-ui,sans-serif;-webkit-font-smoothing:antialiased;min-height:100vh;}
   body::before{content:"";position:fixed;inset:0;z-index:-1;background:radial-gradient(60% 45% at 50% -5%,rgba(101,10,52,.55),transparent 70%),radial-gradient(40% 35% at 85% 15%,rgba(133,0,0,.35),transparent 66%);}
-  .wrap{max-width:860px;margin:0 auto;padding:28px 16px 80px;}
+  .wrap{max-width:860px;margin:0 auto;padding:24px 16px 80px;}
   .card{background:linear-gradient(155deg,rgba(101,10,52,.26),rgba(133,0,0,.12) 50%,rgba(12,12,15,.6));border:1px solid var(--line);border-radius:20px;box-shadow:inset 0 1px 0 rgba(255,255,255,.1),0 24px 50px -30px rgba(0,0,0,.9);padding:22px;margin-bottom:18px;}
-  h1{font-size:22px;font-weight:900;margin:0;}
+  h1{font-size:20px;font-weight:900;margin:0;}
   h2{font-size:17px;font-weight:800;margin:0 0 14px;color:var(--gold);letter-spacing:.3px;}
   label{display:block;font-size:13px;font-weight:700;color:var(--dim);margin:12px 0 5px;}
   input[type=text],input[type=email],input[type=password],input[type=number],textarea{width:100%;background:rgba(245,245,247,.06);border:1px solid var(--line);border-radius:11px;color:var(--fg);font-family:inherit;font-size:15px;padding:11px 13px;outline:none;}
@@ -37,14 +37,23 @@
   .on .knob{background:var(--gold);}
   .on .knob::after{left:25px;}
   .statusline{font-weight:800;font-size:15px;}
-  #toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(80px);background:linear-gradient(180deg,var(--gold2),var(--gold));color:var(--ink);font-weight:800;font-size:14px;padding:12px 22px;border-radius:999px;transition:transform .25s;z-index:50;box-shadow:0 16px 40px -10px rgba(0,0,0,.7);}
+  #toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(90px);background:linear-gradient(180deg,var(--gold2),var(--gold));color:var(--ink);font-weight:800;font-size:14px;padding:12px 22px;border-radius:999px;transition:transform .25s;z-index:50;box-shadow:0 16px 40px -10px rgba(0,0,0,.7);max-width:90vw;text-align:center;}
   #toast.show{transform:translateX(-50%) translateY(0);}
   #toast.err{background:#3a0f0d;color:#FF8F8A;border:1px solid rgba(240,64,60,.5);}
-  .topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:22px;}
+  .topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px;}
   .logo{display:flex;align-items:center;gap:10px;}
   .logo .dot{width:10px;height:10px;border-radius:50%;background:var(--gold);box-shadow:0 0 14px rgba(251,210,10,.9);}
   .hidden{display:none !important;}
-  @media(max-width:560px){.wrap{padding-top:18px;} .card{padding:16px;}}
+  .tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:18px;}
+  .tab{background:rgba(245,245,247,.05);border:1px solid var(--line);color:var(--dim);font-family:inherit;font-size:13.5px;font-weight:700;border-radius:999px;padding:9px 16px;cursor:pointer;}
+  .tab.active{background:linear-gradient(180deg,var(--gold2),var(--gold));color:var(--ink);border-color:transparent;}
+  .badge{display:inline-flex;align-items:center;gap:7px;border-radius:999px;padding:6px 14px;font-size:13px;font-weight:800;}
+  .badge.ok{background:rgba(60,180,110,.14);color:#7fe0ab;border:1px solid rgba(60,180,110,.4);}
+  .badge.off{background:rgba(240,64,60,.12);color:#FF8F8A;border:1px solid rgba(240,64,60,.4);}
+  .qrbox{background:#fff;border-radius:14px;padding:10px;display:inline-block;margin:10px 0;}
+  .qrbox img{display:block;width:190px;height:190px;}
+  code.secret{display:block;background:rgba(12,12,15,.6);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:13px;word-break:break-all;margin:8px 0;color:var(--gold);}
+  @media(max-width:560px){.wrap{padding-top:16px;} .card{padding:16px;}}
 </style>
 </head>
 <body>
@@ -54,8 +63,8 @@
     <button class="btn ghost small hidden" id="signout">Sign out</button>
   </div>
 
-  <!-- ============ LOGIN / REGISTER ============ -->
-  <div id="authView" class="card" style="max-width:420px;margin:8vh auto 0;">
+  <!-- ============ AUTH ============ -->
+  <div id="authView" class="card" style="max-width:420px;margin:6vh auto 0;">
 
     <form id="loginForm" method="post" action="#">
       <h2>Admin Login</h2>
@@ -67,6 +76,26 @@
       <p class="muted" style="margin-top:14px;text-align:center;">First time here?
         <a href="#" id="showRegister" style="color:var(--gold);font-weight:700;">Create your admin account</a>
         &nbsp;·&nbsp; <a href="#" id="showReset" style="color:var(--gold);font-weight:700;">Forgot password?</a></p>
+    </form>
+
+    <form id="mfaForm" method="post" action="#" class="hidden">
+      <h2>Two-Factor Code</h2>
+      <p class="muted">Open your authenticator app and enter the 6-digit code for AIYUBOVAN Admin.</p>
+      <label for="mfaCode">6-digit code</label>
+      <input type="text" id="mfaCode" name="otp" inputmode="numeric" pattern="[0-9]*" maxlength="6" autocomplete="one-time-code" required placeholder="123456">
+      <div style="margin-top:18px;"><button class="btn" type="submit" style="width:100%;">Verify</button></div>
+      <p class="muted" style="text-align:center;"><a href="#" id="mfaCancel" style="color:var(--gold);font-weight:700;">← Cancel</a></p>
+    </form>
+
+    <form id="registerForm" method="post" action="#" class="hidden">
+      <h2>First-time Register</h2>
+      <label for="regEmail">Email</label>
+      <input type="email" id="regEmail" name="email" autocomplete="username email" required placeholder="you@example.com">
+      <label for="regPass">Choose a password (8+ characters)</label>
+      <input type="password" id="regPass" name="new-password" autocomplete="new-password" required minlength="8" placeholder="••••••••">
+      <div style="margin-top:18px;"><button class="btn" type="submit" style="width:100%;">Register</button></div>
+      <p class="muted" style="margin-top:10px;">After registering, click the confirmation link sent to your email — it will bring you straight back here, already logged in. Only pre-approved AIYUBOVAN emails are accepted.</p>
+      <p class="muted" style="text-align:center;"><a href="#" id="showLogin" style="color:var(--gold);font-weight:700;">← Back to login</a></p>
     </form>
 
     <form id="resetForm" method="post" action="#" class="hidden">
@@ -85,23 +114,20 @@
       <div style="margin-top:18px;"><button class="btn" type="submit" style="width:100%;">Save new password</button></div>
     </form>
 
-    <form id="registerForm" method="post" action="#" class="hidden">
-      <h2>First-time Register</h2>
-      <label for="regEmail">Email</label>
-      <input type="email" id="regEmail" name="email" autocomplete="username email" required placeholder="you@example.com">
-      <label for="regPass">Choose a password (8+ characters)</label>
-      <input type="password" id="regPass" name="new-password" autocomplete="new-password" required minlength="8" placeholder="••••••••">
-      <div style="margin-top:18px;"><button class="btn" type="submit" style="width:100%;">Register</button></div>
-      <p class="muted" style="margin-top:10px;">After registering, click the confirmation link sent to your email, then log in. Only pre-approved AIYUBOVAN emails are accepted.</p>
-      <p class="muted" style="text-align:center;"><a href="#" id="showLogin" style="color:var(--gold);font-weight:700;">← Back to login</a></p>
-    </form>
-
   </div>
 
   <!-- ============ DASHBOARD ============ -->
   <div id="dash" class="hidden">
 
-    <div class="card">
+    <div class="tabs" id="tabs">
+      <button class="tab active" data-view="settingsView">🎛️ Registration &amp; Dates</button>
+      <button class="tab" data-view="weeksView">📚 Course Weeks</button>
+      <button class="tab" data-view="testimonialsView">⭐ Reviews</button>
+      <button class="tab" data-view="faqsView">❓ FAQ</button>
+      <button class="tab" data-view="securityView">🔐 Security</button>
+    </div>
+
+    <div id="settingsView" class="view card">
       <h2>🎛️ Registration &amp; Dates</h2>
       <div class="switch" id="regSwitch"><span class="knob"></span><span class="statusline" id="regLabel"></span></div>
       <div class="row">
@@ -119,22 +145,62 @@
       <p class="muted" style="margin-top:10px;">The countdown bar, register buttons, batch stamps and prices across the whole site update from here.</p>
     </div>
 
-    <div class="card">
+    <div id="weeksView" class="view card hidden">
       <h2>📚 Course Weeks</h2>
       <div id="weeksList"></div>
       <button class="btn ghost small" onclick="addRow('weeks')">+ Add a week</button>
     </div>
 
-    <div class="card">
+    <div id="testimonialsView" class="view card hidden">
       <h2>⭐ Reviews (Testimonials)</h2>
       <div id="testimonialsList"></div>
       <button class="btn ghost small" onclick="addRow('testimonials')">+ Add a review</button>
     </div>
 
-    <div class="card">
+    <div id="faqsView" class="view card hidden">
       <h2>❓ Home Page FAQ</h2>
       <div id="faqsList"></div>
       <button class="btn ghost small" onclick="addRow('faqs')">+ Add a question</button>
+    </div>
+
+    <div id="securityView" class="view card hidden">
+      <h2>🔐 Security</h2>
+      <div class="row" style="margin-bottom:14px;">
+        <span>Two-factor authentication (authenticator app):</span>
+        <span id="mfaStatus" class="badge off">Checking…</span>
+      </div>
+
+      <div id="mfaOff">
+        <button class="btn" onclick="startEnroll()">Enable 2FA</button>
+        <p class="muted" style="margin-top:10px;">Works with Google Authenticator, Authy, 1Password, Apple Passwords and similar apps. Once enabled, the database refuses every change unless the session passed the 2FA check.</p>
+      </div>
+
+      <div id="mfaEnroll" class="hidden">
+        <p class="muted">1. Scan this QR code with your authenticator app (or type the secret manually).<br>2. Enter the 6-digit code it shows to activate.</p>
+        <div class="qrbox"><img id="qrImg" alt="2FA QR code"></div>
+        <code class="secret" id="secretText"></code>
+        <form id="enrollForm" method="post" action="#">
+          <label for="enrollCode">6-digit code from the app</label>
+          <input type="text" id="enrollCode" inputmode="numeric" pattern="[0-9]*" maxlength="6" autocomplete="one-time-code" required placeholder="123456" style="max-width:200px;">
+          <div class="row" style="margin-top:12px;">
+            <button class="btn" type="submit">Activate 2FA</button>
+            <button class="btn ghost" type="button" onclick="cancelEnroll()">Cancel</button>
+          </div>
+        </form>
+      </div>
+
+      <div id="mfaOn" class="hidden">
+        <form id="disableForm" method="post" action="#">
+          <label for="disableCode">To turn OFF 2FA, enter your current 6-digit code</label>
+          <input type="text" id="disableCode" inputmode="numeric" pattern="[0-9]*" maxlength="6" autocomplete="one-time-code" required placeholder="123456" style="max-width:200px;">
+          <div style="margin-top:12px;"><button class="btn danger" type="submit">Disable 2FA</button></div>
+        </form>
+      </div>
+
+      <div style="border-top:1px solid var(--line);margin-top:20px;padding-top:16px;">
+        <div class="row"><span>Passkeys:</span><span class="badge off">Not yet supported by Supabase</span></div>
+        <p class="muted" style="margin-top:8px;">Supabase currently offers TOTP (authenticator app) and SMS as second factors — passkey/WebAuthn login for project users isn't available yet. The moment they ship it, this panel can add it.</p>
+      </div>
     </div>
 
   </div>
@@ -159,20 +225,84 @@ function toast(msg, err) {
   t.textContent = msg;
   t.className = 'show' + (err ? ' err' : '');
   clearTimeout(t.__h);
-  t.__h = setTimeout(() => t.className = '', 2600);
+  t.__h = setTimeout(() => t.className = '', 3200);
 }
 const esc = (s) => String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
 
+/* ---------------- tabs ---------------- */
+document.querySelectorAll('.tab').forEach(tab => {
+  tab.onclick = () => {
+    document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t === tab));
+    document.querySelectorAll('.view').forEach(v => v.classList.toggle('hidden', v.id !== tab.dataset.view));
+    if (tab.dataset.view === 'securityView') refreshMfaStatus();
+  };
+});
+
 /* ---------------- auth ---------------- */
-function allowed(email) {
-  return ALLOWED_EMAILS.includes(String(email || '').trim().toLowerCase());
-}
-const AUTH_FORMS = ['loginForm', 'registerForm', 'resetForm', 'newPassForm'];
+const AUTH_FORMS = ['loginForm', 'mfaForm', 'registerForm', 'resetForm', 'newPassForm'];
 function showForm(id) { AUTH_FORMS.forEach(f => $(f).classList.toggle('hidden', f !== id)); }
+function allowed(email) { return ALLOWED_EMAILS.includes(String(email || '').trim().toLowerCase()); }
+
+function showAuth(formId) {
+  $('authView').classList.remove('hidden');
+  $('dash').classList.add('hidden');
+  $('signout').classList.add('hidden');
+  showForm(formId || 'loginForm');
+}
+function showDash() {
+  $('authView').classList.add('hidden');
+  $('dash').classList.remove('hidden');
+  $('signout').classList.remove('hidden');
+  loadAll();
+}
+
+let recoveryMode = false;
+async function route(session) {
+  if (recoveryMode) return;
+  if (!session) return showAuth('loginForm');
+  if (!allowed(session.user.email)) { await db.auth.signOut(); return showAuth('loginForm'); }
+  const { data: aal } = await db.auth.mfa.getAuthenticatorAssuranceLevel();
+  if (aal && aal.nextLevel === 'aal2' && aal.currentLevel !== 'aal2') return showAuth('mfaForm');
+  showDash();
+}
+
 $('showRegister').onclick = (e) => { e.preventDefault(); showForm('registerForm'); };
 $('showReset').onclick = (e) => { e.preventDefault(); showForm('resetForm'); };
 $('showLogin').onclick = (e) => { e.preventDefault(); showForm('loginForm'); };
 $('showLogin2').onclick = (e) => { e.preventDefault(); showForm('loginForm'); };
+$('mfaCancel').onclick = async (e) => { e.preventDefault(); await db.auth.signOut(); showForm('loginForm'); };
+$('signout').onclick = async () => { await db.auth.signOut(); };
+
+$('loginForm').onsubmit = async (e) => {
+  e.preventDefault();
+  const email = $('loginEmail').value.trim(), password = $('loginPass').value;
+  if (!allowed(email)) return toast('This email is not approved for admin access.', true);
+  const { error } = await db.auth.signInWithPassword({ email, password });
+  if (error) return toast(error.message, true);
+};
+
+$('mfaForm').onsubmit = async (e) => {
+  e.preventDefault();
+  const { data: f } = await db.auth.mfa.listFactors();
+  const factor = f && f.totp && f.totp[0];
+  if (!factor) return toast('No 2FA factor found.', true);
+  const { data: ch, error: e1 } = await db.auth.mfa.challenge({ factorId: factor.id });
+  if (e1) return toast(e1.message, true);
+  const { error: e2 } = await db.auth.mfa.verify({ factorId: factor.id, challengeId: ch.id, code: $('mfaCode').value.trim() });
+  if (e2) return toast(e2.message, true);
+  $('mfaCode').value = '';
+  const { data: s } = await db.auth.getSession();
+  route(s.session);
+};
+
+$('registerForm').onsubmit = async (e) => {
+  e.preventDefault();
+  const email = $('regEmail').value.trim(), password = $('regPass').value;
+  if (!allowed(email)) return toast('This email is not approved for admin access.', true);
+  const { error } = await db.auth.signUp({ email, password, options: { emailRedirectTo: window.location.origin } });
+  if (error) return toast(error.message, true);
+  toast('Check your email and click the confirmation link.');
+};
 
 $('resetForm').onsubmit = async (e) => {
   e.preventDefault();
@@ -183,56 +313,91 @@ $('resetForm').onsubmit = async (e) => {
   toast('Reset link sent. Check your email.');
 };
 
-let recoveryMode = false;
 $('newPassForm').onsubmit = async (e) => {
   e.preventDefault();
   const { error } = await db.auth.updateUser({ password: $('newPass').value });
   if (error) return toast(error.message, true);
   recoveryMode = false;
   toast('Password updated ✔');
-  $('authView').classList.add('hidden');
-  $('dash').classList.remove('hidden');
-  $('signout').classList.remove('hidden');
-  loadAll();
+  const { data: s } = await db.auth.getSession();
+  route(s.session);
 };
-
-$('loginForm').onsubmit = async (e) => {
-  e.preventDefault();
-  const email = $('loginEmail').value.trim(), password = $('loginPass').value;
-  if (!allowed(email)) return toast('This email is not approved for admin access.', true);
-  const { error } = await db.auth.signInWithPassword({ email, password });
-  if (error) return toast(error.message, true);
-};
-$('registerForm').onsubmit = async (e) => {
-  e.preventDefault();
-  const email = $('regEmail').value.trim(), password = $('regPass').value;
-  if (!allowed(email)) return toast('This email is not approved for admin access.', true);
-  const { error } = await db.auth.signUp({
-    email, password,
-    options: { emailRedirectTo: window.location.origin },
-  });
-  if (error) return toast(error.message, true);
-  toast('Check your email and click the confirmation link, then log in.');
-};
-$('signout').onclick = async () => { await db.auth.signOut(); };
 
 db.auth.onAuthStateChange((event, session) => {
   if (event === 'PASSWORD_RECOVERY') {
-    // arrived from a reset-password email link
     recoveryMode = true;
-    $('authView').classList.remove('hidden');
-    $('dash').classList.add('hidden');
-    $('signout').classList.add('hidden');
-    showForm('newPassForm');
+    showAuth('newPassForm');
     return;
   }
-  if (recoveryMode) return; // stay on the new-password form until saved
-  const ok = session && allowed(session.user.email);
-  $('authView').classList.toggle('hidden', !!ok);
-  $('dash').classList.toggle('hidden', !ok);
-  $('signout').classList.toggle('hidden', !ok);
-  if (ok) loadAll();
+  route(session);
 });
+
+/* ---------------- 2FA management ---------------- */
+let enrollingFactorId = null;
+
+async function refreshMfaStatus() {
+  const { data, error } = await db.auth.mfa.listFactors();
+  if (error) return toast(error.message, true);
+  const active = (data.totp || []).filter(f => f.status === 'verified');
+  const on = active.length > 0;
+  const b = $('mfaStatus');
+  b.textContent = on ? 'ENABLED ✔' : 'Disabled';
+  b.className = 'badge ' + (on ? 'ok' : 'off');
+  $('mfaOff').classList.toggle('hidden', on);
+  $('mfaOn').classList.toggle('hidden', !on);
+  $('mfaEnroll').classList.add('hidden');
+}
+
+async function startEnroll() {
+  // clear any abandoned half-finished enrollments first
+  const { data: f } = await db.auth.mfa.listFactors();
+  for (const stale of (f.all || []).filter(x => x.status !== 'verified')) {
+    await db.auth.mfa.unenroll({ factorId: stale.id });
+  }
+  const { data, error } = await db.auth.mfa.enroll({ factorType: 'totp', friendlyName: 'AIYUBOVAN Admin' });
+  if (error) return toast(error.message, true);
+  enrollingFactorId = data.id;
+  $('qrImg').src = data.totp.qr_code;
+  $('secretText').textContent = data.totp.secret;
+  $('mfaOff').classList.add('hidden');
+  $('mfaEnroll').classList.remove('hidden');
+}
+function cancelEnroll() {
+  if (enrollingFactorId) db.auth.mfa.unenroll({ factorId: enrollingFactorId });
+  enrollingFactorId = null;
+  refreshMfaStatus();
+}
+
+$('enrollForm').onsubmit = async (e) => {
+  e.preventDefault();
+  const { data: ch, error: e1 } = await db.auth.mfa.challenge({ factorId: enrollingFactorId });
+  if (e1) return toast(e1.message, true);
+  const { error: e2 } = await db.auth.mfa.verify({ factorId: enrollingFactorId, challengeId: ch.id, code: $('enrollCode').value.trim() });
+  if (e2) return toast(e2.message, true);
+  enrollingFactorId = null;
+  $('enrollCode').value = '';
+  await db.auth.refreshSession();
+  toast('2FA is ON ✔ You will need your code at every login.');
+  refreshMfaStatus();
+};
+
+$('disableForm').onsubmit = async (e) => {
+  e.preventDefault();
+  const { data: f } = await db.auth.mfa.listFactors();
+  const factor = f && f.totp && f.totp[0];
+  if (!factor) return refreshMfaStatus();
+  // proving possession of the current code is required before disabling
+  const { data: ch, error: e1 } = await db.auth.mfa.challenge({ factorId: factor.id });
+  if (e1) return toast(e1.message, true);
+  const { error: e2 } = await db.auth.mfa.verify({ factorId: factor.id, challengeId: ch.id, code: $('disableCode').value.trim() });
+  if (e2) return toast('Wrong code. 2FA stays ON.', true);
+  const { error: e3 } = await db.auth.mfa.unenroll({ factorId: factor.id });
+  if (e3) return toast(e3.message, true);
+  $('disableCode').value = '';
+  await db.auth.refreshSession();
+  toast('2FA disabled.');
+  refreshMfaStatus();
+};
 
 /* ---------------- data ---------------- */
 async function loadAll() {
@@ -314,7 +479,7 @@ function renderList(table) {
   });
 }
 
-function collect(table, div, row) {
+function collect(table, div) {
   const out = {};
   div.querySelectorAll('[data-k]').forEach(el => out[el.getAttribute('data-k')] = el.value.trim());
   if (table === 'testimonials') out.initial = (out.name || '?').trim().charAt(0).toUpperCase();
@@ -324,10 +489,10 @@ function collect(table, div, row) {
 async function action(table, i, act, div) {
   const row = lists[table][i];
   if (act === 'save') {
-    const vals = collect(table, div, row);
+    const vals = collect(table, div);
     const q = row.id
       ? db.from(table).update(vals).eq('id', row.id)
-      : db.from(table).insert({ ...vals, sort: i + 1 });
+      : db.from(table).insert({ ...vals, sort: row.sort || i + 1 });
     const { error } = await q;
     if (error) return toast(error.message, true);
     toast('Saved ✔');
