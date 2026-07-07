@@ -65,7 +65,24 @@
       <input type="password" id="loginPass" name="password" autocomplete="current-password" required placeholder="••••••••">
       <div style="margin-top:18px;"><button class="btn" type="submit" style="width:100%;">Log in</button></div>
       <p class="muted" style="margin-top:14px;text-align:center;">First time here?
-        <a href="#" id="showRegister" style="color:var(--gold);font-weight:700;">Create your admin account</a></p>
+        <a href="#" id="showRegister" style="color:var(--gold);font-weight:700;">Create your admin account</a>
+        &nbsp;·&nbsp; <a href="#" id="showReset" style="color:var(--gold);font-weight:700;">Forgot password?</a></p>
+    </form>
+
+    <form id="resetForm" method="post" action="#" class="hidden">
+      <h2>Reset Password</h2>
+      <label for="resetEmail">Your admin email</label>
+      <input type="email" id="resetEmail" name="email" autocomplete="username email" required placeholder="you@example.com">
+      <div style="margin-top:18px;"><button class="btn" type="submit" style="width:100%;">Send reset link</button></div>
+      <p class="muted" style="margin-top:10px;">We will email you a link. Clicking it brings you back here to choose a new password.</p>
+      <p class="muted" style="text-align:center;"><a href="#" id="showLogin2" style="color:var(--gold);font-weight:700;">← Back to login</a></p>
+    </form>
+
+    <form id="newPassForm" method="post" action="#" class="hidden">
+      <h2>Choose a New Password</h2>
+      <label for="newPass">New password (8+ characters)</label>
+      <input type="password" id="newPass" name="new-password" autocomplete="new-password" required minlength="8" placeholder="••••••••">
+      <div style="margin-top:18px;"><button class="btn" type="submit" style="width:100%;">Save new password</button></div>
     </form>
 
     <form id="registerForm" method="post" action="#" class="hidden">
@@ -150,8 +167,34 @@ const esc = (s) => String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</
 function allowed(email) {
   return ALLOWED_EMAILS.includes(String(email || '').trim().toLowerCase());
 }
-$('showRegister').onclick = (e) => { e.preventDefault(); $('loginForm').classList.add('hidden'); $('registerForm').classList.remove('hidden'); };
-$('showLogin').onclick = (e) => { e.preventDefault(); $('registerForm').classList.add('hidden'); $('loginForm').classList.remove('hidden'); };
+const AUTH_FORMS = ['loginForm', 'registerForm', 'resetForm', 'newPassForm'];
+function showForm(id) { AUTH_FORMS.forEach(f => $(f).classList.toggle('hidden', f !== id)); }
+$('showRegister').onclick = (e) => { e.preventDefault(); showForm('registerForm'); };
+$('showReset').onclick = (e) => { e.preventDefault(); showForm('resetForm'); };
+$('showLogin').onclick = (e) => { e.preventDefault(); showForm('loginForm'); };
+$('showLogin2').onclick = (e) => { e.preventDefault(); showForm('loginForm'); };
+
+$('resetForm').onsubmit = async (e) => {
+  e.preventDefault();
+  const email = $('resetEmail').value.trim();
+  if (!allowed(email)) return toast('This email is not approved for admin access.', true);
+  const { error } = await db.auth.resetPasswordForEmail(email, { redirectTo: window.location.origin });
+  if (error) return toast(error.message, true);
+  toast('Reset link sent. Check your email.');
+};
+
+let recoveryMode = false;
+$('newPassForm').onsubmit = async (e) => {
+  e.preventDefault();
+  const { error } = await db.auth.updateUser({ password: $('newPass').value });
+  if (error) return toast(error.message, true);
+  recoveryMode = false;
+  toast('Password updated ✔');
+  $('authView').classList.add('hidden');
+  $('dash').classList.remove('hidden');
+  $('signout').classList.remove('hidden');
+  loadAll();
+};
 
 $('loginForm').onsubmit = async (e) => {
   e.preventDefault();
@@ -173,7 +216,17 @@ $('registerForm').onsubmit = async (e) => {
 };
 $('signout').onclick = async () => { await db.auth.signOut(); };
 
-db.auth.onAuthStateChange((_e, session) => {
+db.auth.onAuthStateChange((event, session) => {
+  if (event === 'PASSWORD_RECOVERY') {
+    // arrived from a reset-password email link
+    recoveryMode = true;
+    $('authView').classList.remove('hidden');
+    $('dash').classList.add('hidden');
+    $('signout').classList.add('hidden');
+    showForm('newPassForm');
+    return;
+  }
+  if (recoveryMode) return; // stay on the new-password form until saved
   const ok = session && allowed(session.user.email);
   $('authView').classList.toggle('hidden', !!ok);
   $('dash').classList.toggle('hidden', !ok);
