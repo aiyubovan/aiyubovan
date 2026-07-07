@@ -36,9 +36,13 @@
 class Component extends DCLogic {
   state = { openFaqs: {} };
   componentDidMount() {
-    if (!window.PA_CONTENT) this._t = setTimeout(() => this.forceUpdate(), 400);
+    this.__pc = window.PA_CONTENT;
+    this._poll = setInterval(() => {
+      if (window.PA_CONTENT !== this.__pc) { this.__pc = window.PA_CONTENT; this.forceUpdate(); }
+    }, 500);
+    this._pollEnd = setTimeout(() => clearInterval(this._poll), 15000);
   }
-  componentWillUnmount() { if (this._t) clearTimeout(this._t); }
+  componentWillUnmount() { if (this._poll) clearInterval(this._poll); if (this._pollEnd) clearTimeout(this._pollEnd); }
   renderVals() {
     // Questions and answers are edited in site-content.js (faqs list)
     const C = window.PA_CONTENT || {};

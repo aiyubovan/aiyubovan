@@ -8,6 +8,7 @@
 <body>
 <x-dc>
 <helmet data-dc-atomics>
+<script src="./site-content.js"></script>
 </helmet>
   <!-- ============ THE CHOICE ============ -->
   <section style="max-width:1060px;margin:0 auto;padding:40px 22px;">
@@ -33,13 +34,30 @@
         <div style="font-size:13px;font-weight:800;letter-spacing:1px;color:#FBD20A;text-transform:uppercase;margin-bottom:8px;">Option 3</div>
         <h3 style="margin:0 0 12px;font-size:20px;font-weight:800;line-height:1.35;">Practical AI Academy එකට එකතු වෙන එක.</h3>
         <p style="margin:0 0 16px;font-size:16px;line-height:1.8;color:rgba(245,245,247,.96);flex:1;">Computer Science First Class උපාධියක් තියෙන, ඇත්තටම උගන්වලා පුරුදු, ජාත්‍යන්තර Clients ලත් එක්ක වැඩ කරන කෙනෙක්ගෙන් පිළිවෙලකට ඉගෙන ගන්න එක. සති 10කින් මුල ඉඳන්ම Confident AI User කෙනෙක් වෙන එක. Live ඉගැන්වීම්, Recordings, Notes, Cheat sheet, WhatsApp Group, Certificate එක සහ 100% Money-back guarantee එකක් එක්කම.</p>
-        <div style="font-size:15px;line-height:1.6;color:rgba(245,245,247,.9);border-top:1px solid rgba(251,210,10,.25);padding-top:14px;"><b style="color:#FBD20A;">වියදම:</b> රු. 9,900 යි. <b style="color:#FBD20A;">අවදානම (Risk):</b> 0 යි.</div>
+        <div style="font-size:15px;line-height:1.6;color:rgba(245,245,247,.9);border-top:1px solid rgba(251,210,10,.25);padding-top:14px;"><b style="color:#FBD20A;">වියදම:</b> රු. {{ coursePrice }} යි. <b style="color:#FBD20A;">අවදානම (Risk):</b> 0 යි.</div>
       </div>
     </div>
     <p style="margin:26px auto 0;max-width:640px;text-align:center;font-size:clamp(17px,4vw,20px);line-height:1.7;color:#FBD20A;font-weight:700;">තව අවුරුද්දකින් ඔයාට හිතෙයි "මම එදා මේක පටන් ගත්තා නම් කොච්චර හොඳද" කියලා.</p>
   </section>
 
 </x-dc>
-<script type="text/x-dc" data-dc-script></script>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  componentDidMount() {
+    this.__pc = window.PA_CONTENT;
+    this._poll = setInterval(() => {
+      if (window.PA_CONTENT !== this.__pc) { this.__pc = window.PA_CONTENT; this.forceUpdate(); }
+    }, 500);
+    this._pollEnd = setTimeout(() => clearInterval(this._poll), 15000);
+  }
+  componentWillUnmount() { if (this._poll) clearInterval(this._poll); if (this._pollEnd) clearTimeout(this._pollEnd); }
+  renderVals() {
+    // Prices are managed from the admin panel (site_settings)
+    const S = (window.PA_CONTENT && window.PA_CONTENT.settings) || {};
+    const fmt = (n) => Number(n || 0).toLocaleString('en-US');
+    return { coursePrice: fmt(S.coursePrice || 9900), courseValue: fmt(S.courseValue || 45000) };
+  }
+}
+</script>
 </body>
 </html>

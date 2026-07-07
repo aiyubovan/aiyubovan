@@ -32,10 +32,10 @@
           </sc-if>
           <div style="display:inline-block;font-size:15px;font-weight:700;letter-spacing:.3px;color:rgba(245,245,247,.96);background:rgba(245,245,247,.06);border:1px solid rgba(245,245,247,.14);border-radius:999px;padding:6px 14px;">සම්පූර්ණ පාඨමාලාව සඳහා</div>
           <div style="margin-top:20px;font-size:18px;color:rgba(245,245,247,.96);">තනි තනිව ඉගැන්වූවා නම් වටිනාකම</div>
-          <div style="font-size:30px;font-weight:700;color:rgba(245,245,247,.62);text-decoration:line-through;text-decoration-color:rgba(251,210,10,.6);">Rs. 45,000</div>
+          <div style="font-size:30px;font-weight:700;color:rgba(245,245,247,.62);text-decoration:line-through;text-decoration-color:rgba(251,210,10,.6);">Rs. {{ courseValue }}</div>
           <div style="display:flex;align-items:baseline;justify-content:center;gap:8px;margin-top:6px;">
             <span style="font-size:20px;font-weight:700;color:#FBD20A;">Rs.</span>
-            <span style="font-size:clamp(52px,13vw,74px);font-weight:900;line-height:1;color:#FBD20A;letter-spacing:-2px;">9,900</span>
+            <span style="font-size:clamp(52px,13vw,74px);font-weight:900;line-height:1;color:#FBD20A;letter-spacing:-2px;">{{ coursePrice }}</span>
           </div>
           <div style="font-size:16px;color:rgba(245,245,247,.96);margin-top:6px;">සම්පූර්ණ සති 10 පාඨමාලාව සඳහාම එකවර ගෙවීම</div>
         </div>
@@ -74,14 +74,21 @@
 <script type="text/x-dc" data-dc-script>
 class Component extends DCLogic {
   componentDidMount() {
-    if (!window.PA_CONTENT) this._t = setTimeout(() => this.forceUpdate(), 400);
+    this.__pc = window.PA_CONTENT;
+    this._poll = setInterval(() => {
+      if (window.PA_CONTENT !== this.__pc) { this.__pc = window.PA_CONTENT; this.forceUpdate(); }
+    }, 500);
+    this._pollEnd = setTimeout(() => clearInterval(this._poll), 15000);
   }
-  componentWillUnmount() { if (this._t) clearTimeout(this._t); }
+  componentWillUnmount() { if (this._poll) clearInterval(this._poll); if (this._pollEnd) clearTimeout(this._pollEnd); }
   renderVals() {
     const C = window.PA_CONTENT || {};
     const S = C.settings || {};
     const regOpen = S.registrationOpen !== false;
+    const fmt = (n) => Number(n || 0).toLocaleString('en-US');
     return {
+      coursePrice: fmt(S.coursePrice || 9900),
+      courseValue: fmt(S.courseValue || 45000),
       pricingIncludes: C.pricingIncludes || [],
       regOpen, regClosed: !regOpen,
       nextBatch: S.nextBatchDate || '',

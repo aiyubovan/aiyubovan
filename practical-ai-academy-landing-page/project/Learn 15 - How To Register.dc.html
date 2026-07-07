@@ -32,9 +32,13 @@
 <script type="text/x-dc" data-dc-script>
 class Component extends DCLogic {
   componentDidMount() {
-    if (!window.PA_CONTENT) this._t = setTimeout(() => this.forceUpdate(), 400);
+    this.__pc = window.PA_CONTENT;
+    this._poll = setInterval(() => {
+      if (window.PA_CONTENT !== this.__pc) { this.__pc = window.PA_CONTENT; this.forceUpdate(); }
+    }, 500);
+    this._pollEnd = setTimeout(() => clearInterval(this._poll), 15000);
   }
-  componentWillUnmount() { if (this._t) clearTimeout(this._t); }
+  componentWillUnmount() { if (this._poll) clearInterval(this._poll); if (this._pollEnd) clearTimeout(this._pollEnd); }
   renderVals() {
     // Shows the registration closing date from site-content.js in Sinhala
     const S = (window.PA_CONTENT && window.PA_CONTENT.settings) || {};

@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>AIYUBOVAN — Admin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;700;800;900&family=Noto+Sans+Sinhala:wght@400;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<style>
+  :root{--gold:#FBD20A;--gold2:#FDE25C;--ink:#2A0512;--bg:#0A0A0C;--fg:#F5F5F7;--dim:rgba(245,245,247,.65);--line:rgba(245,245,247,.14);}
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--fg);font-family:'Noto Sans','Noto Sans Sinhala',system-ui,sans-serif;-webkit-font-smoothing:antialiased;min-height:100vh;}
+  body::before{content:"";position:fixed;inset:0;z-index:-1;background:radial-gradient(60% 45% at 50% -5%,rgba(101,10,52,.55),transparent 70%),radial-gradient(40% 35% at 85% 15%,rgba(133,0,0,.35),transparent 66%);}
+  .wrap{max-width:860px;margin:0 auto;padding:28px 16px 80px;}
+  .card{background:linear-gradient(155deg,rgba(101,10,52,.26),rgba(133,0,0,.12) 50%,rgba(12,12,15,.6));border:1px solid var(--line);border-radius:20px;box-shadow:inset 0 1px 0 rgba(255,255,255,.1),0 24px 50px -30px rgba(0,0,0,.9);padding:22px;margin-bottom:18px;}
+  h1{font-size:22px;font-weight:900;margin:0;}
+  h2{font-size:17px;font-weight:800;margin:0 0 14px;color:var(--gold);letter-spacing:.3px;}
+  label{display:block;font-size:13px;font-weight:700;color:var(--dim);margin:12px 0 5px;}
+  input[type=text],input[type=email],input[type=password],input[type=number],textarea{width:100%;background:rgba(245,245,247,.06);border:1px solid var(--line);border-radius:11px;color:var(--fg);font-family:inherit;font-size:15px;padding:11px 13px;outline:none;}
+  input:focus,textarea:focus{border-color:rgba(251,210,10,.55);}
+  textarea{min-height:74px;resize:vertical;}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;background:linear-gradient(180deg,var(--gold2),var(--gold));color:var(--ink);font-family:inherit;font-weight:800;font-size:14.5px;border:none;border-radius:999px;padding:12px 22px;cursor:pointer;box-shadow:0 10px 26px -10px rgba(251,210,10,.5);}
+  .btn:active{transform:translateY(1px);}
+  .btn.ghost{background:rgba(245,245,247,.06);color:var(--fg);border:1px solid var(--line);box-shadow:none;font-weight:600;}
+  .btn.small{padding:8px 14px;font-size:13px;}
+  .btn.danger{background:rgba(240,64,60,.14);color:#FF8F8A;border:1px solid rgba(240,64,60,.4);box-shadow:none;}
+  .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
+  .grow{flex:1;min-width:140px;}
+  .item{border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:12px;background:rgba(12,12,15,.45);}
+  .muted{font-size:12.5px;color:var(--dim);line-height:1.6;}
+  .switch{display:flex;align-items:center;gap:12px;padding:14px;border:1px solid var(--line);border-radius:14px;background:rgba(12,12,15,.45);cursor:pointer;user-select:none;}
+  .knob{width:52px;height:30px;border-radius:999px;background:rgba(245,245,247,.14);position:relative;transition:background .2s;flex:none;}
+  .knob::after{content:"";position:absolute;top:3px;left:3px;width:24px;height:24px;border-radius:50%;background:#fff;transition:left .2s;}
+  .on .knob{background:var(--gold);}
+  .on .knob::after{left:25px;}
+  .statusline{font-weight:800;font-size:15px;}
+  #toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(80px);background:linear-gradient(180deg,var(--gold2),var(--gold));color:var(--ink);font-weight:800;font-size:14px;padding:12px 22px;border-radius:999px;transition:transform .25s;z-index:50;box-shadow:0 16px 40px -10px rgba(0,0,0,.7);}
+  #toast.show{transform:translateX(-50%) translateY(0);}
+  #toast.err{background:#3a0f0d;color:#FF8F8A;border:1px solid rgba(240,64,60,.5);}
+  .topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:22px;}
+  .logo{display:flex;align-items:center;gap:10px;}
+  .logo .dot{width:10px;height:10px;border-radius:50%;background:var(--gold);box-shadow:0 0 14px rgba(251,210,10,.9);}
+  .hidden{display:none !important;}
+  @media(max-width:560px){.wrap{padding-top:18px;} .card{padding:16px;}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <div class="logo"><span class="dot"></span><h1>AIYUBOVAN Admin</h1></div>
+    <button class="btn ghost small hidden" id="signout">Sign out</button>
+  </div>
+
+  <!-- ============ LOGIN ============ -->
+  <div id="authView" class="card" style="max-width:420px;margin:8vh auto 0;">
+    <h2>Admin Login</h2>
+    <label>Email</label>
+    <input type="email" id="authEmail" autocomplete="username" placeholder="you@example.com">
+    <label>Password</label>
+    <input type="password" id="authPass" autocomplete="current-password" placeholder="••••••••">
+    <div class="row" style="margin-top:18px;">
+      <button class="btn" id="loginBtn">Log in</button>
+      <button class="btn ghost" id="registerBtn">First-time register</button>
+    </div>
+    <p class="muted" style="margin-top:14px;">Only pre-approved AIYUBOVAN emails can use this panel. First time: register, then click the confirmation link sent to your email, then log in.</p>
+  </div>
+
+  <!-- ============ DASHBOARD ============ -->
+  <div id="dash" class="hidden">
+
+    <div class="card">
+      <h2>🎛️ Registration &amp; Dates</h2>
+      <div class="switch" id="regSwitch"><span class="knob"></span><span class="statusline" id="regLabel"></span></div>
+      <div class="row">
+        <div class="grow"><label>Next batch date (shown to visitors, e.g. 2026 ජූලි 25)</label><input type="text" id="s_batch"></div>
+      </div>
+      <div class="row">
+        <div class="grow"><label>Registration opens (YYYY-MM-DD HH:MM)</label><input type="text" id="s_opens"></div>
+        <div class="grow"><label>Registration closes (YYYY-MM-DD HH:MM)</label><input type="text" id="s_closes"></div>
+      </div>
+      <div class="row">
+        <div class="grow"><label>Course price (Rs.)</label><input type="number" id="s_price"></div>
+        <div class="grow"><label>"Individually taught" value (Rs.)</label><input type="number" id="s_value"></div>
+      </div>
+      <div style="margin-top:16px;"><button class="btn" onclick="saveSettings()">Save settings</button></div>
+      <p class="muted" style="margin-top:10px;">The countdown bar, register buttons, batch stamps and prices across the whole site update from here.</p>
+    </div>
+
+    <div class="card">
+      <h2>📚 Course Weeks</h2>
+      <div id="weeksList"></div>
+      <button class="btn ghost small" onclick="addRow('weeks')">+ Add a week</button>
+    </div>
+
+    <div class="card">
+      <h2>⭐ Reviews (Testimonials)</h2>
+      <div id="testimonialsList"></div>
+      <button class="btn ghost small" onclick="addRow('testimonials')">+ Add a review</button>
+    </div>
+
+    <div class="card">
+      <h2>❓ Home Page FAQ</h2>
+      <div id="faqsList"></div>
+      <button class="btn ghost small" onclick="addRow('faqs')">+ Add a question</button>
+    </div>
+
+  </div>
+</div>
+<div id="toast"></div>
+
+<script>
+/* ================= CONFIG ================= */
+const SUPABASE_URL = 'https://tueaxfwuvugekxvlbnuf.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR1ZWF4Znd1dnVnZWt4dmxibnVmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM0MzA0ODgsImV4cCI6MjA5OTAwNjQ4OH0.e2x9IawWs5cMMhph2nkCOu5xliyC1jZYiS50FitK6R4';
+// Only these emails may register / log in (also enforced by the database):
+const ALLOWED_EMAILS = ['udrgunasinghe@gmail.com'];
+/* ========================================== */
+
+const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const $ = (id) => document.getElementById(id);
+let settings = null;
+const lists = { weeks: [], testimonials: [], faqs: [] };
+
+function toast(msg, err) {
+  const t = $('toast');
+  t.textContent = msg;
+  t.className = 'show' + (err ? ' err' : '');
+  clearTimeout(t.__h);
+  t.__h = setTimeout(() => t.className = '', 2600);
+}
+const esc = (s) => String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
+
+/* ---------------- auth ---------------- */
+function allowed(email) {
+  return ALLOWED_EMAILS.includes(String(email || '').trim().toLowerCase());
+}
+$('loginBtn').onclick = async () => {
+  const email = $('authEmail').value.trim(), password = $('authPass').value;
+  if (!allowed(email)) return toast('This email is not approved for admin access.', true);
+  const { error } = await db.auth.signInWithPassword({ email, password });
+  if (error) return toast(error.message, true);
+};
+$('registerBtn').onclick = async () => {
+  const email = $('authEmail').value.trim(), password = $('authPass').value;
+  if (!allowed(email)) return toast('This email is not approved for admin access.', true);
+  if (password.length < 8) return toast('Password needs at least 8 characters.', true);
+  const { error } = await db.auth.signUp({ email, password });
+  if (error) return toast(error.message, true);
+  toast('Check your email and click the confirmation link, then log in.');
+};
+$('signout').onclick = async () => { await db.auth.signOut(); };
+
+db.auth.onAuthStateChange((_e, session) => {
+  const ok = session && allowed(session.user.email);
+  $('authView').classList.toggle('hidden', !!ok);
+  $('dash').classList.toggle('hidden', !ok);
+  $('signout').classList.toggle('hidden', !ok);
+  if (ok) loadAll();
+});
+
+/* ---------------- data ---------------- */
+async function loadAll() {
+  const [st, wk, ts, fq] = await Promise.all([
+    db.from('site_settings').select('*').eq('id', 1).single(),
+    db.from('weeks').select('*').order('sort'),
+    db.from('testimonials').select('*').order('sort'),
+    db.from('faqs').select('*').order('sort'),
+  ]);
+  if (st.error) return toast(st.error.message, true);
+  settings = st.data;
+  lists.weeks = wk.data || [];
+  lists.testimonials = ts.data || [];
+  lists.faqs = fq.data || [];
+  renderSettings();
+  ['weeks', 'testimonials', 'faqs'].forEach(renderList);
+}
+
+function renderSettings() {
+  $('s_batch').value = settings.next_batch_date;
+  $('s_opens').value = settings.registration_opens_on;
+  $('s_closes').value = settings.registration_closes_on;
+  $('s_price').value = settings.course_price;
+  $('s_value').value = settings.course_value;
+  paintSwitch();
+}
+function paintSwitch() {
+  $('regSwitch').classList.toggle('on', !!settings.registration_open);
+  $('regLabel').textContent = settings.registration_open ? 'Registration is OPEN' : 'Registration is CLOSED';
+  $('regLabel').style.color = settings.registration_open ? '#FBD20A' : '#FF8F8A';
+}
+$('regSwitch').onclick = () => { settings.registration_open = !settings.registration_open; paintSwitch(); };
+
+async function saveSettings() {
+  const patch = {
+    registration_open: settings.registration_open,
+    next_batch_date: $('s_batch').value.trim(),
+    registration_opens_on: $('s_opens').value.trim(),
+    registration_closes_on: $('s_closes').value.trim(),
+    course_price: parseInt($('s_price').value, 10) || 0,
+    course_value: parseInt($('s_value').value, 10) || 0,
+    updated_at: new Date().toISOString(),
+  };
+  const { error } = await db.from('site_settings').update(patch).eq('id', 1);
+  if (error) return toast(error.message, true);
+  toast('Settings saved ✔ live on the site');
+}
+
+/* ---------------- list editors ---------------- */
+const FIELDS = {
+  weeks: [['n', 'No. (e.g. 01)', 'input'], ['title', 'Title', 'input'], ['line', 'Small line (English)', 'input']],
+  testimonials: [['name', 'Name', 'input'], ['role', 'Role', 'input'], ['city', 'City', 'input'], ['quote', 'Review text', 'textarea']],
+  faqs: [['q', 'Question', 'input'], ['a', 'Answer', 'textarea']],
+};
+
+function renderList(table) {
+  const host = $(table + 'List');
+  host.innerHTML = '';
+  lists[table].forEach((row, i) => {
+    const div = document.createElement('div');
+    div.className = 'item';
+    let inner = '';
+    for (const [key, lab, kind] of FIELDS[table]) {
+      inner += `<label>${lab}</label>` + (kind === 'textarea'
+        ? `<textarea data-k="${key}">${esc(row[key])}</textarea>`
+        : `<input type="text" data-k="${key}" value="${esc(row[key])}">`);
+    }
+    inner += `<div class="row" style="margin-top:12px;">
+      <button class="btn small" data-act="save">Save</button>
+      <button class="btn ghost small" data-act="up" ${i === 0 ? 'disabled' : ''}>↑</button>
+      <button class="btn ghost small" data-act="down" ${i === lists[table].length - 1 ? 'disabled' : ''}>↓</button>
+      <button class="btn danger small" data-act="del">Delete</button>
+    </div>`;
+    div.innerHTML = inner;
+    div.querySelectorAll('[data-act]').forEach(btn => {
+      btn.onclick = () => action(table, i, btn.getAttribute('data-act'), div);
+    });
+    host.appendChild(div);
+  });
+}
+
+function collect(table, div, row) {
+  const out = {};
+  div.querySelectorAll('[data-k]').forEach(el => out[el.getAttribute('data-k')] = el.value.trim());
+  if (table === 'testimonials') out.initial = (out.name || '?').trim().charAt(0).toUpperCase();
+  return out;
+}
+
+async function action(table, i, act, div) {
+  const row = lists[table][i];
+  if (act === 'save') {
+    const vals = collect(table, div, row);
+    const q = row.id
+      ? db.from(table).update(vals).eq('id', row.id)
+      : db.from(table).insert({ ...vals, sort: i + 1 });
+    const { error } = await q;
+    if (error) return toast(error.message, true);
+    toast('Saved ✔');
+    return loadAll();
+  }
+  if (act === 'del') {
+    if (!confirm('Delete this item?')) return;
+    if (row.id) {
+      const { error } = await db.from(table).delete().eq('id', row.id);
+      if (error) return toast(error.message, true);
+    }
+    toast('Deleted');
+    return loadAll();
+  }
+  if (act === 'up' || act === 'down') {
+    const j = act === 'up' ? i - 1 : i + 1;
+    const other = lists[table][j];
+    if (!other || !row.id || !other.id) return;
+    const a = row.sort, b = other.sort;
+    const r1 = await db.from(table).update({ sort: b }).eq('id', row.id);
+    const r2 = await db.from(table).update({ sort: a }).eq('id', other.id);
+    if (r1.error || r2.error) return toast((r1.error || r2.error).message, true);
+    return loadAll();
+  }
+}
+
+function addRow(table) {
+  const maxSort = Math.max(0, ...lists[table].map(r => r.sort || 0));
+  const blank = { sort: maxSort + 1 };
+  FIELDS[table].forEach(([k]) => blank[k] = '');
+  lists[table].push(blank);
+  renderList(table);
+  const host = $(table + 'List');
+  host.lastElementChild.scrollIntoView({ block: 'center' });
+}
+</script>
+</body>
+</html>

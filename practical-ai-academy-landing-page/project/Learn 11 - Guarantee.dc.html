@@ -8,13 +8,14 @@
 <body>
 <x-dc>
 <helmet data-dc-atomics>
+<script src="./site-content.js"></script>
 </helmet>
   <!-- ============ GUARANTEE ============ -->
   <section style="max-width:800px;margin:0 auto;padding:40px 22px;">
     <div style="background:linear-gradient(155deg,rgba(101,10,52,.22),rgba(133,0,0,.10) 45%,rgba(12,12,15,.55));border:1px solid rgba(251,210,10,.28);border-radius:22px;box-shadow:inset 0 1px 0 rgba(255,255,255,.1),0 24px 50px -30px rgba(0,0,0,.9);padding:clamp(28px,5.5vw,44px);text-align:center;">
       <div style="display:inline-flex;align-items:center;justify-content:center;width:64px;height:64px;border-radius:18px;background:rgba(251,210,10,.1);border:1px solid rgba(251,210,10,.32);margin-bottom:18px;"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#FBD20A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.4-3 8.3-7 9.5C8 19.3 5 15.4 5 11V6z"/><path d="M9 12l2 2 4-4"/></svg></div>
       <h2 style="margin:0 0 20px;font-size:clamp(23px,5.2vw,32px);font-weight:800;line-height:1.28;">🎖️ ලංකාවේ වෙන කිසිම AI Course එකකින් නොලැබෙන මගේ වගකීම</h2>
-      <p style="margin:0 0 18px;font-size:clamp(16.5px,3.9vw,18.5px);line-height:1.88;color:rgba(245,245,247,.96);text-align:left;">ඔයා දැන් මෙහෙම හිතනවා ඇති. "මේ කවුද? මේක ඇත්තටම රු. 9,900 ක් වටිනවද? මේකත් මගේ සල්ලි සහ කාලය නාස්ති කරන තවත් එක බොරු Course එකක් වුණොත්?"</p>
+      <p style="margin:0 0 18px;font-size:clamp(16.5px,3.9vw,18.5px);line-height:1.88;color:rgba(245,245,247,.96);text-align:left;">ඔයා දැන් මෙහෙම හිතනවා ඇති. "මේ කවුද? මේක ඇත්තටම රු. {{ coursePrice }} ක් වටිනවද? මේකත් මගේ සල්ලි සහ කාලය නාස්ති කරන තවත් එක බොරු Course එකක් වුණොත්?"</p>
       <p style="margin:0 0 18px;font-size:clamp(16.5px,3.9vw,18.5px);line-height:1.88;color:rgba(245,245,247,.96);text-align:left;">ඒ බය ගොඩක් සාධාරණයි. ඒකට මගේ උත්තරේ මේකයි:</p>
       <p style="margin:0 0 18px;font-size:clamp(16.5px,3.9vw,18.5px);line-height:1.88;color:#F5F5F7;font-weight:600;text-align:left;">Practical AI Academy එකට එකතු වෙන්න. මුල් සති 2ක පන්ති වලට සහභාගි වෙන්න. ඒ සති 2 ඇතුළත ඕනෙම වෙලාවක "මේක මම ගෙවපු මුදලට වටින්නේ නෑ" කියලා ඔයාට හිතුණොත්, මට එක Email එකක් දාන්න. ඔයා ගෙවපු මුළු මුදලම මම ආපසු දෙනවා. සතයක්වත් අඩු කරන්නේ නෑ, කිසිම ප්‍රශ්නයක් අහන්නේ නෑ, කිසිම තරහක් නෑ.</p>
       <p style="margin:0 0 18px;font-size:clamp(16.5px,3.9vw,18.5px);line-height:1.88;color:rgba(245,245,247,.96);text-align:left;">ඇයි මම මෙහෙම කරන්නේ? මොකද මම කාලයක් තිස්සේ සිසුන්ට උගන්වනවා, ජාත්‍යන්තර Clients ලට පුහුණුව දීලා තියෙනවා, ඒ වගේම මගේ YouTube චැනල් එකෙන් දහස් ගාණකට කියලා දීලා තියෙනවා. එකම එක්කෙනෙක්වත් අද වෙනකල් කියලා නෑ මම උගන්වන දේ එයාලගේ කාලය නාස්ති කිරීමක් කියලා.</p>
@@ -23,6 +24,23 @@
   </section>
 
 </x-dc>
-<script type="text/x-dc" data-dc-script></script>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  componentDidMount() {
+    this.__pc = window.PA_CONTENT;
+    this._poll = setInterval(() => {
+      if (window.PA_CONTENT !== this.__pc) { this.__pc = window.PA_CONTENT; this.forceUpdate(); }
+    }, 500);
+    this._pollEnd = setTimeout(() => clearInterval(this._poll), 15000);
+  }
+  componentWillUnmount() { if (this._poll) clearInterval(this._poll); if (this._pollEnd) clearTimeout(this._pollEnd); }
+  renderVals() {
+    // Prices are managed from the admin panel (site_settings)
+    const S = (window.PA_CONTENT && window.PA_CONTENT.settings) || {};
+    const fmt = (n) => Number(n || 0).toLocaleString('en-US');
+    return { coursePrice: fmt(S.coursePrice || 9900), courseValue: fmt(S.courseValue || 45000) };
+  }
+}
+</script>
 </body>
 </html>

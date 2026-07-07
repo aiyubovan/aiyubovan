@@ -132,10 +132,11 @@
 <script type="text/x-dc" data-dc-script>
 class Component extends DCLogic {
   componentDidMount() {
-    // site-content.js may finish loading just after first render
-    if (!window.PA_CONTENT) {
-      this._t = setTimeout(() => this.forceUpdate(), 400);
-    }
+    this.__pc = window.PA_CONTENT;
+    this._poll = setInterval(() => {
+      if (window.PA_CONTENT !== this.__pc) { this.__pc = window.PA_CONTENT; this.forceUpdate(); }
+    }, 500);
+    this._pollEnd = setTimeout(() => clearInterval(this._poll), 15000);
 
     // The Tally embed script (loaded in the helmet) runs before the runtime
     // mounts, and re-renders can recreate the iframe unprocessed — so keep
@@ -150,7 +151,7 @@ class Component extends DCLogic {
     this._tallyWatchStop = setTimeout(() => clearInterval(this._tallyWatch), 30000);
   }
   componentWillUnmount() {
-    if (this._t) clearTimeout(this._t);
+    if (this._poll) clearInterval(this._poll); if (this._pollEnd) clearTimeout(this._pollEnd);
     if (this._tallyWatch) clearInterval(this._tallyWatch);
     if (this._tallyWatchStop) clearTimeout(this._tallyWatchStop);
   }

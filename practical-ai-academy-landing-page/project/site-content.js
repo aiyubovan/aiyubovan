@@ -38,6 +38,8 @@ window.PA_CONTENT = {
     nextBatchDate: '2026 ජූලි 25',
     registrationOpensOn: '2026-07-07 09:00',
     registrationClosesOn: '2026-07-21 23:59',
+    coursePrice: 9900,
+    courseValue: 45000,
   },
 
   /* ----------------------------------------------------------
@@ -117,3 +119,49 @@ window.PA_CONTENT = {
   ],
 
 };
+
+
+/* ============================================================
+   LIVE CONTENT (managed from the AIYUBOVAN admin panel)
+   ------------------------------------------------------------
+   The values above are instant fallbacks. A moment after the
+   page loads, fresh content is pulled from the database and the
+   page updates itself. If the database is unreachable, the
+   fallbacks above are shown, so the site never breaks.
+   ============================================================ */
+(function () {
+  var URL = 'https://tueaxfwuvugekxvlbnuf.supabase.co';
+  var KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR1ZWF4Znd1dnVnZWt4dmxibnVmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM0MzA0ODgsImV4cCI6MjA5OTAwNjQ4OH0.e2x9IawWs5cMMhph2nkCOu5xliyC1jZYiS50FitK6R4';
+  var H = { apikey: KEY, Authorization: 'Bearer ' + KEY };
+  function get(path) {
+    return fetch(URL + '/rest/v1/' + path, { headers: H }).then(function (r) {
+      if (!r.ok) throw new Error('http ' + r.status);
+      return r.json();
+    });
+  }
+  Promise.all([
+    get('site_settings?id=eq.1&limit=1'),
+    get('weeks?select=n,title,line&order=sort.asc'),
+    get('testimonials?select=initial,name,role,city,quote&order=sort.asc'),
+    get('faqs?select=q,a&order=sort.asc')
+  ]).then(function (res) {
+    var st = res[0] && res[0][0];
+    if (!st) return;
+    var base = window.PA_CONTENT || {};
+    window.PA_CONTENT = {
+      settings: {
+        registrationOpen: st.registration_open,
+        nextBatchDate: st.next_batch_date,
+        registrationOpensOn: st.registration_opens_on,
+        registrationClosesOn: st.registration_closes_on,
+        coursePrice: st.course_price,
+        courseValue: st.course_value
+      },
+      weeks: (res[1] && res[1].length) ? res[1] : base.weeks,
+      testimonials: (res[2] && res[2].length) ? res[2] : base.testimonials,
+      faqs: (res[3] && res[3].length) ? res[3] : base.faqs,
+      included: base.included,
+      pricingIncludes: base.pricingIncludes
+    };
+  }).catch(function () { /* fallbacks above stay in place */ });
+})();
