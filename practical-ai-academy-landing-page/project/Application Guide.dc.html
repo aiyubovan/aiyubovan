@@ -108,7 +108,7 @@
             <p style="margin:0;font-size:clamp(16px,3.8vw,18px);line-height:1.85;color:rgba(245,245,247,.96);">ඔයා මේ Course එකට එකතු වෙන්න කැමති නම්, පහළ තියෙන Form එක පුරවන්න. ඒක Submit කළාට පස්සේ, ඔයාව තෝරාගත්තද නැද්ද කියලා අපි ඔයාගේ Email එකට දන්වනවා. කරුණාකරලා <strong style="color:#FBD20A;">නිවැරදි තොරතුරු</strong> දීලා Form එක Submit කරන්න. ඒ වගේම ඔයාගේ <strong style="color:#FBD20A;">Email එකයි WhatsApp නම්බර් එකයි නිවැරදිද කියලා දෙපාරක් බලන්න</strong>. අපිට ඔයාව සම්බන්ධ කරගන්න පුළුවන් ඒ දෙකෙන් විතරයි.</p>
           </div>
           <div style="text-align:left;background:linear-gradient(155deg,rgba(101,10,52,.30),rgba(133,0,0,.14) 50%,rgba(12,12,15,.62));border:1px solid rgba(245,245,247,.18);border-radius:26px;box-shadow:inset 0 1px 0 rgba(255,255,255,.14),inset 0 -1px 1px rgba(0,0,0,.3),0 36px 84px -38px rgba(0,0,0,1);padding:clamp(14px,3vw,28px);">
-            <iframe src="https://tally.so/embed/xXBRad?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1" data-tally-src="https://tally.so/embed/xXBRad?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1" loading="lazy" width="100%" height="2130" frameborder="0" marginheight="0" marginwidth="0" title="Practical AI Academy — Application Form" style="border:none;"></iframe>
+            <iframe id="pa-tally-embed" src="https://tally.so/embed/xXBRad?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1" loading="lazy" width="100%" height="1800" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" title="Practical AI Academy — Application Form" style="border:none;display:block;width:100%;overflow:hidden;"></iframe>
           </div>
           <p style="margin:20px 0 0;font-size:15px;line-height:1.7;color:rgba(245,245,247,.72);">විනාඩි කිහිපයයි. කිසිම Account එකකින් Sign in වෙන්න ඕනේ නෑ.</p>
         </div>
@@ -138,22 +138,27 @@ class Component extends DCLogic {
     }, 500);
     this._pollEnd = setTimeout(() => clearInterval(this._poll), 15000);
 
-    // The Tally embed script (loaded in the helmet) runs before the runtime
-    // mounts, and re-renders can recreate the iframe unprocessed — so keep
-    // converting any iframe[data-tally-src] without a src until settled.
-    this._tallyWatch = setInterval(() => {
-      const pending = document.querySelector("iframe[data-tally-src]:not([src])");
-      if (pending && window.Tally && typeof window.Tally.loadEmbeds === "function") {
+    // Make the embedded form auto-size to its content so it NEVER scrolls on
+    // its own — only the page scrolls. The iframe is served with its src and
+    // dynamicHeight=1 already set (so it always shows, even if scripts are
+    // slow). Tally's loadEmbeds has a pass that adopts an already-loaded
+    // iframe whose src contains dynamicHeight=1 (and has no data-tally-src),
+    // attaching its licensed auto-height resizer. The runtime mounts the
+    // iframe a beat after this component, so we call loadEmbeds repeatedly
+    // until it has been adopted.
+    let tries = 0;
+    this._tallyInit = setInterval(() => {
+      const f = document.getElementById("pa-tally-embed");
+      if (f && f.dataset.tallyEmbedWidgetInitialized) { clearInterval(this._tallyInit); return; }
+      if (window.Tally && typeof window.Tally.loadEmbeds === "function" && f) {
         window.Tally.loadEmbeds();
       }
-    }, 400);
-    // stop watching once the page has long settled
-    this._tallyWatchStop = setTimeout(() => clearInterval(this._tallyWatch), 30000);
+      if (++tries > 60) clearInterval(this._tallyInit);
+    }, 200);
   }
   componentWillUnmount() {
     if (this._poll) clearInterval(this._poll); if (this._pollEnd) clearTimeout(this._pollEnd);
-    if (this._tallyWatch) clearInterval(this._tallyWatch);
-    if (this._tallyWatchStop) clearTimeout(this._tallyWatchStop);
+    if (this._tallyInit) clearInterval(this._tallyInit);
   }
   renderVals() {
     const S = (window.PA_CONTENT && window.PA_CONTENT.settings) || {};
