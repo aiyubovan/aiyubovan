@@ -28,7 +28,6 @@
       <div style="color:#FBD20A;font-size:12.5px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;">Legal</div>
       <h1 style="margin:12px 0 0;font-size:clamp(30px,7vw,46px);font-weight:900;line-height:1.1;letter-spacing:-.8px;">Privacy Policy</h1>
       <p style="margin:12px 0 0;font-size:14px;color:rgba(245,245,247,.5);">Last updated: {{ updated }}</p>
-      <div style="margin:20px 0 0;background:linear-gradient(155deg,rgba(101,10,52,.18),rgba(12,12,15,.5));border:1px solid rgba(245,245,247,.14);border-radius:14px;box-shadow:inset 0 1px 0 rgba(255,255,255,.08);padding:16px 18px;font-size:14px;line-height:1.6;color:rgba(245,245,247,.6);">This is placeholder text so you can see the layout. Please replace each section with your finalized wording before going live.</div>
 
       <div style="margin-top:34px;display:flex;flex-direction:column;gap:30px;">
         <sc-for list="{{ sections }}" as="s" hint-placeholder-count="9">
@@ -48,18 +47,20 @@
 class Component extends DCLogic {
   renderVals() {
     return {
-      updated: '1 July 2026',
+      updated: '8 July 2026',
       sections: [
-        { h: '1. Information We Collect', p: 'When you register, we collect details such as your name, email, phone number and payment confirmation. We only collect what we need to run the course. Placeholder text.' },
-        { h: '2. How We Use Your Information', p: 'We use your information to give you access to classes, send notes and recordings, and keep you updated about the course. Placeholder text, replace with your final wording.' },
-        { h: '3. Payment Information', p: 'Payments are processed by trusted providers and through bank transfer. We do not store your full card details on our systems. Placeholder text.' },
-        { h: '4. Cookies and Analytics', p: 'Our website may use basic cookies and analytics to understand how visitors use the page and to improve it. Placeholder text.' },
-        { h: '5. Sharing Your Information', p: 'We do not sell your personal information. We only share it with services that help us deliver the course, such as our class platform. Placeholder text.' },
-        { h: '6. Data Security', p: 'We take reasonable steps to keep your information safe. No system is perfect, but we work to protect your data. Placeholder text.' },
-        { h: '7. Your Rights', p: 'You can ask us to view, correct or delete the personal information we hold about you at any time. Placeholder text.' },
-        { h: '8. Third Party Services', p: 'We use tools such as Zoom, WhatsApp and email providers. Their own privacy policies also apply when you use them. Placeholder text.' },
-        { h: '9. Changes to This Policy', p: 'We may update this policy from time to time. The latest version will always be available on this page. Placeholder text.' },
-        { h: '10. Contact', p: 'For any questions about your privacy, please reach out through the contact details on our main page. Placeholder text.' },
+        { h: '1. Information We Collect', p: 'When you apply for a course, book a consultation, or contact us, we may collect your name, date of birth, mobile and WhatsApp numbers, email address, your answers to our application questions, payment confirmation details, and basic website usage data. We do not store your full card details, since payments are processed by our payment provider or through bank transfer.' },
+        { h: '2. How We Use Your Information', p: 'We use your information to review your application, communicate with you about your enrollment, consultation, or purchase, deliver course access and materials, and add you to the relevant WhatsApp community. We will only send you updates about future AIYUBOVAN courses if you have agreed to this on our application form.' },
+        { h: '3. Legal Basis for Processing', p: 'We process your personal data based on your consent, such as when you submit an application or agree to receive updates, and where necessary to deliver a course, consultation, or product you have paid for.' },
+        { h: '4. Third Party Services We Use', p: 'To operate our services, we share limited data with trusted third party providers, including Tally for application forms, Cal.com for consultation scheduling, Supabase for securely storing website content, WhatsApp for community communication, and Google Meet for live sessions, along with our payment providers. We do not sell your personal information to anyone.' },
+        { h: '5. Data Retention', p: 'We keep your personal information for as long as needed to deliver our services, or as required by law. If you would like your data deleted sooner, please contact us.' },
+        { h: '6. Your Rights', p: 'You have the right to request access to the personal data we hold about you, ask us to correct inaccurate data, request deletion of your data where possible, and withdraw your consent to marketing updates at any time. To do any of this, email info@aiyubovan.com.' },
+        { h: '7. Cookies and Analytics', p: 'Our website may use basic cookies and analytics to understand how visitors use our site and to improve it. You can manage cookies through your browser settings.' },
+        { h: '8. International Data Transfers', p: 'Some of the third party services we use may process or store data outside Sri Lanka. Where this happens, we take reasonable steps to keep your data protected in line with this policy.' },
+        { h: '9. Children\'s Privacy', p: 'Our services are not directed at children under 18, and we do not knowingly collect personal data from children.' },
+        { h: '10. Data Security', p: 'We take reasonable steps to protect your personal data from unauthorized access, loss, or misuse, although no method of sending information over the internet is completely secure.' },
+        { h: '11. Changes to This Policy', p: 'We may update this privacy policy from time to time. The latest version will always be available on this page.' },
+        { h: '12. Contact', p: 'For any privacy related questions or requests, please reach out to info@aiyubovan.com.' },
       ],
     };
   }

@@ -28,7 +28,6 @@
       <div style="color:#FBD20A;font-size:12.5px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;">Legal</div>
       <h1 style="margin:12px 0 0;font-size:clamp(30px,7vw,46px);font-weight:900;line-height:1.1;letter-spacing:-.8px;">Terms &amp; Conditions</h1>
       <p style="margin:12px 0 0;font-size:14px;color:rgba(245,245,247,.5);">Last updated: {{ updated }}</p>
-      <div style="margin:20px 0 0;background:linear-gradient(155deg,rgba(101,10,52,.18),rgba(12,12,15,.5));border:1px solid rgba(245,245,247,.14);border-radius:14px;box-shadow:inset 0 1px 0 rgba(255,255,255,.08);padding:16px 18px;font-size:14px;line-height:1.6;color:rgba(245,245,247,.6);">This is placeholder text so you can see the layout. Please replace each section with your finalized wording before going live.</p>
 
       <div style="margin-top:34px;display:flex;flex-direction:column;gap:30px;">
         <sc-for list="{{ sections }}" as="s" hint-placeholder-count="9">
@@ -48,18 +47,23 @@
 class Component extends DCLogic {
   renderVals() {
     return {
-      updated: '1 July 2026',
+      updated: '8 July 2026',
       sections: [
-        { h: '1. Acceptance of Terms', p: 'By enrolling in Practical AI Academy or using any AIYUBOVAN service, you agree to these terms. If you do not agree, please do not register. Placeholder text, replace with your final wording.' },
-        { h: '2. Enrollment and Access', p: 'Enrollment gives you access to the live sessions, recordings and materials for the batch you join. Access is personal to you and should not be shared with others. Placeholder text.' },
-        { h: '3. Payments and Pricing', p: 'All prices are shown in Sri Lankan Rupees. Payment can be made by card or bank transfer, and your seat is confirmed once payment is received. Placeholder text.' },
-        { h: '4. Refund Policy', p: 'You may request a full refund within the first two weeks of the course, no questions asked. After this period, fees are non refundable. Placeholder text.' },
-        { h: '5. Use of Course Materials', p: 'Recordings, notes and resources are for your personal learning only. You may not resell, redistribute or publish them without written permission. Placeholder text.' },
-        { h: '6. Intellectual Property', p: 'All course content, branding and materials remain the property of AIYUBOVAN. Placeholder text, replace with your final wording.' },
-        { h: '7. Community Conduct', p: 'We expect respectful behaviour in the WhatsApp community and live sessions. We may remove anyone who is abusive or disruptive. Placeholder text.' },
-        { h: '8. Limitation of Liability', p: 'The course provides education and guidance. Results depend on your own effort, and we cannot guarantee specific outcomes. Placeholder text.' },
-        { h: '9. Changes to These Terms', p: 'We may update these terms from time to time. The latest version will always be available on this page. Placeholder text.' },
-        { h: '10. Contact', p: 'For any questions about these terms, please reach out through the contact details on our main page. Placeholder text.' },
+        { h: '1. Acceptance of Terms', p: 'By registering for a course, booking a consultation, purchasing a digital product, or otherwise using AIYUBOVAN\'s services, you agree to these Terms and Conditions. If you do not agree with any part of these terms, please do not use our services.' },
+        { h: '2. Who We Are', p: 'AIYUBOVAN is an independent online education project run by a single individual based in Sri Lanka, teaching AI tools and skills in Sinhala through the Practical AI Academy live course, one to one consultations, and digital products sold through our Shop. AIYUBOVAN is not currently a registered business or company. You can reach us at info@aiyubovan.com.' },
+        { h: '3. Eligibility', p: 'Our services are intended for individuals aged 18 and above. If you are under 18, you may only use our services with the involvement and consent of a parent or legal guardian.' },
+        { h: '4. Course Enrollment and Access', p: 'Enrollment in Practical AI Academy is subject to an application process, and submitting an application does not guarantee a seat. Once your application is accepted and payment is confirmed, you will be given access to the live Zoom sessions, class recordings, notes, and the private WhatsApp community for the batch you join. This access is personal to you and should not be shared with anyone else. Class schedules and curriculum details may be adjusted from time to time to improve the course, without reducing its overall value or duration.' },
+        { h: '5. Pricing and Payment', p: 'All prices are listed in Sri Lankan Rupees and are payable in full at the time of enrollment or purchase, by card or bank transfer as instructed. Prices may change for future batches or products at any time, but such changes will not affect any enrollment or purchase you have already confirmed.' },
+        { h: '6. One to One Consultations', p: 'Consultations are booked through our online scheduling system and conducted over Google Meet. Please join on time, as arriving late will reduce your session time without any fee adjustment. If you need to reschedule, please let us know at least 24 hours before your session. Sessions missed without any notice are treated as completed.' },
+        { h: '7. Digital Shop Products', p: 'Digital products sold through our Shop, such as PDFs, prompt packs, and templates, are licensed for your personal, non commercial use only, unless stated otherwise at the time of purchase.' },
+        { h: '8. Refunds and Cancellations', p: 'You may request a full refund for Practical AI Academy within the first two weeks of your course batch, no questions asked, by emailing info@aiyubovan.com. Beyond this two week window, course fees are non refundable. Any other course added to our platform in the future, as well as all one to one consultations and all digital products sold through our Shop, are non refundable once purchased or delivered, unless stated otherwise at the time of purchase. Full details are available in our Return and Refund Policy.' },
+        { h: '9. Use of Course Materials and Acceptable Use', p: 'Recordings, notes, and any other materials we provide are for your personal learning only. You may not resell, redistribute, publicly share, or publish them without our written permission. You also agree not to use our services for any unlawful purpose, or to disrupt or attempt to gain unauthorized access to our live sessions, community groups, or website. We may remove anyone who is abusive, disruptive, or in breach of these terms, without a refund.' },
+        { h: '10. Intellectual Property', p: 'All course content, videos, notes, infographics, cheat sheets, branding, and website content belong to AIYUBOVAN, unless credited otherwise. You are granted a limited, personal license to use these materials for your own learning, and no ownership is transferred to you.' },
+        { h: '11. Third Party Tools and No Guarantee of Results', p: 'Our courses teach the use of third party AI tools such as Google Gemini, Perplexity AI, NotebookLM, and ChatGPT. We are not affiliated with these tools, and their features, pricing, and free plans may change at any time outside our control. Our courses and consultations are educational in nature, and while we share real examples and testimonials, we do not guarantee specific income, career, or business results from applying what you learn.' },
+        { h: '12. Limitation of Liability', p: 'To the fullest extent permitted by law, AIYUBOVAN is not liable for any indirect or consequential loss arising from your use of our services. Our total liability for any claim will not exceed the amount you paid for the specific course, session, or product involved.' },
+        { h: '13. Governing Law', p: 'These terms are governed by the laws of Sri Lanka, and any disputes will be subject to the courts of Sri Lanka.' },
+        { h: '14. Changes to These Terms', p: 'We may update these terms from time to time. The latest version will always be available on this page, and continuing to use our services after an update means you accept the changes.' },
+        { h: '15. Contact', p: 'For any questions about these terms, please reach out to info@aiyubovan.com.' },
       ],
     };
   }

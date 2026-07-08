@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700;800;900&family=Noto+Sans+Sinhala:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:#0A0A0C;color:#F5F5F7;font-family:'Noto Sans','Noto Sans Sinhala',system-ui,-apple-system,sans-serif;-webkit-font-smoothing:antialiased;}
+  ::selection{background:#FBD20A;color:#2A0512;}
+  a{color:inherit;}
+</style>
+</helmet>
+<div style="min-height:100vh;display:flex;flex-direction:column;">
+  <dc-import name="Nav" home-href="Practical AI Academy.dc.html#home" register-href="Application Guide.dc.html#apply" hint-size="100%,64px"></dc-import>
+
+  <main style="flex:1;position:relative;overflow:hidden;padding:clamp(16px,4vw,56px) 20px 72px;">
+    <div style="position:absolute;inset:0;pointer-events:none;background:radial-gradient(70% 30% at 50% 0%,rgba(101,10,52,.4),transparent 68%);"></div>
+    <div style="position:relative;max-width:780px;margin:0 auto;">
+      <div style="color:#FBD20A;font-size:12.5px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;">Legal</div>
+      <h1 style="margin:12px 0 0;font-size:clamp(30px,7vw,46px);font-weight:900;line-height:1.1;letter-spacing:-.8px;">Return &amp; Refund Policy</h1>
+      <p style="margin:12px 0 0;font-size:14px;color:rgba(245,245,247,.5);">Last updated: {{ updated }}</p>
+
+      <div style="margin-top:34px;display:flex;flex-direction:column;gap:30px;">
+        <sc-for list="{{ sections }}" as="s" hint-placeholder-count="8">
+          <div>
+            <h2 style="margin:0 0 10px;font-size:clamp(19px,4.4vw,23px);font-weight:800;color:#F5F5F7;">{{ s.h }}</h2>
+            <p style="margin:0;font-size:clamp(15px,3.6vw,16.5px);line-height:1.72;color:rgba(245,245,247,.68);">{{ s.p }}</p>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </main>
+
+  <dc-import name="Footer" hint-size="100%,360px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      updated: '8 July 2026',
+      sections: [
+        { h: '1. Digital Products and Services', p: 'AIYUBOVAN sells digital educational courses, live online classes, one to one consultations, and digital products through this website. Because these are digital goods and services, this policy explains exactly when a refund is and is not available.' },
+        { h: '2. Practical AI Academy Live Course', p: 'If you join Practical AI Academy and are not happy with the course, you can request a full refund within the first two weeks of your batch, no questions asked. Simply email info@aiyubovan.com within that two week window, and your full payment will be refunded.' },
+        { h: '3. Other Courses on This Platform', p: 'Beyond this two week window, and for any other course we may add to our course library in the future, course fees are non refundable once purchased, unless stated otherwise on that specific course page at the time of purchase.' },
+        { h: '4. One to One Consultations', p: 'One to one consultation sessions are non refundable once booked and confirmed. You may reschedule your session at no charge if you let us know at least 24 hours in advance. Sessions missed without notice are treated as completed and are non refundable.' },
+        { h: '5. Digital Shop Products', p: 'Digital products sold through our Shop, including PDFs, AI prompt packs, and templates, are non refundable once delivered, since they cannot be returned after being downloaded or accessed.' },
+        { h: '6. Exceptions', p: 'We may consider an exception if you were accidentally charged twice for the same purchase, or if a technical fault on our end meant you never received access to a course, session, or product. Please email info@aiyubovan.com within 7 days of your payment, along with details of the issue. Approval of any exception is at our discretion.' },
+        { h: '7. Cancellations By Us', p: 'If we ever need to cancel a course batch or a scheduled consultation, you will be offered a full refund or a transfer to the next available batch or session.' },
+        { h: '8. Contact', p: 'For any questions about this policy, please reach out to info@aiyubovan.com.' },
+      ],
+    };
+  }
+}
+</script>
+</body>
+</html>
