@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700;800;900&family=Noto+Sans+Sinhala:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:#0A0A0C;color:#F5F5F7;font-family:'Noto Sans','Noto Sans Sinhala',system-ui,-apple-system,sans-serif;-webkit-font-smoothing:antialiased;}
+  ::selection{background:#FBD20A;color:#2A0512;}
+  a{color:inherit;}
+  [style*="253, 226, 92"]{position:relative;overflow:hidden;transition:transform .28s cubic-bezier(.2,.7,.2,1),box-shadow .28s ease,filter .28s ease;}
+  [style*="253, 226, 92"]:hover{transform:translateY(-2px) scale(1.015);box-shadow:0 22px 52px -12px rgba(251,210,10,.72);filter:brightness(1.06);}
+  [style*="253, 226, 92"]::after{content:"";position:absolute;top:0;bottom:0;left:-75%;width:55%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.6),transparent);transform:skewX(-18deg);transition:left .6s ease;pointer-events:none;}
+  [style*="253, 226, 92"]:hover::after{left:145%;}
+</style>
+</helmet>
+<div style="min-height:100vh;display:flex;flex-direction:column;">
+  <dc-import name="Nav" home-href="Practical AI Academy.dc.html#home" register-href="Application Guide.dc.html#apply" hint-size="100%,64px"></dc-import>
+
+  <main style="flex:1;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;padding:clamp(18px,4.5vw,72px) 20px 88px;">
+    <div style="position:absolute;inset:0;pointer-events:none;background:radial-gradient(60% 55% at 50% 20%,rgba(101,10,52,.55),transparent 70%),radial-gradient(42% 40% at 82% 12%,rgba(133,0,0,.4),transparent 68%);"></div>
+    <div style="position:absolute;left:50%;top:6%;width:520px;height:520px;max-width:92vw;transform:translateX(-50%);pointer-events:none;background:radial-gradient(circle,rgba(251,210,10,.13),rgba(251,210,10,.03) 42%,transparent 62%);"></div>
+
+    <div style="position:relative;width:100%;max-width:560px;text-align:center;background:linear-gradient(155deg,rgba(101,10,52,.30),rgba(133,0,0,.14) 48%,rgba(12,12,15,.6));border:1px solid rgba(245,245,247,.18);border-radius:26px;box-shadow:inset 0 1px 0 rgba(255,255,255,.14),inset 0 -1px 1px rgba(0,0,0,.3),0 34px 80px -38px rgba(0,0,0,1);padding:clamp(34px,7vw,56px);">
+      <div style="display:inline-flex;align-items:center;justify-content:center;width:70px;height:70px;border-radius:20px;background:rgba(251,210,10,.1);border:1px solid rgba(251,210,10,.32);margin-bottom:22px;">
+        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#FBD20A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+      </div>
+      <div style="color:#FBD20A;font-size:12.5px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;">Shop</div>
+      <h1 style="margin:12px 0 0;font-size:clamp(28px,7vw,42px);font-weight:900;line-height:1.12;letter-spacing:-.5px;">මේ පිටුව තාමත්<br>හැදෙන ගමන් තියෙන්නේ.</h1>
+      <p style="margin:18px auto 0;max-width:400px;font-size:clamp(15.5px,4vw,17px);line-height:1.66;color:rgba(245,245,247,.94);">AIYUBOVAN Shop එක ළඟදීම ඔයාට බලාගන්න පුළුවන් වෙයි. දැනට, මුල ඉඳන්ම පටන් ගන්න හොඳම තැන තමයි Practical AI Academy එක.</p>
+      <a href="Practical AI Academy.dc.html" style="display:inline-flex;align-items:center;justify-content:center;margin-top:28px;background:linear-gradient(180deg,#FDE25C,#FBD20A);color:#2A0512;font-weight:800;font-size:16.5px;border-radius:999px;padding:16px 32px;text-decoration:none;box-shadow:0 14px 34px -10px rgba(251,210,10,.55);">Practical AI Academy එක ගැන බලන්න</a>
+    </div>
+  </main>
+
+  <dc-import name="Footer" hint-size="100%,360px"></dc-import>
+</div>
+</x-dc>
+</body>
+</html>
