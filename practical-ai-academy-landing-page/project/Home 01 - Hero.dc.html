@@ -39,10 +39,10 @@
         <a href="/what-you-will-learn" class="pa-ghost" style="display:inline-flex;align-items:center;justify-content:center;background:rgba(245,245,247,.04);color:#F5F5F7;font-weight:600;font-size:16.5px;border:1px solid rgba(245,245,247,.24);border-radius:999px;padding:16px 30px;text-decoration:none;">ඉගෙන ගන්න දේවල් බලන්න</a>
       </div>
 
-      <sc-if value="{{ regClosed }}">
+      <sc-if value="{{ hasBatch }}">
         <div class="pa-hero-row" style="display:flex;justify-content:center;margin-top:18px;">
-          <span style="display:inline-flex;align-items:center;gap:9px;background:rgba(240,64,60,.10);border:1px solid rgba(240,64,60,.45);border-radius:999px;padding:9px 18px;font-size:14.5px;font-weight:700;color:#FF7B72;">
-            <span style="width:7px;height:7px;border-radius:50%;background:#FF5A52;box-shadow:0 0 10px rgba(255,90,82,.9);"></span>
+          <span style="display:inline-flex;align-items:center;gap:9px;background:{{ pillBg }};border:1px solid {{ pillBorder }};border-radius:999px;padding:9px 18px;font-size:14.5px;font-weight:700;color:{{ pillColor }};">
+            <span style="width:7px;height:7px;border-radius:50%;background:{{ pillDot }};box-shadow:0 0 10px {{ pillGlow }};"></span>
             ඊළඟ කණ්ඩායම පටන් ගන්නේ: {{ nextBatch }}
           </span>
         </div>
@@ -85,7 +85,12 @@ class Component extends DCLogic {
   renderVals() {
     const S = (window.PA_CONTENT && window.PA_CONTENT.settings) || {};
     const regOpen = S.registrationOpen !== false;
-    return { regOpen, regClosed: !regOpen, nextBatch: S.nextBatchDate || '' };
+    const nextBatch = S.nextBatchDate || '';
+    // green pill while registration is OPEN, red when CLOSED
+    const th = regOpen
+      ? { pillBg:'rgba(52,199,123,.10)', pillBorder:'rgba(52,199,123,.45)', pillColor:'#7FE6A6', pillDot:'#35D07A', pillGlow:'rgba(53,208,122,.9)' }
+      : { pillBg:'rgba(240,64,60,.10)', pillBorder:'rgba(240,64,60,.45)', pillColor:'#FF7B72', pillDot:'#FF5A52', pillGlow:'rgba(255,90,82,.9)' };
+    return { regOpen, regClosed: !regOpen, hasBatch: !!nextBatch, nextBatch, ...th };
   }
 }
 </script>

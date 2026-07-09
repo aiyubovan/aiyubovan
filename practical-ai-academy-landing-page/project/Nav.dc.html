@@ -64,32 +64,32 @@
   </div>
 
   <sc-if value="{{ showCdBar }}">
-    <div style="border-top:1px solid rgba(240,64,60,.28);background:linear-gradient(90deg,rgba(101,10,52,.6),rgba(133,0,0,.4) 50%,rgba(101,10,52,.6));">
+    <div style="border-top:1px solid {{ barBorder }};background:{{ barBg }};">
       <div class="pa-cdwrap" style="max-width:1200px;margin:0 auto;padding:6px 14px;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:8px 14px;">
-        <span class="pa-cdlabel" style="font-size:12.5px;font-weight:800;letter-spacing:.5px;color:#FF9B94;">{{ cdLabel }}</span>
+        <span class="pa-cdlabel" style="font-size:12.5px;font-weight:800;letter-spacing:.5px;color:{{ cdLabelColor }};">{{ cdLabel }}</span>
         <sc-if value="{{ showCd }}">
         <div class="pa-cdrow" style="display:flex;align-items:center;gap:6px;">
-          <span class="pa-cdbox" style="display:inline-flex;flex-direction:column;align-items:center;min-width:46px;background:rgba(12,12,15,.6);border:1px solid rgba(240,64,60,.4);border-radius:9px;padding:3px 8px 4px;">
+          <span class="pa-cdbox" style="display:inline-flex;flex-direction:column;align-items:center;min-width:46px;background:rgba(12,12,15,.6);border:1px solid {{ boxBorder }};border-radius:9px;padding:3px 8px 4px;">
             <span class="pa-cdnum" style="font-size:16px;font-weight:900;color:#FBD20A;font-variant-numeric:tabular-nums;line-height:1.2;">{{ cdDays }}</span>
             <span class="pa-cdunit" style="font-size:10px;font-weight:700;color:rgba(245,245,247,.6);line-height:1.2;">දින</span>
           </span>
-          <span class="pa-cdbox" style="display:inline-flex;flex-direction:column;align-items:center;min-width:46px;background:rgba(12,12,15,.6);border:1px solid rgba(240,64,60,.4);border-radius:9px;padding:3px 8px 4px;">
+          <span class="pa-cdbox" style="display:inline-flex;flex-direction:column;align-items:center;min-width:46px;background:rgba(12,12,15,.6);border:1px solid {{ boxBorder }};border-radius:9px;padding:3px 8px 4px;">
             <span class="pa-cdnum" style="font-size:16px;font-weight:900;color:#FBD20A;font-variant-numeric:tabular-nums;line-height:1.2;">{{ cdHrs }}</span>
             <span class="pa-cdunit" style="font-size:10px;font-weight:700;color:rgba(245,245,247,.6);line-height:1.2;">පැය</span>
           </span>
-          <span class="pa-cdbox" style="display:inline-flex;flex-direction:column;align-items:center;min-width:46px;background:rgba(12,12,15,.6);border:1px solid rgba(240,64,60,.4);border-radius:9px;padding:3px 8px 4px;">
+          <span class="pa-cdbox" style="display:inline-flex;flex-direction:column;align-items:center;min-width:46px;background:rgba(12,12,15,.6);border:1px solid {{ boxBorder }};border-radius:9px;padding:3px 8px 4px;">
             <span class="pa-cdnum" style="font-size:16px;font-weight:900;color:#FBD20A;font-variant-numeric:tabular-nums;line-height:1.2;">{{ cdMins }}</span>
             <span class="pa-cdunit" style="font-size:10px;font-weight:700;color:rgba(245,245,247,.6);line-height:1.2;">මිනිත්තු</span>
           </span>
-          <span class="pa-cdbox" style="display:inline-flex;flex-direction:column;align-items:center;min-width:46px;background:rgba(12,12,15,.6);border:1px solid rgba(240,64,60,.4);border-radius:9px;padding:3px 8px 4px;">
+          <span class="pa-cdbox" style="display:inline-flex;flex-direction:column;align-items:center;min-width:46px;background:rgba(12,12,15,.6);border:1px solid {{ boxBorder }};border-radius:9px;padding:3px 8px 4px;">
             <span class="pa-cdnum" style="font-size:16px;font-weight:900;color:#FBD20A;font-variant-numeric:tabular-nums;line-height:1.2;">{{ cdSecs }}</span>
             <span class="pa-cdunit" style="font-size:10px;font-weight:700;color:rgba(245,245,247,.6);line-height:1.2;">තත්පර</span>
           </span>
         </div>
         </sc-if>
-        <sc-if value="{{ regClosed }}">
-          <span style="display:inline-flex;align-items:center;gap:7px;background:rgba(240,64,60,.12);color:#FF9B94;font-weight:700;font-size:12.5px;border:1px solid rgba(240,64,60,.4);border-radius:999px;padding:4px 13px;">
-            <span style="width:5px;height:5px;border-radius:50%;background:#FF5A52;box-shadow:0 0 8px rgba(255,90,82,.9);"></span>
+        <sc-if value="{{ hasBatch }}">
+          <span style="display:inline-flex;align-items:center;gap:7px;background:{{ pillBg }};color:{{ pillColor }};font-weight:700;font-size:12.5px;border:1px solid {{ pillBorder }};border-radius:999px;padding:4px 13px;">
+            <span style="width:5px;height:5px;border-radius:50%;background:{{ pillDot }};box-shadow:0 0 8px {{ pillGlow }};"></span>
             ඊළඟ කණ්ඩායම: {{ nextBatch }}
           </span>
         </sc-if>
@@ -194,11 +194,39 @@ class Component extends DCLogic {
       }
     }
 
+    // Colour theme: green while registration is OPEN (active), red when
+    // CLOSED. Applied to the countdown bar, its boxes, label and the
+    // always-visible "next batch" pill.
+    const theme = regOpen ? {
+      barBorder: 'rgba(52,199,123,.30)',
+      barBg: 'linear-gradient(90deg,rgba(12,54,36,.66),rgba(16,74,48,.46) 50%,rgba(12,54,36,.66))',
+      cdLabelColor: '#74E4A0',
+      boxBorder: 'rgba(52,199,123,.45)',
+      pillBg: 'rgba(52,199,123,.12)',
+      pillBorder: 'rgba(52,199,123,.45)',
+      pillColor: '#7FE6A6',
+      pillDot: '#35D07A',
+      pillGlow: 'rgba(53,208,122,.9)',
+    } : {
+      barBorder: 'rgba(240,64,60,.28)',
+      barBg: 'linear-gradient(90deg,rgba(101,10,52,.6),rgba(133,0,0,.4) 50%,rgba(101,10,52,.6))',
+      cdLabelColor: '#FF9B94',
+      boxBorder: 'rgba(240,64,60,.4)',
+      pillBg: 'rgba(240,64,60,.12)',
+      pillBorder: 'rgba(240,64,60,.4)',
+      pillColor: '#FF9B94',
+      pillDot: '#FF5A52',
+      pillGlow: 'rgba(255,90,82,.9)',
+    };
+    const nextBatch = S.nextBatchDate || '';
+
     return {
       regOpen,
       regClosed: !regOpen,
       showCd, showCdBar, cdLabel, cdDays, cdHrs, cdMins, cdSecs,
-      nextBatch: S.nextBatchDate || '2026 අගෝස්තු 21',
+      hasBatch: !!nextBatch,
+      nextBatch: nextBatch || '2026 අගෝස්තු 21',
+      ...theme,
       homeHref: this.props.homeHref || '#home',
       registerHref: this.props.registerHref || '#pricing',
       menuOpen: this.state.menuOpen,

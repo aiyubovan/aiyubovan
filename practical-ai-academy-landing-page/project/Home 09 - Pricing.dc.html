@@ -22,11 +22,11 @@
       <div style="position:relative;overflow:hidden;background:linear-gradient(155deg,rgba(101,10,52,.5),rgba(133,0,0,.24) 55%,rgba(12,12,15,.65));border:1px solid rgba(251,210,10,.3);border-radius:28px;box-shadow:inset 0 1px 0 rgba(255,255,255,.17),inset 0 -1px 1px rgba(0,0,0,.32),0 40px 90px -40px rgba(0,0,0,1),0 0 60px -30px rgba(251,210,10,.4);padding:clamp(28px,6vw,44px);">
         <div style="position:absolute;right:-50px;top:-50px;width:220px;height:220px;pointer-events:none;background:radial-gradient(circle,rgba(251,210,10,.2),transparent 62%);"></div>
         <div style="position:relative;text-align:center;">
-          <sc-if value="{{ regClosed }}">
+          <sc-if value="{{ hasBatch }}">
             <div style="margin-bottom:20px;">
-              <div style="display:inline-flex;flex-direction:column;align-items:center;gap:3px;border:3px solid rgba(240,64,60,.85);border-radius:16px;background:rgba(240,64,60,.09);padding:12px 24px;transform:rotate(-3deg);box-shadow:0 0 0 4px rgba(240,64,60,.18),0 14px 34px -16px rgba(0,0,0,.8);">
-                <span style="font-size:11.5px;font-weight:800;letter-spacing:2.5px;color:#FF6B63;text-transform:uppercase;">Next batch starts on</span>
-                <span style="font-size:22px;font-weight:900;color:#FF6B63;letter-spacing:.5px;">{{ nextBatch }}</span>
+              <div style="display:inline-flex;flex-direction:column;align-items:center;gap:3px;border:3px solid {{ stampBorder }};border-radius:16px;background:{{ stampBg }};padding:12px 24px;transform:rotate(-3deg);box-shadow:0 0 0 4px {{ stampRing }},0 14px 34px -16px rgba(0,0,0,.8);">
+                <span style="font-size:11.5px;font-weight:800;letter-spacing:2.5px;color:{{ stampText }};text-transform:uppercase;">Next batch starts on</span>
+                <span style="font-size:22px;font-weight:900;color:{{ stampText }};letter-spacing:.5px;">{{ nextBatch }}</span>
               </div>
             </div>
           </sc-if>
@@ -86,12 +86,19 @@ class Component extends DCLogic {
     const S = C.settings || {};
     const regOpen = S.registrationOpen !== false;
     const fmt = (n) => Number(n || 0).toLocaleString('en-US');
+    const nextBatch = S.nextBatchDate || '';
+    // "Next batch starts on" sticker: green while OPEN, red when CLOSED
+    const stamp = regOpen
+      ? { stampBorder:'rgba(52,199,123,.8)', stampBg:'rgba(52,199,123,.09)', stampRing:'rgba(52,199,123,.18)', stampText:'#4FD98C' }
+      : { stampBorder:'rgba(240,64,60,.85)', stampBg:'rgba(240,64,60,.09)', stampRing:'rgba(240,64,60,.18)', stampText:'#FF6B63' };
     return {
       coursePrice: fmt(S.coursePrice || 9900),
       courseValue: fmt(S.courseValue || 45000),
       pricingIncludes: C.pricingIncludes || [],
       regOpen, regClosed: !regOpen,
-      nextBatch: S.nextBatchDate || '',
+      hasBatch: !!nextBatch,
+      nextBatch,
+      ...stamp,
     };
   }
 }

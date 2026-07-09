@@ -17,18 +17,20 @@
     <div>
       <h2 style="margin:0;font-size:clamp(30px,7vw,50px);font-weight:900;line-height:1.3;letter-spacing:-.5px;">වැඩ කරන එක තවත් ලේසි කරන, වේගවත් කරන ඔයාගේ අලුත් ගමන <span style="color:#FBD20A;">අදම පටන් ගනිමු.</span></h2>
       <p class="pa-cta-sub" style="margin:20px auto 0;max-width:580px;font-size:clamp(18px,4.4vw,22px);line-height:1.8;color:rgba(245,245,247,.9);">ඔයාට ඇත්තටම තේරෙන භාෂාවෙන්ම AI වලින් ඔයාගේ වැඩ කරගන්න හැටි ඉගෙන ගන්න ඕන නම්, තවත් හිත හිත ඉන්න එපා, අදම Practical AI Academy එකට එකතු වෙන්න!</p>
-      <sc-if value="{{ regOpen }}" hint-placeholder-val="{{ true }}">
-        <a href="/apply#apply" style="display:inline-flex;align-items:center;justify-content:center;margin-top:30px;background:linear-gradient(180deg,#FDE25C,#FBD20A);color:#2A0512;font-weight:800;font-size:18px;border-radius:999px;padding:18px 38px;text-decoration:none;box-shadow:0 16px 40px -12px rgba(251,210,10,.6);">දැන්ම ලියාපදිංචි වන්න</a>
-      </sc-if>
-      <sc-if value="{{ regClosed }}">
-        <div class="pa-cta-closed" style="display:flex;flex-direction:column;align-items:center;gap:14px;margin-top:30px;">
+      <div class="pa-cta-closed" style="display:flex;flex-direction:column;align-items:center;gap:14px;margin-top:30px;">
+        <sc-if value="{{ regOpen }}" hint-placeholder-val="{{ true }}">
+          <a href="/apply#apply" style="display:inline-flex;align-items:center;justify-content:center;background:linear-gradient(180deg,#FDE25C,#FBD20A);color:#2A0512;font-weight:800;font-size:18px;border-radius:999px;padding:18px 38px;text-decoration:none;box-shadow:0 16px 40px -12px rgba(251,210,10,.6);">දැන්ම ලියාපදිංචි වන්න</a>
+        </sc-if>
+        <sc-if value="{{ regClosed }}">
           <span class="pa-reg-off" style="display:inline-flex;align-items:center;justify-content:center;background:rgba(245,245,247,.06);color:rgba(245,245,247,.5);font-weight:800;font-size:18px;border:1px solid rgba(245,245,247,.14);border-radius:999px;padding:18px 38px;cursor:not-allowed;">ලියාපදිංචිය දැන් වසා ඇත</span>
-          <span style="display:inline-flex;align-items:center;gap:9px;background:rgba(240,64,60,.10);border:1px solid rgba(240,64,60,.45);border-radius:999px;padding:9px 18px;font-size:14.5px;font-weight:700;color:#FF7B72;">
-            <span style="width:7px;height:7px;border-radius:50%;background:#FF5A52;box-shadow:0 0 10px rgba(255,90,82,.9);"></span>
+        </sc-if>
+        <sc-if value="{{ hasBatch }}">
+          <span style="display:inline-flex;align-items:center;gap:9px;background:{{ pillBg }};border:1px solid {{ pillBorder }};border-radius:999px;padding:9px 18px;font-size:14.5px;font-weight:700;color:{{ pillColor }};">
+            <span style="width:7px;height:7px;border-radius:50%;background:{{ pillDot }};box-shadow:0 0 10px {{ pillGlow }};"></span>
             ඊළඟ කණ්ඩායම පටන් ගන්නේ: {{ nextBatch }}
           </span>
-        </div>
-      </sc-if>
+        </sc-if>
+      </div>
     </div>
     <div class="pa-cta-img">
       <div style="position:relative;width:100%;aspect-ratio:1;">
@@ -57,7 +59,12 @@ class Component extends DCLogic {
   renderVals() {
     const S = (window.PA_CONTENT && window.PA_CONTENT.settings) || {};
     const regOpen = S.registrationOpen !== false;
-    return { regOpen, regClosed: !regOpen, nextBatch: S.nextBatchDate || '' };
+    const nextBatch = S.nextBatchDate || '';
+    // green pill while registration is OPEN, red when CLOSED
+    const th = regOpen
+      ? { pillBg:'rgba(52,199,123,.10)', pillBorder:'rgba(52,199,123,.45)', pillColor:'#7FE6A6', pillDot:'#35D07A', pillGlow:'rgba(53,208,122,.9)' }
+      : { pillBg:'rgba(240,64,60,.10)', pillBorder:'rgba(240,64,60,.45)', pillColor:'#FF7B72', pillDot:'#FF5A52', pillGlow:'rgba(255,90,82,.9)' };
+    return { regOpen, regClosed: !regOpen, hasBatch: !!nextBatch, nextBatch, ...th };
   }
 }
 </script>
