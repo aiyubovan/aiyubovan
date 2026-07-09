@@ -54,6 +54,17 @@
   .qrbox img{display:block;width:190px;height:190px;}
   code.secret{display:block;background:rgba(12,12,15,.6);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:13px;word-break:break-all;margin:8px 0;color:var(--gold);}
   @media(max-width:560px){.wrap{padding-top:16px;} .card{padding:16px;}}
+  details.item>summary{display:flex;align-items:center;justify-content:space-between;gap:12px;cursor:pointer;list-style:none;user-select:none;}
+  details.item>summary::-webkit-details-marker{display:none;}
+  .sum-title{font-weight:800;font-size:15px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .sum-hint{font-size:12.5px;color:var(--dim);flex:none;display:flex;align-items:center;gap:8px;}
+  .sum-hint::after{content:"▾";transition:transform .2s;}
+  details.item[open] .sum-hint::after{transform:rotate(180deg);}
+  .accbody{margin-top:6px;}
+  input.filter{margin:0 0 14px;}
+  .steprow{border:1px dashed rgba(245,245,247,.22);border-radius:12px;padding:12px;margin:10px 0;}
+  .steprow textarea{min-height:52px;margin-top:8px;}
+  .steprow .btn{margin-top:8px;}
 </style>
 </head>
 <body>
@@ -124,6 +135,7 @@
       <button class="tab" data-view="weeksView">📚 Course Weeks</button>
       <button class="tab" data-view="testimonialsView">⭐ Reviews</button>
       <button class="tab" data-view="faqsView">❓ FAQ</button>
+      <button class="tab" data-view="productsView">🛍️ Products</button>
       <button class="tab" data-view="securityView">🔐 Security</button>
     </div>
 
@@ -147,20 +159,31 @@
 
     <div id="weeksView" class="view card hidden">
       <h2>📚 Course Weeks</h2>
+      <input type="text" class="filter" id="weeksFilter" placeholder="Search weeks…">
       <div id="weeksList"></div>
       <button class="btn ghost small" onclick="addRow('weeks')">+ Add a week</button>
     </div>
 
     <div id="testimonialsView" class="view card hidden">
       <h2>⭐ Reviews (Testimonials)</h2>
+      <input type="text" class="filter" id="testimonialsFilter" placeholder="Search by name, city…">
       <div id="testimonialsList"></div>
       <button class="btn ghost small" onclick="addRow('testimonials')">+ Add a review</button>
     </div>
 
     <div id="faqsView" class="view card hidden">
       <h2>❓ Home Page FAQ</h2>
+      <input type="text" class="filter" id="faqsFilter" placeholder="Search questions…">
       <div id="faqsList"></div>
       <button class="btn ghost small" onclick="addRow('faqs')">+ Add a question</button>
+    </div>
+
+    <div id="productsView" class="view card hidden">
+      <h2>🛍️ Shop Products</h2>
+      <input type="text" class="filter" id="productsFilter" placeholder="Search products…">
+      <div id="productsList"></div>
+      <button class="btn ghost small" onclick="addProduct()">+ Add a product</button>
+      <p class="muted" style="margin-top:12px;">Image fields take a URL. Upload images anywhere you like (or ask me to set up Supabase Storage) and paste the link. Video field accepts a normal YouTube link or a bunny.net embed link.</p>
     </div>
 
     <div id="securityView" class="view card hidden">
@@ -218,7 +241,7 @@ const ALLOWED_EMAILS = ['udrgunasinghe@gmail.com'];
 const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 const $ = (id) => document.getElementById(id);
 let settings = null;
-const lists = { weeks: [], testimonials: [], faqs: [] };
+const lists = { weeks: [], testimonials: [], faqs: [], products: [] };
 
 function toast(msg, err) {
   const t = $('toast');
@@ -401,20 +424,36 @@ $('disableForm').onsubmit = async (e) => {
 
 /* ---------------- data ---------------- */
 async function loadAll() {
-  const [st, wk, ts, fq] = await Promise.all([
+  const [st, wk, ts, fq, pr] = await Promise.all([
     db.from('site_settings').select('*').eq('id', 1).single(),
     db.from('weeks').select('*').order('sort'),
     db.from('testimonials').select('*').order('sort'),
     db.from('faqs').select('*').order('sort'),
+    db.from('products').select('*').order('sort'),
   ]);
   if (st.error) return toast(st.error.message, true);
   settings = st.data;
   lists.weeks = wk.data || [];
   lists.testimonials = ts.data || [];
   lists.faqs = fq.data || [];
+  lists.products = pr.data || [];
   renderSettings();
   ['weeks', 'testimonials', 'faqs'].forEach(renderList);
+  renderProducts();
 }
+
+/* ---- search filters (keep long lists tidy) ---- */
+function applyFilter(table) {
+  const inp = $(table + 'Filter');
+  const q = (inp && inp.value || '').trim().toLowerCase();
+  [...$(table + 'List').children].forEach((d) => {
+    d.classList.toggle('hidden', !!q && !d.textContent.toLowerCase().includes(q));
+  });
+}
+['weeks', 'testimonials', 'faqs', 'products'].forEach((t) => {
+  const f = $(t + 'Filter');
+  if (f) f.oninput = () => applyFilter(t);
+});
 
 function renderSettings() {
   $('s_batch').value = settings.next_batch_date;
@@ -453,13 +492,16 @@ const FIELDS = {
   faqs: [['q', 'Question', 'input'], ['a', 'Answer', 'textarea']],
 };
 
+const SUMMARY_KEY = { weeks: 'title', testimonials: 'name', faqs: 'q' };
+
 function renderList(table) {
   const host = $(table + 'List');
   host.innerHTML = '';
   lists[table].forEach((row, i) => {
-    const div = document.createElement('div');
+    const div = document.createElement('details');
     div.className = 'item';
-    let inner = '';
+    if (row.__open) { div.open = true; delete row.__open; }
+    let inner = `<summary><span class="sum-title">${esc(row[SUMMARY_KEY[table]] || 'New item')}</span><span class="sum-hint">#${i + 1}</span></summary><div class="accbody">`;
     for (const [key, lab, kind] of FIELDS[table]) {
       inner += `<label>${lab}</label>` + (kind === 'textarea'
         ? `<textarea data-k="${key}">${esc(row[key])}</textarea>`
@@ -470,13 +512,14 @@ function renderList(table) {
       <button class="btn ghost small" data-act="up" ${i === 0 ? 'disabled' : ''}>↑</button>
       <button class="btn ghost small" data-act="down" ${i === lists[table].length - 1 ? 'disabled' : ''}>↓</button>
       <button class="btn danger small" data-act="del">Delete</button>
-    </div>`;
+    </div></div>`;
     div.innerHTML = inner;
     div.querySelectorAll('[data-act]').forEach(btn => {
       btn.onclick = () => action(table, i, btn.getAttribute('data-act'), div);
     });
     host.appendChild(div);
   });
+  applyFilter(table);
 }
 
 function collect(table, div) {
@@ -521,12 +564,128 @@ async function action(table, i, act, div) {
 
 function addRow(table) {
   const maxSort = Math.max(0, ...lists[table].map(r => r.sort || 0));
-  const blank = { sort: maxSort + 1 };
+  const blank = { sort: maxSort + 1, __open: true };
   FIELDS[table].forEach(([k]) => blank[k] = '');
   lists[table].push(blank);
   renderList(table);
   const host = $(table + 'List');
   host.lastElementChild.scrollIntoView({ block: 'center' });
+}
+
+/* ================= SHOP PRODUCTS ================= */
+const slugify = (s) => String(s || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || ('product-' + Date.now());
+const pfld = (label, key, val) => `<label>${label}</label><input type="text" data-k="${key}" value="${esc(val == null ? '' : val)}">`;
+
+function stepRow(s) {
+  const d = document.createElement('div');
+  d.className = 'steprow';
+  d.innerHTML = `<input type="text" data-sk="image" placeholder="Image URL" value="${esc(s.image || '')}">`
+    + `<textarea data-sk="text" placeholder="Caption / instruction shown under this image">${esc(s.text || '')}</textarea>`
+    + `<button class="btn danger small" type="button">Remove step</button>`;
+  d.querySelector('button').onclick = () => d.remove();
+  return d;
+}
+
+function renderProducts() {
+  const host = $('productsList');
+  host.innerHTML = '';
+  lists.products.forEach((p, i) => {
+    const det = document.createElement('details');
+    det.className = 'item';
+    if (p.__open) { det.open = true; delete p.__open; }
+    const hint = (p.published === false ? 'Hidden · ' : '') + (p.price > 0 ? 'Rs. ' + Number(p.price).toLocaleString('en-US') : 'Free');
+    det.innerHTML = `<summary><span class="sum-title">${esc(p.title || 'New product')}</span><span class="sum-hint">${hint}</span></summary><div class="accbody">`
+      + pfld('Title', 'title', p.title)
+      + pfld('Link name (slug, English letters and dashes only)', 'slug', p.slug)
+      + pfld('Short card description (one line, shown in the grid)', 'tagline', p.tagline)
+      + pfld('Banner image URL', 'banner_url', p.banner_url)
+      + `<div class="row"><div class="grow">${pfld('Price (Rs.) — 0 means free', 'price', p.price)}</div><div class="grow">${pfld('Original price (Rs.) — shown struck through', 'original_price', p.original_price)}</div></div>`
+      + pfld('Video URL — YouTube link or bunny.net embed link (optional)', 'video_url', p.video_url)
+      + `<label>Full description</label><textarea data-k="description" style="min-height:110px;">${esc(p.description)}</textarea>`
+      + `<label>How-to steps — image + caption, up to 10 (optional)</label><div class="steps"></div>`
+      + `<button class="btn ghost small" data-act="addstep" type="button">+ Add step</button>`
+      + pfld('Buy link (payment gateway URL, for paid products)', 'buy_url', p.buy_url)
+      + pfld('Download link (the product file / delivery link)', 'download_url', p.download_url)
+      + `<label style="display:flex;align-items:center;gap:10px;cursor:pointer;margin-top:14px;"><input type="checkbox" data-k="published"${p.published !== false ? ' checked' : ''} style="width:auto;"> Visible in the shop</label>`
+      + `<div class="row" style="margin-top:14px;">`
+      + `<button class="btn small" data-act="psave">Save</button>`
+      + `<button class="btn ghost small" data-act="pup" ${i === 0 ? 'disabled' : ''}>↑</button>`
+      + `<button class="btn ghost small" data-act="pdown" ${i === lists.products.length - 1 ? 'disabled' : ''}>↓</button>`
+      + `<button class="btn danger small" data-act="pdel">Delete</button></div></div>`;
+    const stepsHost = det.querySelector('.steps');
+    let steps = p.steps;
+    if (typeof steps === 'string') { try { steps = JSON.parse(steps); } catch (e) { steps = []; } }
+    (Array.isArray(steps) ? steps : []).forEach((s) => stepsHost.appendChild(stepRow(s)));
+    det.querySelector('[data-act="addstep"]').onclick = () => {
+      if (stepsHost.children.length >= 10) return toast('Maximum 10 steps.', true);
+      stepsHost.appendChild(stepRow({}));
+    };
+    det.querySelector('[data-act="psave"]').onclick = () => saveProduct(p, det);
+    det.querySelector('[data-act="pdel"]').onclick = () => delProduct(p);
+    det.querySelector('[data-act="pup"]').onclick = () => swapProduct(i, i - 1);
+    det.querySelector('[data-act="pdown"]').onclick = () => swapProduct(i, i + 1);
+    host.appendChild(det);
+  });
+  applyFilter('products');
+}
+
+function collectProduct(det) {
+  const out = {};
+  det.querySelectorAll('.accbody [data-k]').forEach((el) => {
+    if (el.type === 'checkbox') out[el.dataset.k] = el.checked;
+    else out[el.dataset.k] = el.value.trim();
+  });
+  out.price = parseInt(out.price, 10) || 0;
+  out.original_price = parseInt(out.original_price, 10) || 0;
+  out.steps = [...det.querySelectorAll('.steprow')].map((r) => ({
+    image: r.querySelector('[data-sk="image"]').value.trim(),
+    text: r.querySelector('[data-sk="text"]').value.trim(),
+  })).filter((s) => s.image || s.text);
+  if (!out.slug) out.slug = slugify(out.title);
+  else out.slug = slugify(out.slug);
+  return out;
+}
+
+async function saveProduct(p, det) {
+  const vals = collectProduct(det);
+  if (!vals.title) return toast('The product needs a title.', true);
+  const q = p.id
+    ? db.from('products').update(vals).eq('id', p.id)
+    : db.from('products').insert({ ...vals, sort: p.sort || (lists.products.length) });
+  const { error } = await q;
+  if (error) return toast(error.message, true);
+  toast('Product saved ✔');
+  loadAll();
+}
+
+async function delProduct(p) {
+  if (!confirm('Delete this product? This cannot be undone.')) return;
+  if (p.id) {
+    const { error } = await db.from('products').delete().eq('id', p.id);
+    if (error) return toast(error.message, true);
+  } else {
+    lists.products = lists.products.filter((x) => x !== p);
+    renderProducts();
+    return;
+  }
+  toast('Product deleted');
+  loadAll();
+}
+
+async function swapProduct(i, j) {
+  const a = lists.products[i], b = lists.products[j];
+  if (!a || !b || !a.id || !b.id) return;
+  const r1 = await db.from('products').update({ sort: b.sort }).eq('id', a.id);
+  const r2 = await db.from('products').update({ sort: a.sort }).eq('id', b.id);
+  if (r1.error || r2.error) return toast((r1.error || r2.error).message, true);
+  loadAll();
+}
+
+function addProduct() {
+  const maxSort = Math.max(0, ...lists.products.map(r => r.sort || 0));
+  lists.products.push({ __open: true, title: '', slug: '', tagline: '', banner_url: '', price: 0, original_price: 0, video_url: '', description: '', steps: [], buy_url: '', download_url: '', published: true, sort: maxSort + 1 });
+  renderProducts();
+  $('productsList').lastElementChild.scrollIntoView({ block: 'center' });
 }
 </script>
 </body>

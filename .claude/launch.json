@@ -6,6 +6,12 @@
       "runtimeExecutable": "python3",
       "runtimeArgs": ["practical-ai-academy-landing-page/dev-server.py", "4173"],
       "port": 4173
+    },
+    {
+      "name": "aiyubovan-admin",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["-m", "http.server", "4174", "--directory", "practical-ai-academy-landing-page/admin"],
+      "port": 4174
     }
   ]
 }
