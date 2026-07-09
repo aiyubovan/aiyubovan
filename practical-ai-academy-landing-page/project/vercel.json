@@ -1,4 +1,30 @@
 {
+  "rewrites": [
+    { "source": "/", "destination": "/Practical AI Academy.dc.html" },
+    { "source": "/what-you-will-learn", "destination": "/What You Will Learn.dc.html" },
+    { "source": "/apply", "destination": "/Application Guide.dc.html" },
+    { "source": "/consultation", "destination": "/One-to-One Consultation.dc.html" },
+    { "source": "/book-consultation", "destination": "/Book Consultation.dc.html" },
+    { "source": "/courses", "destination": "/Courses.dc.html" },
+    { "source": "/shop", "destination": "/Shop.dc.html" },
+    { "source": "/privacy-policy", "destination": "/Privacy Policy.dc.html" },
+    { "source": "/terms-and-conditions", "destination": "/Terms and Conditions.dc.html" },
+    { "source": "/refund-policy", "destination": "/Return and Refund Policy.dc.html" },
+    { "source": "/how-to-update", "destination": "/How To Update.dc.html" }
+  ],
+  "redirects": [
+    { "source": "/Practical AI Academy.dc.html", "destination": "/", "permanent": true },
+    { "source": "/What You Will Learn.dc.html", "destination": "/what-you-will-learn", "permanent": true },
+    { "source": "/Application Guide.dc.html", "destination": "/apply", "permanent": true },
+    { "source": "/One-to-One Consultation.dc.html", "destination": "/consultation", "permanent": true },
+    { "source": "/Book Consultation.dc.html", "destination": "/book-consultation", "permanent": true },
+    { "source": "/Courses.dc.html", "destination": "/courses", "permanent": true },
+    { "source": "/Shop.dc.html", "destination": "/shop", "permanent": true },
+    { "source": "/Privacy Policy.dc.html", "destination": "/privacy-policy", "permanent": true },
+    { "source": "/Terms and Conditions.dc.html", "destination": "/terms-and-conditions", "permanent": true },
+    { "source": "/Return and Refund Policy.dc.html", "destination": "/refund-policy", "permanent": true },
+    { "source": "/How To Update.dc.html", "destination": "/how-to-update", "permanent": true }
+  ],
   "headers": [
     {
       "source": "/(.*)",

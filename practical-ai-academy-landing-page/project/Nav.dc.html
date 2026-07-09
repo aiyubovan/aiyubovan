@@ -44,11 +44,11 @@
     <div style="display:none;align-items:center;gap:3px;background:linear-gradient(180deg,rgba(245,245,247,.09),rgba(245,245,247,.03));border:1px solid rgba(245,245,247,.14);border-radius:999px;padding:5px;box-shadow:inset 0 1px 0 rgba(255,255,255,.1),0 8px 22px -14px rgba(0,0,0,.9);" class="pa-navlinks">
       <a href="{{ homeHref }}" class="pa-navlink" style="text-decoration:none;font-size:14.5px;font-weight:600;color:rgba(245,245,247,.9);padding:8px 15px;border-radius:999px;transition:background .2s,color .2s;">Home</a>
       <span style="width:1px;height:20px;background:rgba(245,245,247,.14);flex:none;"></span>
-      <a href="Courses.dc.html" class="pa-navlink" style="text-decoration:none;font-size:14.5px;font-weight:600;color:rgba(245,245,247,.9);padding:8px 15px;border-radius:999px;transition:background .2s,color .2s;">Courses</a>
+      <a href="/courses" class="pa-navlink" style="text-decoration:none;font-size:14.5px;font-weight:600;color:rgba(245,245,247,.9);padding:8px 15px;border-radius:999px;transition:background .2s,color .2s;">Courses</a>
       <span style="width:1px;height:20px;background:rgba(245,245,247,.14);flex:none;"></span>
-      <a href="One-to-One Consultation.dc.html" class="pa-navlink" style="text-decoration:none;font-size:14.5px;font-weight:600;color:rgba(245,245,247,.9);padding:8px 15px;border-radius:999px;transition:background .2s,color .2s;">One-to-One Consultation</a>
+      <a href="/consultation" class="pa-navlink" style="text-decoration:none;font-size:14.5px;font-weight:600;color:rgba(245,245,247,.9);padding:8px 15px;border-radius:999px;transition:background .2s,color .2s;">One-to-One Consultation</a>
       <span style="width:1px;height:20px;background:rgba(245,245,247,.14);flex:none;"></span>
-      <a href="Shop.dc.html" class="pa-navlink" style="text-decoration:none;font-size:14.5px;font-weight:600;color:rgba(245,245,247,.9);padding:8px 15px;border-radius:999px;transition:background .2s,color .2s;">Shop</a>
+      <a href="/shop" class="pa-navlink" style="text-decoration:none;font-size:14.5px;font-weight:600;color:rgba(245,245,247,.9);padding:8px 15px;border-radius:999px;transition:background .2s,color .2s;">Shop</a>
     </div>
 
     <div style="display:flex;align-items:center;gap:12px;flex:none;">
@@ -100,9 +100,9 @@
   <sc-if value="{{ menuOpen }}">
     <div style="border-top:1px solid rgba(245,245,247,.08);background:rgba(12,12,16,.98);padding:12px 18px 20px;display:flex;flex-direction:column;gap:4px;" class="pa-mobilemenu">
       <a href="{{ homeHref }}" onClick="{{ closeMenu }}" style="text-decoration:none;font-size:16px;font-weight:600;color:#F5F5F7;padding:13px 6px;border-bottom:1px solid rgba(245,245,247,.06);">Home</a>
-      <a href="Courses.dc.html" onClick="{{ closeMenu }}" style="text-decoration:none;font-size:16px;font-weight:600;color:#F5F5F7;padding:13px 6px;border-bottom:1px solid rgba(245,245,247,.06);">Courses</a>
-      <a href="One-to-One Consultation.dc.html" onClick="{{ closeMenu }}" style="text-decoration:none;font-size:16px;font-weight:600;color:#F5F5F7;padding:13px 6px;border-bottom:1px solid rgba(245,245,247,.06);">One-to-One Consultation</a>
-      <a href="Shop.dc.html" onClick="{{ closeMenu }}" style="text-decoration:none;font-size:16px;font-weight:600;color:#F5F5F7;padding:13px 6px;border-bottom:1px solid rgba(245,245,247,.06);">Shop</a>
+      <a href="/courses" onClick="{{ closeMenu }}" style="text-decoration:none;font-size:16px;font-weight:600;color:#F5F5F7;padding:13px 6px;border-bottom:1px solid rgba(245,245,247,.06);">Courses</a>
+      <a href="/consultation" onClick="{{ closeMenu }}" style="text-decoration:none;font-size:16px;font-weight:600;color:#F5F5F7;padding:13px 6px;border-bottom:1px solid rgba(245,245,247,.06);">One-to-One Consultation</a>
+      <a href="/shop" onClick="{{ closeMenu }}" style="text-decoration:none;font-size:16px;font-weight:600;color:#F5F5F7;padding:13px 6px;border-bottom:1px solid rgba(245,245,247,.06);">Shop</a>
       <sc-if value="{{ regOpen }}" hint-placeholder-val="{{ true }}">
         <a href="{{ registerHref }}" onClick="{{ closeMenu }}" style="margin-top:12px;text-align:center;background:linear-gradient(180deg,#FDE25C,#FBD20A);color:#2A0512;font-weight:800;font-size:16px;border-radius:999px;padding:14px 20px;text-decoration:none;">දැන්ම ලියාපදිංචි වන්න</a>
       </sc-if>

@@ -4,7 +4,7 @@
     {
       "name": "aiyubovan-site",
       "runtimeExecutable": "python3",
-      "runtimeArgs": ["-m", "http.server", "4173", "--directory", "practical-ai-academy-landing-page/project"],
+      "runtimeArgs": ["practical-ai-academy-landing-page/dev-server.py", "4173"],
       "port": 4173
     }
   ]
