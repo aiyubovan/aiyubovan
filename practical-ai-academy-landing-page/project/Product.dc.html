@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700;800;900&family=Noto+Sans+Sinhala:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;}
+  body{margin:0;background:#0A0A0C;color:#F5F5F7;font-family:'Noto Sans','Noto Sans Sinhala',system-ui,-apple-system,sans-serif;-webkit-font-smoothing:antialiased;}
+  ::selection{background:#FBD20A;color:#2A0512;}
+  a{color:inherit;}
+</style>
+</helmet>
+<div style="min-height:100vh;display:flex;flex-direction:column;">
+  <dc-import name="Nav" home-href="/#home" register-href="/apply#apply" hint-size="100%,64px"></dc-import>
+
+  <main style="flex:1;position:relative;overflow:hidden;padding:20px 20px 90px;">
+    <div style="position:absolute;inset:0;pointer-events:none;background:radial-gradient(60% 40% at 50% -5%,rgba(101,10,52,.5),transparent 68%);"></div>
+    <div style="position:relative;max-width:760px;margin:0 auto;">
+
+      <sc-if value="{{ loading }}">
+        <div style="text-align:center;color:rgba(245,245,247,.5);padding:60px 0;">Load වෙනවා...</div>
+      </sc-if>
+      <sc-if value="{{ notFound }}">
+        <div style="text-align:center;color:rgba(245,245,247,.6);padding:60px 0;">මේ Product එක හම්බුවුනේ නෑ.</div>
+      </sc-if>
+
+      <sc-if value="{{ ready }}">
+        <a href="Shop%20Preview.dc.html" style="display:inline-flex;align-items:center;gap:8px;text-decoration:none;font-size:14px;font-weight:700;color:rgba(245,245,247,.65);margin-bottom:22px;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg> Shop එකට ආපහු යන්න
+        </a>
+        <div style="border-radius:18px;overflow:hidden;margin-bottom:26px;background:rgba(0,0,0,.3);">
+          <img src="{{ p.banner_url }}" alt="{{ p.title }}" style="width:100%;display:block;">
+        </div>
+        <h1 style="margin:0 0 10px;font-size:clamp(26px,5.5vw,36px);font-weight:900;line-height:1.2;">{{ p.title }}</h1>
+        <p style="margin:0 0 20px;font-size:16.5px;line-height:1.7;color:rgba(245,245,247,.85);">{{ p.tagline }}</p>
+
+        <sc-if value="{{ p.hasVideo }}">
+          <div style="position:relative;width:100%;aspect-ratio:16/9;border-radius:16px;overflow:hidden;margin:0 0 26px;background:#000;">
+            <iframe src="{{ p.videoEmbedSrc }}" style="position:absolute;inset:0;width:100%;height:100%;border:none;" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+          </div>
+        </sc-if>
+
+        <p style="margin:0 0 30px;font-size:16px;line-height:1.85;color:rgba(245,245,247,.9);white-space:pre-line;">{{ p.description }}</p>
+
+        <div style="display:flex;flex-direction:column;gap:22px;margin-bottom:34px;">
+          <sc-for list="{{ p.steps }}" as="s" hint-placeholder-count="2">
+            <div style="background:linear-gradient(155deg,rgba(101,10,52,.18),rgba(12,12,15,.5));border:1px solid rgba(245,245,247,.14);border-radius:16px;overflow:hidden;">
+              <sc-if value="{{ s.hasImage }}">
+                <img src="{{ s.image }}" alt="Step" style="width:100%;display:block;">
+              </sc-if>
+              <sc-if value="{{ s.hasText }}">
+                <p style="margin:0;padding:16px 18px;font-size:15.5px;line-height:1.7;color:rgba(245,245,247,.9);">{{ s.text }}</p>
+              </sc-if>
+            </div>
+          </sc-for>
+        </div>
+
+        <div style="text-align:center;background:linear-gradient(155deg,rgba(101,10,52,.4),rgba(133,0,0,.2) 55%,rgba(12,12,15,.6));border:1px solid rgba(251,210,10,.3);border-radius:22px;padding:32px 24px;">
+          <div style="margin-bottom:16px;">
+            <sc-if value="{{ p.hasDiscount }}">
+              <span style="font-size:19px;color:rgba(245,245,247,.5);text-decoration:line-through;margin-right:10px;">Rs. {{ p.originalPriceFmt }}</span>
+            </sc-if>
+            <sc-if value="{{ p.isPaid }}">
+              <span style="font-size:34px;font-weight:900;color:#FBD20A;">Rs. {{ p.priceFmt }}</span>
+            </sc-if>
+            <sc-if value="{{ p.isFree }}">
+              <span style="font-size:22px;font-weight:900;color:#7fe0ab;">නොමිලේ</span>
+            </sc-if>
+          </div>
+          <a href="{{ p.buyHref }}" style="display:inline-flex;align-items:center;justify-content:center;background:linear-gradient(180deg,#FDE25C,#FBD20A);color:#2A0512;font-weight:800;font-size:17px;border-radius:999px;padding:16px 40px;text-decoration:none;box-shadow:0 14px 34px -10px rgba(251,210,10,.55);">{{ p.buyLabel }}</a>
+        </div>
+      </sc-if>
+
+    </div>
+  </main>
+
+  <dc-import name="Footer" hint-size="100%,360px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { product: null, notFound: false };
+  componentDidMount() {
+    const slug = new URLSearchParams(window.location.search).get('slug') || '';
+    if (!slug) { this.setState({ notFound: true }); return; }
+    const URL = 'https://tueaxfwuvugekxvlbnuf.supabase.co';
+    const KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR1ZWF4Znd1dnVnZWt4dmxibnVmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM0MzA0ODgsImV4cCI6MjA5OTAwNjQ4OH0.e2x9IawWs5cMMhph2nkCOu5xliyC1jZYiS50FitK6R4';
+    fetch(URL + '/rest/v1/products?select=*&slug=eq.' + encodeURIComponent(slug) + '&published=eq.true&limit=1', {
+      headers: { apikey: KEY, Authorization: 'Bearer ' + KEY }
+    }).then((r) => r.json()).then((rows) => {
+      const row = rows && rows[0];
+      if (!row) { this.setState({ notFound: true }); return; }
+      this.setState({ product: row });
+    }).catch(() => this.setState({ notFound: true }));
+  }
+  renderVals() {
+    const raw = this.state.product;
+    if (!raw) {
+      return { loading: !this.state.notFound, notFound: this.state.notFound, ready: false, p: {} };
+    }
+    const fmt = (n) => Number(n || 0).toLocaleString('en-US');
+    // jsonb columns come back from PostgREST already parsed (an array),
+    // but tolerate a string too in case it's ever stored/edited as text.
+    let steps = raw.steps;
+    if (typeof steps === 'string') { try { steps = JSON.parse(steps); } catch (e) { steps = []; } }
+    if (!Array.isArray(steps)) steps = [];
+    const yt = String(raw.video_url || '').match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/))([\w-]{6,})/);
+    const videoEmbedSrc = raw.video_url ? (yt ? 'https://www.youtube.com/embed/' + yt[1] : raw.video_url) : '';
+    const p = {
+      title: raw.title, tagline: raw.tagline, banner_url: raw.banner_url, description: raw.description,
+      hasVideo: !!raw.video_url, videoEmbedSrc,
+      isPaid: raw.price > 0, isFree: raw.price === 0,
+      hasDiscount: raw.price > 0 && raw.original_price > raw.price,
+      priceFmt: fmt(raw.price), originalPriceFmt: fmt(raw.original_price),
+      buyLabel: raw.price > 0 ? 'දැන්ම මිලදී ගන්න' : 'දැන්ම Download කරගන්න',
+      buyHref: raw.buy_url || raw.download_url || '#',
+      steps: steps.map((s) => ({ image: s.image || '', text: s.text || '', hasImage: !!s.image, hasText: !!s.text })),
+    };
+    return { loading: false, notFound: false, ready: true, p };
+  }
+}
+</script>
+</body>
+</html>
