@@ -98,7 +98,7 @@
   </sc-if>
 
   <sc-if value="{{ menuOpen }}">
-    <div style="border-top:1px solid rgba(245,245,247,.08);background:rgba(12,12,16,.98);padding:12px 18px 20px;display:flex;flex-direction:column;gap:4px;" class="pa-mobilemenu">
+    <div style="border-top:1px solid rgba(245,245,247,.08);background:rgba(12,12,16,.72);backdrop-filter:blur(18px) saturate(1.4);-webkit-backdrop-filter:blur(18px) saturate(1.4);box-shadow:0 30px 60px -20px rgba(0,0,0,.85);padding:12px 18px 20px;display:flex;flex-direction:column;gap:4px;" class="pa-mobilemenu">
       <a href="{{ homeHref }}" onClick="{{ closeMenu }}" style="text-decoration:none;font-size:16px;font-weight:600;color:#F5F5F7;padding:13px 6px;border-bottom:1px solid rgba(245,245,247,.06);">Home</a>
       <a href="/courses" onClick="{{ closeMenu }}" style="text-decoration:none;font-size:16px;font-weight:600;color:#F5F5F7;padding:13px 6px;border-bottom:1px solid rgba(245,245,247,.06);">Courses</a>
       <a href="/consultation" onClick="{{ closeMenu }}" style="text-decoration:none;font-size:16px;font-weight:600;color:#F5F5F7;padding:13px 6px;border-bottom:1px solid rgba(245,245,247,.06);">One-to-One Consultation</a>
@@ -131,6 +131,9 @@ class Component extends DCLogic {
     this._navSync = () => {
       const nav = document.querySelector('nav');
       if (!nav) return;
+      // While the mobile menu is open it must FLOAT over the page (glass
+      // overlay), never push content down — so skip spacer resync then.
+      if (nav.querySelector('.pa-mobilemenu')) return;
       const h = Math.ceil(nav.getBoundingClientRect().height);
       if (!h || h === this._lastNavH) return;
       this._lastNavH = h;
