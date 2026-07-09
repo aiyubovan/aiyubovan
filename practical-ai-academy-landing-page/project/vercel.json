@@ -1,52 +1,153 @@
 {
   "rewrites": [
-    { "source": "/", "destination": "/Practical AI Academy.dc.html" },
-    { "source": "/what-you-will-learn", "destination": "/What You Will Learn.dc.html" },
-    { "source": "/apply", "destination": "/Application Guide.dc.html" },
-    { "source": "/consultation", "destination": "/One-to-One Consultation.dc.html" },
-    { "source": "/book-consultation", "destination": "/Book Consultation.dc.html" },
-    { "source": "/courses", "destination": "/Courses.dc.html" },
-    { "source": "/shop", "destination": "/Shop.dc.html" },
-    { "source": "/privacy-policy", "destination": "/Privacy Policy.dc.html" },
-    { "source": "/terms-and-conditions", "destination": "/Terms and Conditions.dc.html" },
-    { "source": "/refund-policy", "destination": "/Return and Refund Policy.dc.html" },
-    { "source": "/how-to-update", "destination": "/How To Update.dc.html" }
+    {
+      "source": "/",
+      "destination": "/Practical AI Academy.dc.html"
+    },
+    {
+      "source": "/what-you-will-learn",
+      "destination": "/What You Will Learn.dc.html"
+    },
+    {
+      "source": "/apply",
+      "destination": "/Application Guide.dc.html"
+    },
+    {
+      "source": "/consultation",
+      "destination": "/One-to-One Consultation.dc.html"
+    },
+    {
+      "source": "/book-consultation",
+      "destination": "/Book Consultation.dc.html"
+    },
+    {
+      "source": "/courses",
+      "destination": "/Courses.dc.html"
+    },
+    {
+      "source": "/shop",
+      "destination": "/Shop.dc.html"
+    },
+    {
+      "source": "/privacy-policy",
+      "destination": "/Privacy Policy.dc.html"
+    },
+    {
+      "source": "/terms-and-conditions",
+      "destination": "/Terms and Conditions.dc.html"
+    },
+    {
+      "source": "/refund-policy",
+      "destination": "/Return and Refund Policy.dc.html"
+    },
+    {
+      "source": "/how-to-update",
+      "destination": "/How To Update.dc.html"
+    }
   ],
   "redirects": [
-    { "source": "/Practical AI Academy.dc.html", "destination": "/", "permanent": true },
-    { "source": "/What You Will Learn.dc.html", "destination": "/what-you-will-learn", "permanent": true },
-    { "source": "/Application Guide.dc.html", "destination": "/apply", "permanent": true },
-    { "source": "/One-to-One Consultation.dc.html", "destination": "/consultation", "permanent": true },
-    { "source": "/Book Consultation.dc.html", "destination": "/book-consultation", "permanent": true },
-    { "source": "/Courses.dc.html", "destination": "/courses", "permanent": true },
-    { "source": "/Shop.dc.html", "destination": "/shop", "permanent": true },
-    { "source": "/Privacy Policy.dc.html", "destination": "/privacy-policy", "permanent": true },
-    { "source": "/Terms and Conditions.dc.html", "destination": "/terms-and-conditions", "permanent": true },
-    { "source": "/Return and Refund Policy.dc.html", "destination": "/refund-policy", "permanent": true },
-    { "source": "/How To Update.dc.html", "destination": "/how-to-update", "permanent": true }
+    {
+      "source": "/Practical%20AI%20Academy.dc.html",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/What%20You%20Will%20Learn.dc.html",
+      "destination": "/what-you-will-learn",
+      "permanent": true
+    },
+    {
+      "source": "/Application%20Guide.dc.html",
+      "destination": "/apply",
+      "permanent": true
+    },
+    {
+      "source": "/One-to-One%20Consultation.dc.html",
+      "destination": "/consultation",
+      "permanent": true
+    },
+    {
+      "source": "/Book%20Consultation.dc.html",
+      "destination": "/book-consultation",
+      "permanent": true
+    },
+    {
+      "source": "/Courses.dc.html",
+      "destination": "/courses",
+      "permanent": true
+    },
+    {
+      "source": "/Shop.dc.html",
+      "destination": "/shop",
+      "permanent": true
+    },
+    {
+      "source": "/Privacy%20Policy.dc.html",
+      "destination": "/privacy-policy",
+      "permanent": true
+    },
+    {
+      "source": "/Terms%20and%20Conditions.dc.html",
+      "destination": "/terms-and-conditions",
+      "permanent": true
+    },
+    {
+      "source": "/Return%20and%20Refund%20Policy.dc.html",
+      "destination": "/refund-policy",
+      "permanent": true
+    },
+    {
+      "source": "/How%20To%20Update.dc.html",
+      "destination": "/how-to-update",
+      "permanent": true
+    }
   ],
   "headers": [
     {
       "source": "/(.*)",
       "headers": [
-        { "key": "X-Content-Type-Options", "value": "nosniff" },
-        { "key": "X-Frame-Options", "value": "SAMEORIGIN" },
-        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
-        { "key": "Permissions-Policy", "value": "camera=(), microphone=(), geolocation=(), payment=()" },
-        { "key": "Strict-Transport-Security", "value": "max-age=31536000; includeSubDomains" },
-        { "key": "Content-Security-Policy", "value": "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://app.cal.com https://tally.so; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://app.cal.com https://tally.so; frame-src https://app.cal.com https://cal.com https://tally.so; connect-src 'self' https://app.cal.com https://*.cal.com https://tally.so https://*.supabase.co; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'; upgrade-insecure-requests" }
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "SAMEORIGIN"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "key": "Permissions-Policy",
+          "value": "camera=(), microphone=(), geolocation=(), payment=()"
+        },
+        {
+          "key": "Strict-Transport-Security",
+          "value": "max-age=31536000; includeSubDomains"
+        },
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://app.cal.com https://tally.so; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://app.cal.com https://tally.so; frame-src https://app.cal.com https://cal.com https://tally.so; connect-src 'self' https://app.cal.com https://*.cal.com https://tally.so https://*.supabase.co; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'; upgrade-insecure-requests"
+        }
       ]
     },
     {
       "source": "/assets/(.*)",
       "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
       ]
     },
     {
       "source": "/vendor/(.*)",
       "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
       ]
     }
   ]
