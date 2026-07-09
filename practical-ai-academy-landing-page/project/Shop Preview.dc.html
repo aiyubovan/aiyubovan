@@ -17,10 +17,33 @@
   body{margin:0;background:#0A0A0C;color:#F5F5F7;font-family:'Noto Sans','Noto Sans Sinhala',system-ui,-apple-system,sans-serif;-webkit-font-smoothing:antialiased;}
   ::selection{background:#FBD20A;color:#2A0512;}
   a{color:inherit;}
-  .pa-tab{cursor:pointer;background:rgba(245,245,247,.05);border:1px solid rgba(245,245,247,.14);color:rgba(245,245,247,.8);font-weight:700;font-size:14px;border-radius:999px;padding:9px 20px;transition:background .2s,color .2s,border-color .2s;font-family:inherit;}
-  .pa-tab.active{background:#FBD20A;color:#2A0512;border-color:#FBD20A;}
-  .pa-pcard{background:linear-gradient(155deg,rgba(101,10,52,.20),rgba(133,0,0,.09) 45%,rgba(12,12,15,.55));border:1px solid rgba(245,245,247,.17);border-radius:20px;overflow:hidden;text-decoration:none;display:flex;flex-direction:column;transition:transform .3s cubic-bezier(.2,.7,.2,1),box-shadow .3s ease,border-color .3s ease;}
-  .pa-pcard:hover{transform:translateY(-5px);border-color:rgba(251,210,10,.42);box-shadow:0 28px 56px -24px rgba(0,0,0,.95),0 0 40px -12px rgba(251,210,10,.32);}
+
+  /* ---- layout: sidebar + content (reference style) ---- */
+  .pa-shop-wrap{max-width:1240px;margin:34px auto 0;display:grid;grid-template-columns:1fr;gap:26px;}
+  .pa-side{display:flex;flex-direction:row;flex-wrap:wrap;gap:8px;align-items:center;}
+  .pa-side-label{width:100%;font-size:13px;font-weight:700;letter-spacing:1px;color:rgba(245,245,247,.5);margin-bottom:2px;}
+  @media(min-width:1000px){
+    .pa-shop-wrap{grid-template-columns:236px minmax(0,1fr);align-items:start;}
+    .pa-side{flex-direction:column;align-items:stretch;position:sticky;top:104px;}
+    .pa-side-label{margin-bottom:8px;}
+    .pa-cat{width:100%;}
+  }
+  .pa-cat{display:inline-flex;align-items:center;gap:11px;text-align:left;cursor:pointer;background:rgba(245,245,247,.04);border:1px solid rgba(245,245,247,.14);color:rgba(245,245,247,.82);font-weight:700;font-size:14.5px;border-radius:14px;padding:13px 18px;transition:background .2s,color .2s,border-color .2s,box-shadow .2s;font-family:inherit;}
+  .pa-cat:hover{border-color:rgba(251,210,10,.4);color:#FBD20A;}
+  .pa-cat.active{background:linear-gradient(180deg,#FDE25C,#FBD20A);color:#2A0512;border-color:transparent;box-shadow:0 10px 26px -10px rgba(251,210,10,.55);}
+  .pa-cat.active svg{stroke:#2A0512;}
+  .pa-cat svg{stroke:currentColor;flex:none;}
+
+  /* ---- product cards (big, airy, reference style) ---- */
+  .pa-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(400px,100%),1fr));gap:26px;}
+  .pa-pcard{background:rgba(245,245,247,.025);border:1px solid rgba(245,245,247,.13);border-radius:22px;overflow:hidden;text-decoration:none;display:flex;flex-direction:column;transition:transform .3s cubic-bezier(.2,.7,.2,1),box-shadow .3s ease,border-color .3s ease;}
+  .pa-pcard:hover{transform:translateY(-5px);border-color:rgba(251,210,10,.42);box-shadow:0 30px 60px -26px rgba(0,0,0,.95),0 0 44px -14px rgba(251,210,10,.30);}
+  .pa-pimg{aspect-ratio:16/10;overflow:hidden;background:linear-gradient(155deg,rgba(101,10,52,.28),rgba(133,0,0,.12) 50%,rgba(18,17,22,.9));}
+  .pa-pimg img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s cubic-bezier(.2,.7,.2,1);}
+  .pa-pcard:hover .pa-pimg img{transform:scale(1.035);}
+  .pa-pbody{background:rgba(245,245,247,.045);border-top:1px solid rgba(245,245,247,.08);padding:22px 24px 24px;display:flex;flex-direction:column;flex:1;}
+  .pa-price-chip{display:inline-block;background:rgba(251,210,10,.14);border:1px solid rgba(251,210,10,.3);color:#FBD20A;font-size:17px;font-weight:800;border-radius:9px;padding:5px 12px;}
+  .pa-free-chip{display:inline-block;background:rgba(52,199,123,.12);border:1px solid rgba(52,199,123,.4);color:#7fe0ab;font-size:15px;font-weight:800;border-radius:9px;padding:5px 12px;}
 </style>
 </helmet>
 <div style="min-height:100vh;display:flex;flex-direction:column;">
@@ -29,48 +52,64 @@
   <main style="flex:1;position:relative;overflow:hidden;padding:20px 20px 90px;">
     <div style="position:absolute;inset:0;pointer-events:none;background:radial-gradient(60% 45% at 50% -5%,rgba(101,10,52,.55),transparent 70%),radial-gradient(40% 35% at 85% 10%,rgba(133,0,0,.35),transparent 66%);"></div>
 
-    <div style="position:relative;max-width:720px;margin:0 auto;text-align:center;padding:36px 16px 10px;">
-      <div style="display:inline-flex;align-items:center;gap:9px;background:rgba(251,210,10,.08);border:1px solid rgba(251,210,10,.28);border-radius:999px;padding:7px 15px;margin-bottom:20px;">
+    <!-- ===== HERO ===== -->
+    <div style="position:relative;max-width:1240px;margin:0 auto;padding:34px 4px 4px;">
+      <div style="display:inline-flex;align-items:center;gap:9px;background:rgba(251,210,10,.08);border:1px solid rgba(251,210,10,.28);border-radius:999px;padding:7px 15px;margin-bottom:18px;">
         <span style="width:7px;height:7px;border-radius:50%;background:#FBD20A;box-shadow:0 0 12px rgba(251,210,10,.9);"></span>
         <span style="font-size:12.5px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#FBD20A;">AIYUBOVAN Shop</span>
       </div>
-      <h1 style="margin:0;font-size:clamp(28px,6.5vw,44px);font-weight:900;line-height:1.15;letter-spacing:-.5px;">ඔයාගේ ජීවිතේට ඇත්තටම වටින දේවල් විතරයි.</h1>
-      <p style="margin:18px auto 0;max-width:560px;font-size:clamp(16px,3.8vw,18.5px);line-height:1.8;color:rgba(245,245,247,.9);">මෙතන තියෙන්නේ ගොඩක් Products නෙවෙයි. මම ඇත්තටම පාවිච්චි කරන, ඔයාට ප්‍රයෝජනවත් වෙයි කියලා විශ්වාස කරන Digital Products කිහිපයක් විතරයි.</p>
+      <h1 style="margin:0;font-size:clamp(30px,6.5vw,52px);font-weight:900;line-height:1.12;letter-spacing:-.8px;">Digital <span style="color:#FBD20A;">Products.</span></h1>
+      <p style="margin:16px 0 0;max-width:600px;font-size:clamp(16px,3.8vw,18.5px);line-height:1.8;color:rgba(245,245,247,.88);">මෙතන තියෙන්නේ ගොඩක් Products නෙවෙයි. මම ඇත්තටම පාවිච්චි කරන, ඔයාගේ වැඩ ලේසි කරන කියලා විශ්වාස කරන Digital Products කිහිපයක් විතරයි.</p>
     </div>
 
-    <div style="position:relative;max-width:1120px;margin:26px auto 0;display:flex;justify-content:center;gap:10px;flex-wrap:wrap;">
-      <button class="pa-tab {{ tabAllClass }}" onClick="{{ setAll }}">සියල්ල</button>
-      <button class="pa-tab {{ tabPaidClass }}" onClick="{{ setPaid }}">ගෙවීම් සහිත</button>
-      <button class="pa-tab {{ tabFreeClass }}" onClick="{{ setFree }}">නොමිලේ</button>
-    </div>
+    <!-- ===== SIDEBAR + GRID ===== -->
+    <div class="pa-shop-wrap" style="position:relative;">
+      <aside class="pa-side">
+        <div class="pa-side-label">CATEGORIES</div>
+        <button class="pa-cat {{ tabAllClass }}" onClick="{{ setAll }}">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+          සියල්ල
+        </button>
+        <button class="pa-cat {{ tabPaidClass }}" onClick="{{ setPaid }}">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.6 13.4 12 22l-8.6-8.6a2 2 0 0 1-.6-1.4V4a2 2 0 0 1 2-2h8a2 2 0 0 1 1.4.6l8.6 8.6a2 2 0 0 1 0 2.8z" transform="scale(.9) translate(1.2 1.2)"/><circle cx="7.5" cy="7.5" r="1.3"/></svg>
+          ගෙවීම් සහිත
+        </button>
+        <button class="pa-cat {{ tabFreeClass }}" onClick="{{ setFree }}">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg>
+          නොමිලේ
+        </button>
+      </aside>
 
-    <div style="position:relative;max-width:1120px;margin:34px auto 0;display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px;">
-      <sc-if value="{{ loading }}">
-        <div style="grid-column:1/-1;text-align:center;color:rgba(245,245,247,.5);padding:40px 0;">Products load වෙනවා...</div>
-      </sc-if>
-      <sc-if value="{{ empty }}">
-        <div style="grid-column:1/-1;text-align:center;color:rgba(245,245,247,.5);padding:40px 0;">මේ Category එකේ Products නෑ.</div>
-      </sc-if>
-      <sc-for list="{{ items }}" as="p" hint-placeholder-count="3">
-        <a class="pa-pcard" href="{{ p.href }}">
-          <div style="aspect-ratio:16/10;overflow:hidden;background:rgba(0,0,0,.3);"><img src="{{ p.banner_url }}" alt="{{ p.title }}" style="width:100%;height:100%;object-fit:cover;display:block;"></div>
-          <div style="padding:18px 20px 22px;display:flex;flex-direction:column;flex:1;">
-            <h3 style="margin:0 0 8px;font-size:18px;font-weight:800;line-height:1.32;">{{ p.title }}</h3>
-            <p style="margin:0 0 16px;font-size:14.5px;line-height:1.65;color:rgba(245,245,247,.85);flex:1;">{{ p.tagline }}</p>
-            <div>
-              <sc-if value="{{ p.hasDiscount }}">
-                <span style="font-size:14px;color:rgba(245,245,247,.5);text-decoration:line-through;margin-right:8px;">Rs. {{ p.originalPriceFmt }}</span>
-              </sc-if>
-              <sc-if value="{{ p.isPaid }}">
-                <span style="font-size:19px;font-weight:800;color:#FBD20A;">Rs. {{ p.priceFmt }}</span>
-              </sc-if>
-              <sc-if value="{{ p.isFree }}">
-                <span style="font-size:15px;font-weight:800;color:#7fe0ab;">නොමිලේ</span>
-              </sc-if>
-            </div>
-          </div>
-        </a>
-      </sc-for>
+      <div>
+        <div class="pa-grid">
+          <sc-if value="{{ loading }}">
+            <div style="grid-column:1/-1;text-align:center;color:rgba(245,245,247,.5);padding:60px 0;">Products load වෙනවා...</div>
+          </sc-if>
+          <sc-if value="{{ empty }}">
+            <div style="grid-column:1/-1;text-align:center;color:rgba(245,245,247,.5);padding:60px 0;">මේ Category එකේ Products නෑ.</div>
+          </sc-if>
+          <sc-for list="{{ items }}" as="p" hint-placeholder-count="2">
+            <a class="pa-pcard" href="{{ p.href }}">
+              <div class="pa-pimg"><img src="{{ p.banner_url }}" alt="{{ p.title }}" loading="lazy" decoding="async"></div>
+              <div class="pa-pbody">
+                <h3 style="margin:0 0 7px;font-size:21px;font-weight:800;line-height:1.3;letter-spacing:-.2px;">{{ p.title }}</h3>
+                <p style="margin:0 0 20px;font-size:15.5px;line-height:1.65;color:rgba(245,245,247,.6);flex:1;">{{ p.tagline }}</p>
+                <div style="display:flex;align-items:center;gap:12px;">
+                  <sc-if value="{{ p.hasDiscount }}">
+                    <span style="font-size:15.5px;font-weight:600;color:rgba(245,245,247,.45);text-decoration:line-through;">Rs. {{ p.originalPriceFmt }}</span>
+                  </sc-if>
+                  <sc-if value="{{ p.isPaid }}">
+                    <span class="pa-price-chip">Rs. {{ p.priceFmt }}</span>
+                  </sc-if>
+                  <sc-if value="{{ p.isFree }}">
+                    <span class="pa-free-chip">නොමිලේ</span>
+                  </sc-if>
+                </div>
+              </div>
+            </a>
+          </sc-for>
+        </div>
+      </div>
     </div>
   </main>
 
