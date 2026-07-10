@@ -69,9 +69,9 @@
         </div>
 
         <div style="text-align:center;background:linear-gradient(155deg,rgba(101,10,52,.4),rgba(133,0,0,.2) 55%,rgba(12,12,15,.6));border:1px solid rgba(251,210,10,.3);border-radius:22px;padding:32px 24px;">
-          <div style="margin-bottom:16px;">
+          <div style="margin-bottom:16px;display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;">
             <sc-if value="{{ p.hasDiscount }}">
-              <span style="font-size:19px;color:rgba(245,245,247,.5);text-decoration:line-through;margin-right:10px;">Rs. {{ p.originalPriceFmt }}</span>
+              <span style="font-size:19px;color:rgba(245,245,247,.5);text-decoration:line-through;">Rs. {{ p.originalPriceFmt }}</span>
             </sc-if>
             <sc-if value="{{ p.isPaid }}">
               <span style="font-size:34px;font-weight:900;color:#FBD20A;">Rs. {{ p.priceFmt }}</span>
@@ -79,8 +79,19 @@
             <sc-if value="{{ p.isFree }}">
               <span style="font-size:22px;font-weight:900;color:#7fe0ab;">නොමිලේ</span>
             </sc-if>
+            <sc-if value="{{ p.hasDiscount }}">
+              <span style="display:inline-block;background:rgba(255,90,82,.13);border:1px solid rgba(255,90,82,.4);color:#FF7B72;font-size:14px;font-weight:800;border-radius:999px;padding:5px 13px;">-{{ p.discountPct }}%</span>
+            </sc-if>
           </div>
-          <a href="{{ p.buyHref }}" style="display:inline-flex;align-items:center;justify-content:center;background:linear-gradient(180deg,#FDE25C,#FBD20A);color:#2A0512;font-weight:800;font-size:17px;border-radius:999px;padding:16px 40px;text-decoration:none;box-shadow:0 14px 34px -10px rgba(251,210,10,.55);">{{ p.buyLabel }}</a>
+          <sc-if value="{{ p.isAvailable }}">
+            <a href="{{ p.buyHref }}" style="display:inline-flex;align-items:center;justify-content:center;background:linear-gradient(180deg,#FDE25C,#FBD20A);color:#2A0512;font-weight:800;font-size:17px;border-radius:999px;padding:16px 40px;text-decoration:none;box-shadow:0 14px 34px -10px rgba(251,210,10,.55);">{{ p.buyLabel }}</a>
+          </sc-if>
+          <sc-if value="{{ p.isUnavailable }}">
+            <div style="display:inline-flex;align-items:center;gap:9px;background:rgba(255,90,82,.1);border:1px solid rgba(255,90,82,.45);color:#FF7B72;font-weight:800;font-size:15.5px;border-radius:999px;padding:14px 30px;">
+              <span style="width:8px;height:8px;border-radius:50%;background:#FF5A52;box-shadow:0 0 10px rgba(255,90,82,.9);"></span>
+              {{ p.unavailLabel }}
+            </div>
+          </sc-if>
         </div>
       </sc-if>
 
@@ -119,14 +130,20 @@ class Component extends DCLogic {
     if (!Array.isArray(steps)) steps = [];
     const yt = String(raw.video_url || '').match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/))([\w-]{6,})/);
     const videoEmbedSrc = raw.video_url ? (yt ? 'https://www.youtube.com/embed/' + yt[1] : raw.video_url) : '';
+    const status = raw.status || 'active';
+    const hasDiscount = raw.price > 0 && raw.original_price > raw.price;
     const p = {
       title: raw.title, tagline: raw.tagline, banner_url: raw.banner_url, description: raw.description,
       hasVideo: !!raw.video_url, videoEmbedSrc,
       isPaid: raw.price > 0, isFree: raw.price === 0,
-      hasDiscount: raw.price > 0 && raw.original_price > raw.price,
+      hasDiscount,
+      discountPct: hasDiscount ? Math.round((1 - raw.price / raw.original_price) * 100) : 0,
       priceFmt: fmt(raw.price), originalPriceFmt: fmt(raw.original_price),
       buyLabel: raw.price > 0 ? 'දැන්ම මිලදී ගන්න' : 'දැන්ම Download කරගන්න',
       buyHref: 'Checkout.dc.html?slug=' + encodeURIComponent(raw.slug),
+      isAvailable: status === 'active',
+      isUnavailable: status !== 'active',
+      unavailLabel: status === 'coming_soon' ? 'ළඟදීම එනවා' : 'තාවකාලිකව වසා ඇත',
       steps: steps.map((s) => ({ image: s.image || '', text: s.text || '', hasImage: !!s.image, hasText: !!s.text })),
     };
     return { loading: false, notFound: false, ready: true, p };

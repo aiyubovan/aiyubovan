@@ -75,20 +75,24 @@
               <div style="padding:22px 22px 24px;">
                 <h1 style="margin:0 0 8px;font-size:clamp(21px,3.6vw,26px);font-weight:900;line-height:1.3;">{{ p.title }}</h1>
                 <p style="margin:0 0 18px;font-size:14.5px;line-height:1.65;color:rgba(245,245,247,.8);">{{ p.tagline }}</p>
-                <div style="display:flex;align-items:center;justify-content:space-between;border-top:1px solid rgba(245,245,247,.12);padding-top:16px;">
+                <div style="display:flex;align-items:center;justify-content:space-between;border-top:1px solid rgba(245,245,247,.12);padding-top:16px;flex-wrap:wrap;gap:8px;">
                   <span style="font-size:13.5px;font-weight:700;color:rgba(245,245,247,.6);">මුළු මුදල</span>
-                  <span>
+                  <span style="display:inline-flex;align-items:center;gap:10px;flex-wrap:wrap;">
                     <sc-if value="{{ p.hasDiscount }}">
-                      <span style="font-size:14px;color:rgba(245,245,247,.45);text-decoration:line-through;margin-right:8px;">Rs. {{ p.originalPriceFmt }}</span>
+                      <span style="font-size:14px;color:rgba(245,245,247,.45);text-decoration:line-through;">Rs. {{ p.originalPriceFmt }}</span>
                     </sc-if>
                     <sc-if value="{{ p.isPaid }}">
-                      <span style="font-size:22px;font-weight:900;color:#FBD20A;">Rs. {{ p.priceFmt }}</span>
+                      <span id="ck-total" style="font-size:22px;font-weight:900;color:#FBD20A;">Rs. {{ p.priceFmt }}</span>
+                    </sc-if>
+                    <sc-if value="{{ p.hasDiscount }}">
+                      <span style="display:inline-block;background:rgba(255,90,82,.13);border:1px solid rgba(255,90,82,.4);color:#FF7B72;font-size:12.5px;font-weight:800;border-radius:999px;padding:4px 11px;">-{{ p.discountPct }}%</span>
                     </sc-if>
                     <sc-if value="{{ p.isFree }}">
                       <span style="font-size:17px;font-weight:900;color:#7fe0ab;">නොමිලේ</span>
                     </sc-if>
                   </span>
                 </div>
+                <p id="ck-coupon-note" style="display:none;margin:10px 0 0;font-size:13px;font-weight:700;color:#7fe0ab;text-align:right;"></p>
               </div>
             </div>
           </div>
@@ -137,6 +141,18 @@
                   <p class="ck-hint" id="ck-phone-hint">+94 සමඟ digits 9 ක් (මුල 0 නැතුව).</p>
                 </div>
 
+                <sc-if value="{{ p.isPaid }}">
+                  <div class="ck-row">
+                    <label class="ck-label" for="ck-coupon">Coupon Code <span style="font-weight:500;color:rgba(245,245,247,.45);">(optional)</span></label>
+                    <div style="display:grid;grid-template-columns:1fr 96px;gap:10px;">
+                      <input class="ck-input" id="ck-coupon" type="text" autocomplete="off" placeholder="LAUNCH20" style="text-transform:uppercase;">
+                      <button type="button" id="ck-apply" style="background:rgba(245,245,247,.08);border:1px solid rgba(245,245,247,.22);color:#F5F5F7;font-family:inherit;font-weight:700;font-size:14px;border-radius:12px;cursor:pointer;">Apply</button>
+                    </div>
+                    <p class="ck-err" id="ck-e-coupon">මේ coupon code එක වැඩ කරන්නේ නෑ.</p>
+                    <p class="ck-hint" id="ck-coupon-ok" style="display:none;color:#7fe0ab;font-weight:700;"></p>
+                  </div>
+                </sc-if>
+
                 <div class="ck-row">
                   <label class="ck-consent" for="ck-consent">
                     <input type="checkbox" id="ck-consent">
@@ -162,6 +178,16 @@
                 <h2 style="margin:0 0 10px;font-size:21px;font-weight:900;">ස්තූතියි!</h2>
                 <p style="margin:0 0 24px;font-size:14.5px;line-height:1.7;color:rgba(245,245,247,.75);">ඔබේ විස්තර ලැබුනා. දැන් product එක download කරගන්න පුළුවන්.</p>
                 <a href="{{ downloadHref }}" target="_blank" rel="noopener" class="ck-submit" style="text-decoration:none;max-width:340px;margin:0 auto;">දැන්ම Download කරගන්න</a>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ showUnavail }}">
+              <div class="ck-formcard" style="text-align:center;padding:40px 26px;">
+                <div style="width:64px;height:64px;margin:0 auto 18px;border-radius:50%;background:rgba(255,90,82,.12);border:1px solid rgba(255,90,82,.45);display:flex;align-items:center;justify-content:center;">
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#FF7B72" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg>
+                </div>
+                <h2 style="margin:0 0 10px;font-size:21px;font-weight:900;">{{ unavailTitle }}</h2>
+                <p style="margin:0;font-size:14.5px;line-height:1.7;color:rgba(245,245,247,.75);">මේ product එක දැනට මිලදී ගන්න බෑ. පස්සේ ආයෙත් බලන්න.</p>
               </div>
             </sc-if>
 
@@ -210,10 +236,68 @@ class Component extends DCLogic {
       document.addEventListener('click', (e) => {
         const btn = e.target && e.target.closest ? e.target.closest('#ck-submit') : null;
         if (btn && !btn.disabled) this.submit(btn);
+        const apply = e.target && e.target.closest ? e.target.closest('#ck-apply') : null;
+        if (apply) this.applyCoupon(apply);
       });
       document.addEventListener('change', (e) => {
         if (e.target && e.target.id === 'ck-country') this.updatePhoneHint();
       });
+    }
+  }
+
+  applyCoupon(btn) {
+    const input = document.getElementById('ck-coupon');
+    const errEl = document.getElementById('ck-e-coupon');
+    const okEl = document.getElementById('ck-coupon-ok');
+    const code = (input ? input.value : '').trim().toUpperCase();
+    errEl.classList.remove('ck-show');
+    okEl.style.display = 'none';
+    if (!code) { this._coupon = null; this.paintTotal(0); return; }
+    btn.disabled = true;
+    fetch(this._sb.URL + '/rest/v1/rpc/validate_coupon', {
+      method: 'POST',
+      headers: {
+        apikey: this._sb.KEY, Authorization: 'Bearer ' + this._sb.KEY,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ p_code: code, p_slug: this._slug })
+    }).then((r) => r.json()).then((percent) => {
+      btn.disabled = false;
+      if (typeof percent === 'number' && percent >= 1) {
+        this._coupon = code;
+        this._couponPercent = percent;
+        this.paintTotal(percent);
+        okEl.textContent = code + ' applied! -' + percent + '%';
+        okEl.style.display = 'block';
+        input.classList.remove('ck-bad');
+      } else {
+        this._coupon = null;
+        this._couponPercent = 0;
+        this.paintTotal(0);
+        input.classList.add('ck-bad');
+        errEl.classList.add('ck-show');
+      }
+    }).catch(() => {
+      btn.disabled = false;
+      errEl.classList.add('ck-show');
+    });
+  }
+
+  paintTotal(percent) {
+    const p = this.state.product;
+    const totalEl = document.getElementById('ck-total');
+    const noteEl = document.getElementById('ck-coupon-note');
+    if (!p || !totalEl) return;
+    const base = Number(p.price || 0);
+    const discounted = percent ? Math.round(base * (100 - percent) / 100) : base;
+    totalEl.textContent = 'Rs. ' + discounted.toLocaleString('en-US');
+    if (noteEl) {
+      if (percent) {
+        noteEl.textContent = 'Coupon: Rs. ' + base.toLocaleString('en-US') + ' > Rs. ' + discounted.toLocaleString('en-US');
+        noteEl.style.display = 'block';
+      } else {
+        noteEl.style.display = 'none';
+      }
     }
   }
 
@@ -270,7 +354,11 @@ class Component extends DCLogic {
     if (!first || !last || !emailOk || !phoneOk || !consent) return;
 
     const p = this.state.product;
-    const isFree = !(p.price > 0);
+    const pct = this._coupon ? (this._couponPercent || 0) : 0;
+    const effectivePrice = Math.round(Number(p.price || 0) * (100 - pct) / 100);
+    const isFree = effectivePrice <= 0;
+    // price/status/title are decided by the database, not the browser;
+    // these values are just placeholders the server overwrites.
     const order = {
       product_slug: p.slug,
       product_title: p.title,
@@ -280,7 +368,8 @@ class Component extends DCLogic {
       email: email,
       whatsapp: rule.code + digits,
       consent: true,
-      status: isFree ? 'free_delivered' : 'pending_payment'
+      status: isFree ? 'free_delivered' : 'pending_payment',
+      coupon_code: this._coupon || null
     };
 
     btn.disabled = true;
@@ -310,17 +399,22 @@ class Component extends DCLogic {
     const raw = this.state.product;
     if (!raw) {
       return { loading: !this.state.notFound, notFound: this.state.notFound, ready: false,
-               showForm: false, showFreeDone: false, showPaidDone: false, p: {},
-               backHref: '#', downloadHref: '#', formIntro: '', submitLabel: '' };
+               showForm: false, showFreeDone: false, showPaidDone: false, showUnavail: false, p: {},
+               backHref: '#', downloadHref: '#', formIntro: '', submitLabel: '', unavailTitle: '' };
     }
     const fmt = (n) => Number(n || 0).toLocaleString('en-US');
     const isPaid = raw.price > 0;
+    const status = raw.status || 'active';
+    const unavail = status !== 'active';
+    const hasDiscount = isPaid && raw.original_price > raw.price;
     const phase = this.state.phase;
     return {
       loading: false, notFound: false, ready: true,
-      showForm: phase === 'form',
-      showFreeDone: phase === 'freeDone',
-      showPaidDone: phase === 'paidDone',
+      showForm: !unavail && phase === 'form',
+      showFreeDone: !unavail && phase === 'freeDone',
+      showPaidDone: !unavail && phase === 'paidDone',
+      showUnavail: unavail,
+      unavailTitle: status === 'coming_soon' ? 'ළඟදීම එනවා!' : 'තාවකාලිකව වසා ඇත',
       backHref: 'Product.dc.html?slug=' + encodeURIComponent(this._slug || raw.slug),
       downloadHref: raw.download_url || raw.buy_url || '#',
       formIntro: isPaid
@@ -330,7 +424,8 @@ class Component extends DCLogic {
       p: {
         title: raw.title, tagline: raw.tagline, banner_url: raw.banner_url,
         isPaid: isPaid, isFree: !isPaid,
-        hasDiscount: isPaid && raw.original_price > raw.price,
+        hasDiscount: hasDiscount,
+        discountPct: hasDiscount ? Math.round((1 - raw.price / raw.original_price) * 100) : 0,
         priceFmt: fmt(raw.price), originalPriceFmt: fmt(raw.original_price)
       }
     };

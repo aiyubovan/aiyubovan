@@ -137,6 +137,8 @@
       <button class="tab" data-view="faqsView">❓ FAQ</button>
       <button class="tab" data-view="productsView">🛍️ Products</button>
       <button class="tab" data-view="ordersView">🧾 Orders</button>
+      <button class="tab" data-view="earningsView">💰 Earnings</button>
+      <button class="tab" data-view="downloadsView">📊 Downloads</button>
       <button class="tab" data-view="securityView">🔐 Security</button>
     </div>
 
@@ -194,6 +196,22 @@
       <p class="muted" style="margin-top:12px;">Every checkout submission lands here, newest first. Free downloads arrive as "Free (delivered)". Paid orders start as "Pending payment" and flip to "Paid" automatically once the payment gateway is connected.</p>
     </div>
 
+    <div id="earningsView" class="view card hidden">
+      <h2>💰 Earnings</h2>
+      <div class="row" style="gap:8px;flex-wrap:wrap;align-items:center;" id="earningsControls"></div>
+      <div id="earningsSummary"></div>
+      <div id="earningsBreakdown"></div>
+      <p class="muted" style="margin-top:12px;">Counts orders marked Paid or Delivered. Pending and cancelled orders are not included. Once the payment gateway is live, paid orders land here automatically.</p>
+    </div>
+
+    <div id="downloadsView" class="view card hidden">
+      <h2>📊 Downloads</h2>
+      <div class="row" style="gap:8px;flex-wrap:wrap;align-items:center;" id="downloadsControls"></div>
+      <div id="downloadsSummary"></div>
+      <div id="downloadsBreakdown"></div>
+      <p class="muted" style="margin-top:12px;">Counts free product deliveries (each one is a captured lead with email and WhatsApp in the Orders tab).</p>
+    </div>
+
     <div id="securityView" class="view card hidden">
       <h2>🔐 Security</h2>
       <div class="row" style="margin-bottom:14px;">
@@ -249,7 +267,7 @@ const ALLOWED_EMAILS = ['udrgunasinghe@gmail.com'];
 const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 const $ = (id) => document.getElementById(id);
 let settings = null;
-const lists = { weeks: [], testimonials: [], faqs: [], products: [], orders: [] };
+const lists = { weeks: [], testimonials: [], faqs: [], products: [], orders: [], coupons: [] };
 
 function toast(msg, err) {
   const t = $('toast');
@@ -432,13 +450,14 @@ $('disableForm').onsubmit = async (e) => {
 
 /* ---------------- data ---------------- */
 async function loadAll() {
-  const [st, wk, ts, fq, pr, od] = await Promise.all([
+  const [st, wk, ts, fq, pr, od, cp] = await Promise.all([
     db.from('site_settings').select('*').eq('id', 1).single(),
     db.from('weeks').select('*').order('sort'),
     db.from('testimonials').select('*').order('sort'),
     db.from('faqs').select('*').order('sort'),
     db.from('products').select('*').order('sort'),
     db.from('orders').select('*').order('created_at', { ascending: false }),
+    db.from('coupons').select('*').order('created_at'),
   ]);
   if (st.error) return toast(st.error.message, true);
   settings = st.data;
@@ -447,10 +466,13 @@ async function loadAll() {
   lists.faqs = fq.data || [];
   lists.products = pr.data || [];
   lists.orders = od.data || [];
+  lists.coupons = cp.data || [];
   renderSettings();
   ['weeks', 'testimonials', 'faqs'].forEach(renderList);
   renderProducts();
   renderOrders();
+  renderAnalytics('earnings');
+  renderAnalytics('downloads');
 }
 
 /* ---- search filters (keep long lists tidy) ---- */
@@ -604,19 +626,40 @@ function renderProducts() {
     const det = document.createElement('details');
     det.className = 'item';
     if (p.__open) { det.open = true; delete p.__open; }
-    const hint = (p.published === false ? 'Hidden · ' : '') + (p.price > 0 ? 'Rs. ' + Number(p.price).toLocaleString('en-US') : 'Free');
+    const pct = (p.price > 0 && p.original_price > p.price) ? Math.round((1 - p.price / p.original_price) * 100) : 0;
+    const STATUS_HINT = { coming_soon: 'Coming soon · ', closed: 'Closed · ' };
+    const hint = (p.published === false ? 'Hidden · ' : '') + (STATUS_HINT[p.status] || '')
+      + (p.price > 0 ? 'Rs. ' + Number(p.price).toLocaleString('en-US') : 'Free')
+      + (pct ? ' · -' + pct + '%' : '');
+    const stOpt = (v, lab) => `<option value="${v}"${(p.status || 'active') === v ? ' selected' : ''}>${lab}</option>`;
     det.innerHTML = `<summary><span class="sum-title">${esc(p.title || 'New product')}</span><span class="sum-hint">${hint}</span></summary><div class="accbody">`
       + pfld('Title', 'title', p.title)
       + pfld('Link name (slug, English letters and dashes only)', 'slug', p.slug)
       + pfld('Short card description (one line, shown in the grid)', 'tagline', p.tagline)
       + pfld('Banner image URL', 'banner_url', p.banner_url)
       + `<div class="row"><div class="grow">${pfld('Price (Rs.) — 0 means free', 'price', p.price)}</div><div class="grow">${pfld('Original price (Rs.) — shown struck through', 'original_price', p.original_price)}</div></div>`
+      + `<p class="muted" style="margin:4px 0 0;">${pct ? 'Shoppers will see a -' + pct + '% discount chip on this product.' : 'Set an original price above the price to show a discount chip automatically.'}</p>`
+      + `<label>Availability</label><select data-k="status">`
+      + stOpt('active', 'Active — customers can buy / download')
+      + stOpt('coming_soon', 'Coming soon — visible but not clickable, red badge')
+      + stOpt('closed', 'Temporarily closed — visible but not clickable, red badge')
+      + `</select>`
       + pfld('Video URL — YouTube link or bunny.net embed link (optional)', 'video_url', p.video_url)
       + `<label>Full description</label><textarea data-k="description" style="min-height:110px;">${esc(p.description)}</textarea>`
       + `<label>How-to steps — image + caption, up to 10 (optional)</label><div class="steps"></div>`
       + `<button class="btn ghost small" data-act="addstep" type="button">+ Add step</button>`
       + pfld('Buy link (payment gateway URL, for paid products)', 'buy_url', p.buy_url)
       + pfld('Download link (the product file / delivery link)', 'download_url', p.download_url)
+      + `<label>Coupon codes (percentage discount, this product only)</label>`
+      + (p.id
+        ? `<div class="coupons"></div>
+           <div class="row" style="gap:8px;flex-wrap:wrap;">
+             <input type="text" data-ck="code" placeholder="CODE e.g. LAUNCH20" style="max-width:170px;text-transform:uppercase;">
+             <input type="number" data-ck="percent" placeholder="% off" min="1" max="100" style="max-width:90px;">
+             <input type="number" data-ck="max" placeholder="Max uses (empty = unlimited)" min="1" style="max-width:220px;">
+             <button class="btn ghost small" data-act="addcoupon" type="button">+ Create coupon</button>
+           </div>`
+        : `<p class="muted" style="margin:0;">Save the product first, then coupons can be added here.</p>`)
       + `<label style="display:flex;align-items:center;gap:10px;cursor:pointer;margin-top:14px;"><input type="checkbox" data-k="published"${p.published !== false ? ' checked' : ''} style="width:auto;"> Visible in the shop</label>`
       + `<div class="row" style="margin-top:14px;">`
       + `<button class="btn small" data-act="psave">Save</button>`
@@ -635,6 +678,7 @@ function renderProducts() {
     det.querySelector('[data-act="pdel"]').onclick = () => delProduct(p);
     det.querySelector('[data-act="pup"]').onclick = () => swapProduct(i, i - 1);
     det.querySelector('[data-act="pdown"]').onclick = () => swapProduct(i, i + 1);
+    if (p.id) renderCoupons(det, p);
     host.appendChild(det);
   });
   applyFilter('products');
@@ -699,6 +743,167 @@ function addProduct() {
   $('productsList').lastElementChild.scrollIntoView({ block: 'center' });
 }
 
+/* ================= ANALYTICS: EARNINGS & DOWNLOADS ================= */
+const ANALYTICS = {
+  earnings: { statuses: ['paid', 'delivered'], preset: '30d', from: '', to: '' },
+  downloads: { statuses: ['free_delivered'], preset: '30d', from: '', to: '' },
+};
+const PRESETS = [['today', 'Today'], ['7d', '7 days'], ['30d', '30 days'], ['all', 'All time']];
+
+function analyticsRange(cfg) {
+  if (cfg.preset === 'custom') {
+    return {
+      from: cfg.from ? new Date(cfg.from + 'T00:00:00') : null,
+      to: cfg.to ? new Date(cfg.to + 'T23:59:59') : null,
+    };
+  }
+  if (cfg.preset === 'all') return { from: null, to: null };
+  const days = cfg.preset === 'today' ? 0 : (cfg.preset === '7d' ? 7 : 30);
+  const from = new Date();
+  from.setHours(0, 0, 0, 0);
+  from.setDate(from.getDate() - days);
+  return { from, to: null };
+}
+
+function renderAnalyticsControls(kind) {
+  const cfg = ANALYTICS[kind];
+  const host = $(kind + 'Controls');
+  host.innerHTML = '';
+  PRESETS.forEach(([key, label]) => {
+    const b = document.createElement('button');
+    b.className = 'btn ghost small';
+    b.textContent = label;
+    if (cfg.preset === key) b.style.cssText = 'border-color:var(--gold);color:var(--gold);';
+    b.onclick = () => { cfg.preset = key; renderAnalytics(kind); };
+    host.appendChild(b);
+  });
+  const mk = (k, label) => {
+    const w = document.createElement('span');
+    w.innerHTML = `<span class="muted" style="font-size:12px;margin:0 4px 0 8px;">${label}</span>`;
+    const inp = document.createElement('input');
+    inp.type = 'date';
+    inp.value = cfg[k];
+    inp.style.cssText = 'width:auto;padding:7px 10px;font-size:13px;';
+    inp.onchange = () => {
+      cfg[k] = inp.value;
+      if (cfg.from || cfg.to) { cfg.preset = 'custom'; renderAnalytics(kind); }
+    };
+    w.appendChild(inp);
+    return w;
+  };
+  host.appendChild(mk('from', 'From'));
+  host.appendChild(mk('to', 'To'));
+}
+
+function renderAnalytics(kind) {
+  renderAnalyticsControls(kind);
+  const cfg = ANALYTICS[kind];
+  const { from, to } = analyticsRange(cfg);
+  const rows = lists.orders.filter((o) => {
+    if (!cfg.statuses.includes(o.status)) return false;
+    const t = new Date(o.created_at);
+    if (from && t < from) return false;
+    if (to && t > to) return false;
+    return true;
+  });
+  const money = kind === 'earnings';
+  const total = money ? rows.reduce((s, o) => s + Number(o.price || 0), 0) : rows.length;
+  const fmtRs = (n) => 'Rs. ' + Number(n).toLocaleString('en-US');
+
+  const card = (label, value) =>
+    `<div style="flex:1;min-width:150px;background:rgba(251,210,10,.06);border:1px solid var(--line);border-radius:14px;padding:16px 18px;">
+      <div class="muted" style="font-size:12px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;margin-bottom:6px;">${label}</div>
+      <div style="font-size:24px;font-weight:900;color:var(--gold);">${value}</div>
+    </div>`;
+  $(kind + 'Summary').innerHTML = `<div class="row" style="gap:12px;flex-wrap:wrap;margin:14px 0 18px;">`
+    + (money
+      ? card('Total earned', fmtRs(total)) + card('Orders', rows.length) + card('Average order', rows.length ? fmtRs(Math.round(total / rows.length)) : 'Rs. 0')
+      : card('Total downloads', total))
+    + `</div>`;
+
+  const byProduct = {};
+  rows.forEach((o) => {
+    const k = o.product_title || o.product_slug;
+    byProduct[k] = byProduct[k] || { count: 0, sum: 0 };
+    byProduct[k].count++;
+    byProduct[k].sum += Number(o.price || 0);
+  });
+  const entries = Object.entries(byProduct).sort((a, b) => money ? b[1].sum - a[1].sum : b[1].count - a[1].count);
+  const max = Math.max(1, ...entries.map(([, v]) => money ? v.sum : v.count));
+  const bd = $(kind + 'Breakdown');
+  if (!entries.length) {
+    bd.innerHTML = '<p class="muted">Nothing in this period yet.</p>';
+    return;
+  }
+  bd.innerHTML = '<label style="margin-bottom:10px;">By product</label>' + entries.map(([name, v], i) => {
+    const val = money ? v.sum : v.count;
+    const pctW = Math.max(4, Math.round(val / max * 100));
+    return `<div style="margin-bottom:12px;">
+      <div class="row" style="justify-content:space-between;gap:10px;margin-bottom:5px;">
+        <span style="font-size:14px;font-weight:700;">${i === 0 ? '🏆 ' : ''}${esc(name)}</span>
+        <span style="font-size:13.5px;font-weight:800;color:var(--gold);white-space:nowrap;">${money ? fmtRs(v.sum) + ' (' + v.count + ')' : v.count}</span>
+      </div>
+      <div style="height:8px;border-radius:999px;background:rgba(245,245,247,.07);overflow:hidden;">
+        <div style="height:100%;width:${pctW}%;border-radius:999px;background:linear-gradient(90deg,#FDE25C,#FBD20A);"></div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+/* ================= COUPONS ================= */
+function renderCoupons(det, p) {
+  const host = det.querySelector('.coupons');
+  if (!host) return;
+  host.innerHTML = '';
+  const mine = lists.coupons.filter((c) => c.product_slug === p.slug);
+  if (!mine.length) {
+    host.innerHTML = '<p class="muted" style="margin:0 0 10px;">No coupons yet for this product.</p>';
+  }
+  mine.forEach((c) => {
+    const row = document.createElement('div');
+    row.className = 'row';
+    row.style.cssText = 'gap:10px;align-items:center;flex-wrap:wrap;padding:8px 12px;border:1px solid var(--line);border-radius:10px;margin-bottom:8px;';
+    const usage = `${c.used_count}${c.max_uses ? ' / ' + c.max_uses : ''} used`;
+    const dead = !c.active || (c.max_uses && c.used_count >= c.max_uses);
+    row.innerHTML = `<code style="font-weight:800;letter-spacing:1px;${dead ? 'opacity:.5;text-decoration:line-through;' : 'color:#FBD20A;'}">${esc(c.code)}</code>`
+      + `<span style="font-weight:700;">-${c.percent}%</span>`
+      + `<span class="muted" style="font-size:12.5px;">${usage}</span>`
+      + `<span class="badge ${c.active ? 'ok' : 'off'}" style="font-size:11px;">${c.active ? 'Active' : 'Off'}</span>`
+      + `<span style="flex:1;"></span>`
+      + `<button class="btn ghost small" data-cact="toggle" type="button">${c.active ? 'Disable' : 'Enable'}</button>`
+      + `<button class="btn danger small" data-cact="del" type="button">Delete</button>`;
+    row.querySelector('[data-cact="toggle"]').onclick = async () => {
+      const { error } = await db.from('coupons').update({ active: !c.active }).eq('id', c.id);
+      if (error) return toast(error.message, true);
+      toast(c.active ? 'Coupon disabled' : 'Coupon enabled ✔');
+      loadAll();
+    };
+    row.querySelector('[data-cact="del"]').onclick = async () => {
+      if (!confirm(`Delete coupon ${c.code}? Customers will no longer be able to use it.`)) return;
+      const { error } = await db.from('coupons').delete().eq('id', c.id);
+      if (error) return toast(error.message, true);
+      toast('Coupon deleted');
+      loadAll();
+    };
+    host.appendChild(row);
+  });
+  const addBtn = det.querySelector('[data-act="addcoupon"]');
+  if (addBtn) addBtn.onclick = async () => {
+    const g = (k) => det.querySelector(`[data-ck="${k}"]`);
+    const code = g('code').value.trim().toUpperCase().replace(/\s+/g, '');
+    const percent = parseInt(g('percent').value, 10);
+    const maxRaw = g('max').value.trim();
+    const max_uses = maxRaw === '' ? null : parseInt(maxRaw, 10);
+    if (!code || !/^[A-Z0-9-]{2,30}$/.test(code)) return toast('Coupon code: 2 to 30 letters, numbers or dashes.', true);
+    if (!percent || percent < 1 || percent > 100) return toast('Discount must be between 1 and 100 percent.', true);
+    if (max_uses !== null && (!max_uses || max_uses < 1)) return toast('Max uses must be a positive number or empty.', true);
+    const { error } = await db.from('coupons').insert({ code, product_slug: p.slug, percent, max_uses });
+    if (error) return toast(error.message.includes('duplicate') ? 'That code already exists for this product.' : error.message, true);
+    toast(`Coupon ${code} created ✔`);
+    loadAll();
+  };
+}
+
 /* ================= ORDERS & LEADS ================= */
 const ORDER_STATUS = {
   pending_payment: { label: 'Pending payment', bg: 'rgba(251,210,10,.15)', fg: '#FBD20A' },
@@ -729,7 +934,7 @@ function renderOrders() {
       + `<div class="accbody">`
       + `<div class="row" style="gap:26px;flex-wrap:wrap;margin-bottom:12px;">`
       + `<div><label>Product</label><div>${esc(o.product_title)} <span class="muted">(${esc(o.product_slug)})</span></div></div>`
-      + `<div><label>Amount</label><div>${priceStr}</div></div>`
+      + `<div><label>Amount</label><div>${priceStr}${o.coupon_code ? ` <span class=\"muted\">(coupon ${esc(o.coupon_code)})</span>` : ''}</div></div>`
       + `<div><label>Date</label><div>${dateStr}</div></div>`
       + `</div>`
       + `<div class="row" style="gap:26px;flex-wrap:wrap;margin-bottom:14px;">`
