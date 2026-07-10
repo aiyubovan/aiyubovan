@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700;800;900&family=Noto+Sans+Sinhala:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;}
+  body{margin:0;background:#0A0A0C;color:#F5F5F7;font-family:'Noto Sans','Noto Sans Sinhala',system-ui,-apple-system,sans-serif;-webkit-font-smoothing:antialiased;}
+  ::selection{background:#FBD20A;color:#2A0512;}
+  a{color:inherit;}
+  .pa-backbtn{display:inline-flex;align-items:center;gap:8px;text-decoration:none;font-size:14px;font-weight:700;color:rgba(245,245,247,.8);padding:10px 18px;border-radius:999px;background:rgba(245,245,247,.06);border:1px solid rgba(245,245,247,.14);backdrop-filter:blur(14px) saturate(1.4);-webkit-backdrop-filter:blur(14px) saturate(1.4);box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 8px 20px -14px rgba(0,0,0,.8);margin-bottom:22px;transition:background .25s,border-color .25s,color .25s,box-shadow .25s;cursor:pointer;}
+  .pa-backbtn svg{transition:transform .25s;}
+  .pa-backbtn:hover{background:rgba(251,210,10,.16);border-color:rgba(251,210,10,.5);color:#FBD20A;box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 10px 28px -12px rgba(251,210,10,.4);}
+  .pa-backbtn:hover svg{transform:translateX(-3px);}
+  .ck-grid{display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:start;}
+  @media (max-width:900px){.ck-grid{grid-template-columns:1fr;}}
+  .ck-card{background:linear-gradient(155deg,rgba(101,10,52,.22),rgba(12,12,15,.55));border:1px solid rgba(245,245,247,.14);border-radius:20px;overflow:hidden;}
+  .ck-formcard{background:linear-gradient(155deg,rgba(101,10,52,.18),rgba(12,12,15,.6));border:1px solid rgba(245,245,247,.16);border-radius:20px;padding:26px 24px;backdrop-filter:blur(14px) saturate(1.3);-webkit-backdrop-filter:blur(14px) saturate(1.3);box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 18px 44px -24px rgba(0,0,0,.9);}
+  .ck-label{display:block;font-size:13.5px;font-weight:700;color:rgba(245,245,247,.85);margin:0 0 7px;}
+  .ck-input{width:100%;background:rgba(10,10,12,.55);border:1px solid rgba(245,245,247,.18);border-radius:12px;color:#F5F5F7;font-size:15.5px;font-family:inherit;padding:13px 14px;outline:none;transition:border-color .2s,box-shadow .2s;}
+  .ck-input:focus{border-color:rgba(251,210,10,.55);box-shadow:0 0 0 3px rgba(251,210,10,.14);}
+  .ck-input.ck-bad{border-color:rgba(255,90,82,.7);box-shadow:0 0 0 3px rgba(255,90,82,.12);}
+  select.ck-input{appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23F5F5F7' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'><path d='M6 9l6 6 6-6'/></svg>");background-repeat:no-repeat;background-position:right 13px center;padding-right:38px;cursor:pointer;}
+  select.ck-input option{background:#151318;color:#F5F5F7;}
+  .ck-err{display:none;margin:6px 0 0;font-size:12.5px;font-weight:600;color:#FF7B72;line-height:1.5;}
+  .ck-err.ck-show{display:block;}
+  .ck-hint{margin:6px 0 0;font-size:12px;color:rgba(245,245,247,.45);line-height:1.5;}
+  .ck-row{margin-bottom:16px;}
+  .ck-names{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  @media (max-width:480px){.ck-names{grid-template-columns:1fr;}}
+  .ck-phone{display:grid;grid-template-columns:150px 1fr;gap:10px;}
+  @media (max-width:480px){.ck-phone{grid-template-columns:128px 1fr;}}
+  .ck-consent{display:flex;gap:11px;align-items:flex-start;background:rgba(10,10,12,.4);border:1px solid rgba(245,245,247,.12);border-radius:14px;padding:14px;cursor:pointer;}
+  .ck-consent input{margin:3px 0 0;width:17px;height:17px;flex:none;accent-color:#FBD20A;cursor:pointer;}
+  .ck-consent span{font-size:12.5px;line-height:1.65;color:rgba(245,245,247,.75);}
+  .ck-submit{width:100%;display:inline-flex;align-items:center;justify-content:center;gap:9px;background:linear-gradient(180deg,#FDE25C,#FBD20A);color:#2A0512;font-weight:800;font-size:16.5px;font-family:inherit;border:none;border-radius:999px;padding:16px 20px;cursor:pointer;box-shadow:0 14px 34px -10px rgba(251,210,10,.55);transition:transform .15s,box-shadow .2s,opacity .2s;}
+  .ck-submit:hover{transform:translateY(-1px);box-shadow:0 18px 40px -10px rgba(251,210,10,.6);}
+  .ck-submit:disabled{opacity:.55;cursor:not-allowed;transform:none;}
+  .ck-secure{display:flex;align-items:center;justify-content:center;gap:7px;margin-top:13px;font-size:12px;color:rgba(245,245,247,.45);}
+</style>
+</helmet>
+<div style="min-height:100vh;display:flex;flex-direction:column;">
+  <dc-import name="Nav" home-href="/#home" register-href="/apply#apply" hint-size="100%,64px"></dc-import>
+
+  <main style="flex:1;position:relative;overflow:hidden;padding:20px 20px 90px;">
+    <div style="position:absolute;inset:0;pointer-events:none;background:radial-gradient(60% 40% at 50% -5%,rgba(101,10,52,.5),transparent 68%);"></div>
+    <div style="position:relative;max-width:1060px;margin:0 auto;">
+
+      <sc-if value="{{ loading }}">
+        <div style="text-align:center;color:rgba(245,245,247,.5);padding:60px 0;">Load වෙනවා...</div>
+      </sc-if>
+      <sc-if value="{{ notFound }}">
+        <div style="text-align:center;color:rgba(245,245,247,.6);padding:60px 0;">මේ Product එක හම්බුවුනේ නෑ.</div>
+      </sc-if>
+
+      <sc-if value="{{ ready }}">
+        <a href="{{ backHref }}" class="pa-backbtn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg> Product එකට ආපහු යන්න
+        </a>
+
+        <div class="ck-grid">
+
+          <div>
+            <div class="ck-card">
+              <img src="{{ p.banner_url }}" alt="{{ p.title }}" style="width:100%;display:block;">
+              <div style="padding:22px 22px 24px;">
+                <h1 style="margin:0 0 8px;font-size:clamp(21px,3.6vw,26px);font-weight:900;line-height:1.3;">{{ p.title }}</h1>
+                <p style="margin:0 0 18px;font-size:14.5px;line-height:1.65;color:rgba(245,245,247,.8);">{{ p.tagline }}</p>
+                <div style="display:flex;align-items:center;justify-content:space-between;border-top:1px solid rgba(245,245,247,.12);padding-top:16px;">
+                  <span style="font-size:13.5px;font-weight:700;color:rgba(245,245,247,.6);">මුළු මුදල</span>
+                  <span>
+                    <sc-if value="{{ p.hasDiscount }}">
+                      <span style="font-size:14px;color:rgba(245,245,247,.45);text-decoration:line-through;margin-right:8px;">Rs. {{ p.originalPriceFmt }}</span>
+                    </sc-if>
+                    <sc-if value="{{ p.isPaid }}">
+                      <span style="font-size:22px;font-weight:900;color:#FBD20A;">Rs. {{ p.priceFmt }}</span>
+                    </sc-if>
+                    <sc-if value="{{ p.isFree }}">
+                      <span style="font-size:17px;font-weight:900;color:#7fe0ab;">නොමිලේ</span>
+                    </sc-if>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <sc-if value="{{ showForm }}">
+              <div class="ck-formcard">
+                <h2 style="margin:0 0 6px;font-size:19px;font-weight:900;">ඔබේ විස්තර</h2>
+                <p style="margin:0 0 20px;font-size:13.5px;line-height:1.6;color:rgba(245,245,247,.6);">{{ formIntro }}</p>
+
+                <div class="ck-row ck-names">
+                  <div>
+                    <label class="ck-label" for="ck-first">First Name</label>
+                    <input class="ck-input" id="ck-first" type="text" autocomplete="given-name" placeholder="Ruwan">
+                    <p class="ck-err" id="ck-e-first">First name එක අවශ්‍යයි.</p>
+                  </div>
+                  <div>
+                    <label class="ck-label" for="ck-last">Last Name</label>
+                    <input class="ck-input" id="ck-last" type="text" autocomplete="family-name" placeholder="Perera">
+                    <p class="ck-err" id="ck-e-last">Last name එක අවශ්‍යයි.</p>
+                  </div>
+                </div>
+
+                <div class="ck-row">
+                  <label class="ck-label" for="ck-email">Email Address</label>
+                  <input class="ck-input" id="ck-email" type="email" autocomplete="email" inputmode="email" placeholder="you@example.com">
+                  <p class="ck-err" id="ck-e-email">හරි email address එකක් දාන්න.</p>
+                  <p class="ck-hint">Product එක ලැබෙන්නේ මේ email එකට යි.</p>
+                </div>
+
+                <div class="ck-row">
+                  <label class="ck-label" for="ck-phone">WhatsApp Number</label>
+                  <div class="ck-phone">
+                    <select class="ck-input" id="ck-country" aria-label="Country code">
+                      <option value="LK" selected>&#127473;&#127472; +94</option>
+                      <option value="US">&#127482;&#127480; +1</option>
+                      <option value="CA">&#127464;&#127462; +1</option>
+                      <option value="GB">&#127468;&#127463; +44</option>
+                      <option value="AU">&#127462;&#127482; +61</option>
+                      <option value="AE">&#127462;&#127466; +971</option>
+                      <option value="NZ">&#127475;&#127487; +64</option>
+                    </select>
+                    <input class="ck-input" id="ck-phone" type="tel" autocomplete="tel-national" inputmode="numeric" placeholder="77 123 4567">
+                  </div>
+                  <p class="ck-err" id="ck-e-phone">WhatsApp number එක වැරදියි.</p>
+                  <p class="ck-hint" id="ck-phone-hint">+94 සමඟ digits 9 ක් (මුල 0 නැතුව).</p>
+                </div>
+
+                <div class="ck-row">
+                  <label class="ck-consent" for="ck-consent">
+                    <input type="checkbox" id="ck-consent">
+                    <span>I agree to share these details with AIYUBOVAN. We will never spam you or sell your information to third parties. We may contact you about future AIYUBOVAN products and offers.</span>
+                  </label>
+                  <p class="ck-err" id="ck-e-consent">ඉදිරියට යන්න කලින් agree වෙන්න ඕනේ.</p>
+                </div>
+
+                <button class="ck-submit" id="ck-submit" type="button">{{ submitLabel }}</button>
+                <p class="ck-err" id="ck-e-submit" style="text-align:center;">යමක් වැරදුනා. ආයෙත් try කරන්න.</p>
+                <div class="ck-secure">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                  ඔබේ විස්තර ආරක්ෂිතයි
+                </div>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ showFreeDone }}">
+              <div class="ck-formcard" style="text-align:center;padding:40px 26px;">
+                <div style="width:64px;height:64px;margin:0 auto 18px;border-radius:50%;background:rgba(53,208,122,.15);border:1px solid rgba(53,208,122,.4);display:flex;align-items:center;justify-content:center;">
+                  <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#35D07A" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+                </div>
+                <h2 style="margin:0 0 10px;font-size:21px;font-weight:900;">ස්තූතියි!</h2>
+                <p style="margin:0 0 24px;font-size:14.5px;line-height:1.7;color:rgba(245,245,247,.75);">ඔබේ විස්තර ලැබුනා. දැන් product එක download කරගන්න පුළුවන්.</p>
+                <a href="{{ downloadHref }}" target="_blank" rel="noopener" class="ck-submit" style="text-decoration:none;max-width:340px;margin:0 auto;">දැන්ම Download කරගන්න</a>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ showPaidDone }}">
+              <div class="ck-formcard" style="text-align:center;padding:40px 26px;">
+                <div style="width:64px;height:64px;margin:0 auto 18px;border-radius:50%;background:rgba(251,210,10,.13);border:1px solid rgba(251,210,10,.4);display:flex;align-items:center;justify-content:center;">
+                  <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#FBD20A" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+                </div>
+                <h2 style="margin:0 0 10px;font-size:21px;font-weight:900;">විස්තර ලැබුනා!</h2>
+                <p style="margin:0;font-size:14.5px;line-height:1.7;color:rgba(245,245,247,.75);">ගෙවීම් පහසුකම ළඟදීම active වෙනවා. ඒ වෙනකම් ඔබේ order එක අපි ළඟ ආරක්ෂිතව තියෙනවා. ගෙවීම open වුන ගමන් අපි ඔබට email එකක් එවන්නම්.</p>
+              </div>
+            </sc-if>
+          </div>
+
+        </div>
+      </sc-if>
+
+    </div>
+  </main>
+
+  <dc-import name="Footer" hint-size="100%,360px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { product: null, notFound: false, phase: 'form' };
+
+  componentDidMount() {
+    const slug = new URLSearchParams(window.location.search).get('slug') || '';
+    if (!slug) { this.setState({ notFound: true }); return; }
+    const URL = 'https://tueaxfwuvugekxvlbnuf.supabase.co';
+    const KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR1ZWF4Znd1dnVnZWt4dmxibnVmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM0MzA0ODgsImV4cCI6MjA5OTAwNjQ4OH0.e2x9IawWs5cMMhph2nkCOu5xliyC1jZYiS50FitK6R4';
+    this._sb = { URL: URL, KEY: KEY };
+    this._slug = slug;
+    fetch(URL + '/rest/v1/products?select=*&slug=eq.' + encodeURIComponent(slug) + '&published=eq.true&limit=1', {
+      headers: { apikey: KEY, Authorization: 'Bearer ' + KEY }
+    }).then((r) => r.json()).then((rows) => {
+      const row = rows && rows[0];
+      if (!row) { this.setState({ notFound: true }); return; }
+      this.setState({ product: row });
+    }).catch(() => this.setState({ notFound: true }));
+
+    // Delegated listeners survive runtime re-renders (nodes get replaced).
+    if (!window.__ckBound) {
+      window.__ckBound = true;
+      document.addEventListener('click', (e) => {
+        const btn = e.target && e.target.closest ? e.target.closest('#ck-submit') : null;
+        if (btn && !btn.disabled) this.submit(btn);
+      });
+      document.addEventListener('change', (e) => {
+        if (e.target && e.target.id === 'ck-country') this.updatePhoneHint();
+      });
+    }
+  }
+
+  countryRules() {
+    return {
+      LK: { code: '+94',  min: 9,  max: 9,  hint: '+94 සමඟ digits 9 ක් (මුල 0 නැතුව).' },
+      US: { code: '+1',   min: 10, max: 10, hint: '+1 සමඟ digits 10 ක්.' },
+      CA: { code: '+1',   min: 10, max: 10, hint: '+1 සමඟ digits 10 ක්.' },
+      GB: { code: '+44',  min: 10, max: 10, hint: '+44 සමඟ digits 10 ක් (මුල 0 නැතුව).' },
+      AU: { code: '+61',  min: 9,  max: 9,  hint: '+61 සමඟ digits 9 ක් (මුල 0 නැතුව).' },
+      AE: { code: '+971', min: 9,  max: 9,  hint: '+971 සමඟ digits 9 ක් (මුල 0 නැතුව).' },
+      NZ: { code: '+64',  min: 8,  max: 10, hint: '+64 සමඟ digits 8 සිට 10 දක්වා.' }
+    };
+  }
+
+  updatePhoneHint() {
+    const sel = document.getElementById('ck-country');
+    const hint = document.getElementById('ck-phone-hint');
+    if (!sel || !hint) return;
+    const rule = this.countryRules()[sel.value];
+    if (rule) hint.textContent = rule.hint;
+  }
+
+  markField(id, errId, bad) {
+    const el = document.getElementById(id);
+    const err = document.getElementById(errId);
+    if (el) el.classList.toggle('ck-bad', !!bad);
+    if (err) err.classList.toggle('ck-show', !!bad);
+  }
+
+  submit(btn) {
+    const val = (id) => {
+      const el = document.getElementById(id);
+      return el ? el.value.trim() : '';
+    };
+    const first = val('ck-first');
+    const last = val('ck-last');
+    const email = val('ck-email');
+    const country = (document.getElementById('ck-country') || {}).value || 'LK';
+    const rule = this.countryRules()[country] || this.countryRules().LK;
+    let digits = val('ck-phone').replace(/\D/g, '');
+    if (digits.charAt(0) === '0') digits = digits.slice(1);
+    const consent = !!(document.getElementById('ck-consent') || {}).checked;
+
+    const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email);
+    const phoneOk = digits.length >= rule.min && digits.length <= rule.max;
+
+    this.markField('ck-first', 'ck-e-first', !first);
+    this.markField('ck-last', 'ck-e-last', !last);
+    this.markField('ck-email', 'ck-e-email', !emailOk);
+    this.markField('ck-phone', 'ck-e-phone', !phoneOk);
+    this.markField('ck-consent', 'ck-e-consent', !consent);
+    document.getElementById('ck-e-submit').classList.remove('ck-show');
+    if (!first || !last || !emailOk || !phoneOk || !consent) return;
+
+    const p = this.state.product;
+    const isFree = !(p.price > 0);
+    const order = {
+      product_slug: p.slug,
+      product_title: p.title,
+      price: p.price || 0,
+      first_name: first,
+      last_name: last,
+      email: email,
+      whatsapp: rule.code + digits,
+      consent: true,
+      status: isFree ? 'free_delivered' : 'pending_payment'
+    };
+
+    btn.disabled = true;
+    const oldLabel = btn.textContent;
+    btn.textContent = 'මොහොතක් ඉන්න...';
+
+    fetch(this._sb.URL + '/rest/v1/orders', {
+      method: 'POST',
+      headers: {
+        apikey: this._sb.KEY,
+        Authorization: 'Bearer ' + this._sb.KEY,
+        'Content-Type': 'application/json',
+        Prefer: 'return=minimal'
+      },
+      body: JSON.stringify(order)
+    }).then((r) => {
+      if (!r.ok) throw new Error('insert failed ' + r.status);
+      this.setState({ phase: isFree ? 'freeDone' : 'paidDone' });
+    }).catch(() => {
+      btn.disabled = false;
+      btn.textContent = oldLabel;
+      document.getElementById('ck-e-submit').classList.add('ck-show');
+    });
+  }
+
+  renderVals() {
+    const raw = this.state.product;
+    if (!raw) {
+      return { loading: !this.state.notFound, notFound: this.state.notFound, ready: false,
+               showForm: false, showFreeDone: false, showPaidDone: false, p: {},
+               backHref: '#', downloadHref: '#', formIntro: '', submitLabel: '' };
+    }
+    const fmt = (n) => Number(n || 0).toLocaleString('en-US');
+    const isPaid = raw.price > 0;
+    const phase = this.state.phase;
+    return {
+      loading: false, notFound: false, ready: true,
+      showForm: phase === 'form',
+      showFreeDone: phase === 'freeDone',
+      showPaidDone: phase === 'paidDone',
+      backHref: 'Product.dc.html?slug=' + encodeURIComponent(this._slug || raw.slug),
+      downloadHref: raw.download_url || raw.buy_url || '#',
+      formIntro: isPaid
+        ? 'ගෙවීමට කලින් පහළ විස්තර පුරවන්න. Product එක එවන්නේ මේ විස්තර වලට යි.'
+        : 'මේ product එක නොමිලේ! Download කරගන්න පහළ විස්තර පුරවන්න.',
+      submitLabel: isPaid ? 'ගෙවීමට යන්න' : 'Download කරගන්න',
+      p: {
+        title: raw.title, tagline: raw.tagline, banner_url: raw.banner_url,
+        isPaid: isPaid, isFree: !isPaid,
+        hasDiscount: isPaid && raw.original_price > raw.price,
+        priceFmt: fmt(raw.price), originalPriceFmt: fmt(raw.original_price)
+      }
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -126,7 +126,7 @@ class Component extends DCLogic {
       hasDiscount: raw.price > 0 && raw.original_price > raw.price,
       priceFmt: fmt(raw.price), originalPriceFmt: fmt(raw.original_price),
       buyLabel: raw.price > 0 ? 'දැන්ම මිලදී ගන්න' : 'දැන්ම Download කරගන්න',
-      buyHref: raw.buy_url || raw.download_url || '#',
+      buyHref: 'Checkout.dc.html?slug=' + encodeURIComponent(raw.slug),
       steps: steps.map((s) => ({ image: s.image || '', text: s.text || '', hasImage: !!s.image, hasText: !!s.text })),
     };
     return { loading: false, notFound: false, ready: true, p };
