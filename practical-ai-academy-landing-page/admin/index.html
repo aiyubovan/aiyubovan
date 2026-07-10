@@ -136,6 +136,7 @@
       <button class="tab" data-view="testimonialsView">⭐ Reviews</button>
       <button class="tab" data-view="faqsView">❓ FAQ</button>
       <button class="tab" data-view="productsView">🛍️ Products</button>
+      <button class="tab" data-view="ordersView">🧾 Orders</button>
       <button class="tab" data-view="securityView">🔐 Security</button>
     </div>
 
@@ -184,6 +185,13 @@
       <div id="productsList"></div>
       <button class="btn ghost small" onclick="addProduct()">+ Add a product</button>
       <p class="muted" style="margin-top:12px;">Image fields take a URL. Upload images anywhere you like (or ask me to set up Supabase Storage) and paste the link. Video field accepts a normal YouTube link or a bunny.net embed link.</p>
+    </div>
+
+    <div id="ordersView" class="view card hidden">
+      <h2>🧾 Orders &amp; Leads</h2>
+      <input type="text" class="filter" id="ordersFilter" placeholder="Search by name, email, product, status…">
+      <div id="ordersList"></div>
+      <p class="muted" style="margin-top:12px;">Every checkout submission lands here, newest first. Free downloads arrive as "Free (delivered)". Paid orders start as "Pending payment" and flip to "Paid" automatically once the payment gateway is connected.</p>
     </div>
 
     <div id="securityView" class="view card hidden">
@@ -241,7 +249,7 @@ const ALLOWED_EMAILS = ['udrgunasinghe@gmail.com'];
 const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 const $ = (id) => document.getElementById(id);
 let settings = null;
-const lists = { weeks: [], testimonials: [], faqs: [], products: [] };
+const lists = { weeks: [], testimonials: [], faqs: [], products: [], orders: [] };
 
 function toast(msg, err) {
   const t = $('toast');
@@ -424,12 +432,13 @@ $('disableForm').onsubmit = async (e) => {
 
 /* ---------------- data ---------------- */
 async function loadAll() {
-  const [st, wk, ts, fq, pr] = await Promise.all([
+  const [st, wk, ts, fq, pr, od] = await Promise.all([
     db.from('site_settings').select('*').eq('id', 1).single(),
     db.from('weeks').select('*').order('sort'),
     db.from('testimonials').select('*').order('sort'),
     db.from('faqs').select('*').order('sort'),
     db.from('products').select('*').order('sort'),
+    db.from('orders').select('*').order('created_at', { ascending: false }),
   ]);
   if (st.error) return toast(st.error.message, true);
   settings = st.data;
@@ -437,9 +446,11 @@ async function loadAll() {
   lists.testimonials = ts.data || [];
   lists.faqs = fq.data || [];
   lists.products = pr.data || [];
+  lists.orders = od.data || [];
   renderSettings();
   ['weeks', 'testimonials', 'faqs'].forEach(renderList);
   renderProducts();
+  renderOrders();
 }
 
 /* ---- search filters (keep long lists tidy) ---- */
@@ -450,7 +461,7 @@ function applyFilter(table) {
     d.classList.toggle('hidden', !!q && !d.textContent.toLowerCase().includes(q));
   });
 }
-['weeks', 'testimonials', 'faqs', 'products'].forEach((t) => {
+['weeks', 'testimonials', 'faqs', 'products', 'orders'].forEach((t) => {
   const f = $(t + 'Filter');
   if (f) f.oninput = () => applyFilter(t);
 });
@@ -686,6 +697,69 @@ function addProduct() {
   lists.products.push({ __open: true, title: '', slug: '', tagline: '', banner_url: '', price: 0, original_price: 0, video_url: '', description: '', steps: [], buy_url: '', download_url: '', published: true, sort: maxSort + 1 });
   renderProducts();
   $('productsList').lastElementChild.scrollIntoView({ block: 'center' });
+}
+
+/* ================= ORDERS & LEADS ================= */
+const ORDER_STATUS = {
+  pending_payment: { label: 'Pending payment', bg: 'rgba(251,210,10,.15)', fg: '#FBD20A' },
+  paid: { label: 'Paid', bg: 'rgba(53,208,122,.15)', fg: '#7fe0ab' },
+  delivered: { label: 'Delivered', bg: 'rgba(53,208,122,.15)', fg: '#7fe0ab' },
+  free_delivered: { label: 'Free (delivered)', bg: 'rgba(53,208,122,.15)', fg: '#7fe0ab' },
+  cancelled: { label: 'Cancelled', bg: 'rgba(255,90,82,.15)', fg: '#FF7B72' },
+};
+
+function renderOrders() {
+  const host = $('ordersList');
+  host.innerHTML = '';
+  if (!lists.orders.length) {
+    host.innerHTML = '<p class="muted">No orders yet. When someone fills the shop checkout form, they show up here.</p>';
+    return;
+  }
+  lists.orders.forEach((o) => {
+    const st = ORDER_STATUS[o.status] || { label: o.status, bg: 'rgba(245,245,247,.1)', fg: '#F5F5F7' };
+    const when = new Date(o.created_at);
+    const dateStr = when.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
+      + ' ' + when.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+    const priceStr = o.price > 0 ? 'Rs. ' + Number(o.price).toLocaleString('en-US') : 'Free';
+    const waDigits = String(o.whatsapp || '').replace(/\D/g, '');
+    const det = document.createElement('details');
+    det.className = 'item';
+    det.innerHTML = `<summary><span class="sum-title">${esc(o.first_name)} ${esc(o.last_name)} · ${esc(o.product_title)}</span>`
+      + `<span class="sum-hint"><span style="background:${st.bg};color:${st.fg};border-radius:999px;padding:2px 10px;font-weight:700;">${esc(st.label)}</span> ${dateStr}</span></summary>`
+      + `<div class="accbody">`
+      + `<div class="row" style="gap:26px;flex-wrap:wrap;margin-bottom:12px;">`
+      + `<div><label>Product</label><div>${esc(o.product_title)} <span class="muted">(${esc(o.product_slug)})</span></div></div>`
+      + `<div><label>Amount</label><div>${priceStr}</div></div>`
+      + `<div><label>Date</label><div>${dateStr}</div></div>`
+      + `</div>`
+      + `<div class="row" style="gap:26px;flex-wrap:wrap;margin-bottom:14px;">`
+      + `<div><label>Email</label><div><a href="mailto:${esc(o.email)}" style="color:#FBD20A;">${esc(o.email)}</a></div></div>`
+      + `<div><label>WhatsApp</label><div><a href="https://wa.me/${esc(waDigits)}" target="_blank" rel="noopener" style="color:#7fe0ab;">${esc(o.whatsapp)}</a></div></div>`
+      + `</div>`
+      + `<div class="row" style="align-items:flex-end;gap:12px;">`
+      + `<div><label>Status</label><select data-k="status">`
+      + Object.entries(ORDER_STATUS).map(([k, v]) => `<option value="${k}"${k === o.status ? ' selected' : ''}>${v.label}</option>`).join('')
+      + `</select></div>`
+      + `<button class="btn small" data-act="osave">Save status</button>`
+      + `<button class="btn danger small" data-act="odel">Delete</button>`
+      + `</div></div>`;
+    det.querySelector('[data-act="osave"]').onclick = async () => {
+      const status = det.querySelector('[data-k="status"]').value;
+      const { error } = await db.from('orders').update({ status }).eq('id', o.id);
+      if (error) return toast(error.message, true);
+      toast('Order updated ✔');
+      loadAll();
+    };
+    det.querySelector('[data-act="odel"]').onclick = async () => {
+      if (!confirm('Delete this order/lead? This cannot be undone.')) return;
+      const { error } = await db.from('orders').delete().eq('id', o.id);
+      if (error) return toast(error.message, true);
+      toast('Order deleted');
+      loadAll();
+    };
+    host.appendChild(det);
+  });
+  applyFilter('orders');
 }
 </script>
 </body>
