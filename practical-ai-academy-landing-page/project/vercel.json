@@ -26,7 +26,7 @@
     },
     {
       "source": "/shop",
-      "destination": "/Shop.dc.html"
+      "destination": "/Shop Preview.dc.html"
     },
     {
       "source": "/privacy-policy",
@@ -99,6 +99,11 @@
     {
       "source": "/How%20To%20Update.dc.html",
       "destination": "/how-to-update",
+      "permanent": true
+    },
+    {
+      "source": "/Shop%20Preview.dc.html",
+      "destination": "/shop",
       "permanent": true
     }
   ],

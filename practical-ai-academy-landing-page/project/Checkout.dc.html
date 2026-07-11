@@ -222,6 +222,12 @@ class Component extends DCLogic {
     const KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR1ZWF4Znd1dnVnZWt4dmxibnVmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM0MzA0ODgsImV4cCI6MjA5OTAwNjQ4OH0.e2x9IawWs5cMMhph2nkCOu5xliyC1jZYiS50FitK6R4';
     this._sb = { URL: URL, KEY: KEY };
     this._slug = slug;
+    // Shop switched off in admin -> bounce deep links to /shop (unavailable card)
+    fetch(URL + '/rest/v1/site_settings?select=shop_status&id=eq.1&limit=1', {
+      headers: { apikey: KEY, Authorization: 'Bearer ' + KEY }
+    }).then((r) => r.json()).then((rows) => {
+      if (rows && rows[0] && rows[0].shop_status === 'down') { window.location.replace('/shop'); return; }
+    }).catch(() => {});
     fetch(URL + '/rest/v1/products?select=*&slug=eq.' + encodeURIComponent(slug) + '&published=eq.true&limit=1', {
       headers: { apikey: KEY, Authorization: 'Bearer ' + KEY }
     }).then((r) => r.json()).then((rows) => {

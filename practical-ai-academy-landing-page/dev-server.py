@@ -19,7 +19,7 @@ REWRITES = {
     "/consultation": "/One-to-One Consultation.dc.html",
     "/book-consultation": "/Book Consultation.dc.html",
     "/courses": "/Courses.dc.html",
-    "/shop": "/Shop.dc.html",
+    "/shop": "/Shop Preview.dc.html",
     "/privacy-policy": "/Privacy Policy.dc.html",
     "/terms-and-conditions": "/Terms and Conditions.dc.html",
     "/refund-policy": "/Return and Refund Policy.dc.html",

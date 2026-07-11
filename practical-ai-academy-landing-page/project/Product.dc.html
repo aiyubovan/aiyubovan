@@ -38,7 +38,7 @@
       </sc-if>
 
       <sc-if value="{{ ready }}">
-        <a href="Shop%20Preview.dc.html" class="pa-backbtn">
+        <a href="/shop" class="pa-backbtn">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg> Shop එකට ආපහු යන්න
         </a>
         <div style="border-radius:18px;overflow:hidden;margin-bottom:26px;background:rgba(0,0,0,.3);">
@@ -109,6 +109,13 @@ class Component extends DCLogic {
     if (!slug) { this.setState({ notFound: true }); return; }
     const URL = 'https://tueaxfwuvugekxvlbnuf.supabase.co';
     const KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR1ZWF4Znd1dnVnZWt4dmxibnVmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM0MzA0ODgsImV4cCI6MjA5OTAwNjQ4OH0.e2x9IawWs5cMMhph2nkCOu5xliyC1jZYiS50FitK6R4';
+    // If the shop is switched off in the admin panel, deep links to a product
+    // bounce to /shop which shows the "temporarily unavailable" card.
+    fetch(URL + '/rest/v1/site_settings?select=shop_status&id=eq.1&limit=1', {
+      headers: { apikey: KEY, Authorization: 'Bearer ' + KEY }
+    }).then((r) => r.json()).then((rows) => {
+      if (rows && rows[0] && rows[0].shop_status === 'down') { window.location.replace('/shop'); return; }
+    }).catch(() => {});
     fetch(URL + '/rest/v1/products?select=*&slug=eq.' + encodeURIComponent(slug) + '&published=eq.true&limit=1', {
       headers: { apikey: KEY, Authorization: 'Bearer ' + KEY }
     }).then((r) => r.json()).then((rows) => {
