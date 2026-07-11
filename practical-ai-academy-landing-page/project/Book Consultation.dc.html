@@ -50,10 +50,10 @@ window.Cal("init", "consultation", { origin: "https://app.cal.com" });
   body{margin:0;background:#0A0A0C;color:#F5F5F7;font-family:'Noto Sans','Noto Sans Sinhala',system-ui,-apple-system,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden;}
   ::selection{background:#FBD20A;color:#2A0512;}
   a{color:inherit;}
-  .pa-backlink{transition:color .2s,transform .2s;}
-  .pa-backlink:hover{color:#FBD20A !important;}
-  .pa-backlink:hover svg{transform:translateX(-3px);}
-  .pa-backlink svg{transition:transform .2s;}
+  .pa-backbtn{display:inline-flex;align-items:center;gap:8px;text-decoration:none;font-size:14px;font-weight:700;color:rgba(245,245,247,.8);padding:10px 18px;border-radius:999px;background:rgba(245,245,247,.06);border:1px solid rgba(245,245,247,.14);backdrop-filter:blur(14px) saturate(1.4);-webkit-backdrop-filter:blur(14px) saturate(1.4);box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 8px 20px -14px rgba(0,0,0,.8);margin-bottom:24px;transition:background .25s,border-color .25s,color .25s,box-shadow .25s;cursor:pointer;}
+  .pa-backbtn svg{transition:transform .25s;}
+  .pa-backbtn:hover{background:rgba(251,210,10,.16);border-color:rgba(251,210,10,.5);color:#FBD20A;box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 10px 28px -12px rgba(251,210,10,.4);}
+  .pa-backbtn:hover svg{transform:translateX(-3px);}
   @media(min-width:1020px){
     .pa-book{grid-template-columns:minmax(0,380px) minmax(0,1fr) !important;gap:clamp(28px,3.5vw,52px) !important;align-items:start;}
     .pa-book-copy{position:sticky;top:84px;}
@@ -62,7 +62,7 @@ window.Cal("init", "consultation", { origin: "https://app.cal.com" });
   @media(max-width:430px){
     .pa-book-jump{width:100%;}
   }
-  #cal-booking-embed{width:100%;min-height:560px;overflow:auto;}
+  #cal-booking-embed{width:100%;min-height:480px;overflow:auto;}
   #cal-booking-embed iframe{border-radius:18px;}
 </style>
 </helmet>
@@ -77,8 +77,8 @@ window.Cal("init", "consultation", { origin: "https://app.cal.com" });
 
       <!-- ===== LEFT: BRAND COPY ===== -->
       <div class="pa-book-copy">
-        <a href="/" class="pa-backlink" style="display:inline-flex;align-items:center;gap:9px;text-decoration:none;font-size:14.5px;font-weight:700;color:rgba(245,245,247,.68);margin-bottom:30px;">
-          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+        <a href="/" class="pa-backbtn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
           මුල් පිටුවට ආපහු යන්න
         </a>
 
@@ -172,11 +172,15 @@ class Component extends DCLogic {
       calLink: "aiyubovan/consultation",
     });
 
-    // Dark theme + AIYUBOVAN gold as the Cal brand color
+    // Dark theme + AIYUBOVAN gold as the Cal brand color.
+    // hideEventTypeDetails:true drops the widget's own title/description/
+    // duration panel (the left brand column already shows all of that), so
+    // the embed is just the date picker and fits the first screen with the
+    // book button, no scrolling.
     window.Cal.ns.consultation("ui", {
       theme: "dark",
       cssVarsPerTheme: { dark: { "cal-brand": "#FBD20A" } },
-      hideEventTypeDetails: false,
+      hideEventTypeDetails: true,
       layout: "month_view",
     });
 
