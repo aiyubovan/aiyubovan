@@ -176,10 +176,15 @@
     </div>
 
     <div id="faqsView" class="view card hidden">
-      <h2>❓ Home Page FAQ</h2>
+      <h2>❓ FAQ</h2>
+      <p class="muted" style="margin:0 0 12px;">Choose which page's FAQ you want to edit.</p>
+      <div class="row" style="gap:8px;margin-bottom:16px;flex-wrap:wrap;">
+        <button class="btn ghost small" id="faqTabHome" onclick="setFaqPage('home')">🏠 Homepage</button>
+        <button class="btn ghost small" id="faqTabLearn" onclick="setFaqPage('learn')">📘 What You Will Learn page</button>
+      </div>
       <input type="text" class="filter" id="faqsFilter" placeholder="Search questions…">
       <div id="faqsList"></div>
-      <button class="btn ghost small" onclick="addRow('faqs')">+ Add a question</button>
+      <button class="btn ghost small" onclick="addFaq()">+ Add a question</button>
     </div>
 
     <div id="productsView" class="view card hidden">
@@ -280,6 +285,7 @@ const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 const $ = (id) => document.getElementById(id);
 let settings = null;
 const lists = { weeks: [], testimonials: [], faqs: [], products: [], orders: [], coupons: [] };
+let faqPage = 'home'; // which FAQ set the FAQ tab is editing: 'home' or 'learn'
 
 function toast(msg, err) {
   const t = $('toast');
@@ -480,7 +486,8 @@ async function loadAll() {
   lists.orders = od.data || [];
   lists.coupons = cp.data || [];
   renderSettings();
-  ['weeks', 'testimonials', 'faqs'].forEach(renderList);
+  ['weeks', 'testimonials'].forEach(renderList);
+  renderFaqs();
   renderProducts();
   renderOrders();
   renderAnalytics('earnings');
@@ -637,6 +644,87 @@ function addRow(table) {
   renderList(table);
   const host = $(table + 'List');
   host.lastElementChild.scrollIntoView({ block: 'center' });
+}
+
+/* ================= FAQ (two sets: home + learn, one table) ================= */
+function setFaqPage(p) { faqPage = p; renderFaqs(); }
+function paintFaqTabs() {
+  const on = 'border-color:var(--gold);color:var(--gold);';
+  $('faqTabHome').style.cssText = faqPage === 'home' ? on : '';
+  $('faqTabLearn').style.cssText = faqPage === 'learn' ? on : '';
+}
+function currentFaqs() {
+  return lists.faqs
+    .filter((f) => (f.page || 'home') === faqPage)
+    .sort((a, b) => (a.sort || 0) - (b.sort || 0));
+}
+function renderFaqs() {
+  paintFaqTabs();
+  const host = $('faqsList');
+  host.innerHTML = '';
+  const rows = currentFaqs();
+  if (!rows.length) {
+    host.innerHTML = '<p class="muted">No questions on this page yet. Click "Add a question" below.</p>';
+    return;
+  }
+  rows.forEach((row, i) => {
+    const div = document.createElement('details');
+    div.className = 'item';
+    if (row.__open) { div.open = true; delete row.__open; }
+    div.innerHTML = `<summary><span class="sum-title">${esc(row.q || 'New question')}</span><span class="sum-hint">#${i + 1}</span></summary><div class="accbody">`
+      + `<label>Question</label><input type="text" data-k="q" value="${esc(row.q)}">`
+      + `<label>Answer</label><textarea data-k="a">${esc(row.a)}</textarea>`
+      + `<div class="row" style="margin-top:12px;">`
+      + `<button class="btn small" data-act="save">Save</button>`
+      + `<button class="btn ghost small" data-act="up" ${i === 0 ? 'disabled' : ''}>↑</button>`
+      + `<button class="btn ghost small" data-act="down" ${i === rows.length - 1 ? 'disabled' : ''}>↓</button>`
+      + `<button class="btn danger small" data-act="del">Delete</button></div></div>`;
+    div.querySelectorAll('[data-act]').forEach((btn) => {
+      btn.onclick = () => faqAction(row, rows, i, btn.getAttribute('data-act'), div);
+    });
+    host.appendChild(div);
+  });
+  applyFilter('faqs');
+}
+async function faqAction(row, rows, i, act, div) {
+  if (act === 'save') {
+    const vals = {
+      q: div.querySelector('[data-k="q"]').value.trim(),
+      a: div.querySelector('[data-k="a"]').value.trim(),
+    };
+    if (!vals.q) return toast('The question cannot be empty.', true);
+    const q = row.id
+      ? db.from('faqs').update(vals).eq('id', row.id)
+      : db.from('faqs').insert({ ...vals, page: faqPage, sort: row.sort || (rows.length) });
+    const { error } = await q;
+    if (error) return toast(error.message, true);
+    toast('Saved ✔');
+    return loadAll();
+  }
+  if (act === 'del') {
+    if (!confirm('Delete this question?')) return;
+    if (row.id) {
+      const { error } = await db.from('faqs').delete().eq('id', row.id);
+      if (error) return toast(error.message, true);
+    }
+    toast('Deleted');
+    return loadAll();
+  }
+  if (act === 'up' || act === 'down') {
+    const j = act === 'up' ? i - 1 : i + 1;
+    const other = rows[j];
+    if (!other || !row.id || !other.id) return;
+    const r1 = await db.from('faqs').update({ sort: other.sort }).eq('id', row.id);
+    const r2 = await db.from('faqs').update({ sort: row.sort }).eq('id', other.id);
+    if (r1.error || r2.error) return toast((r1.error || r2.error).message, true);
+    return loadAll();
+  }
+}
+function addFaq() {
+  const maxSort = Math.max(0, ...currentFaqs().map((r) => r.sort || 0));
+  lists.faqs.push({ q: '', a: '', page: faqPage, sort: maxSort + 1, __open: true });
+  renderFaqs();
+  $('faqsList').lastElementChild.scrollIntoView({ block: 'center' });
 }
 
 /* ================= IMAGE UPLOADS (auto WebP -> Supabase Storage) ================= */

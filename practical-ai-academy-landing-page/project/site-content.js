@@ -118,6 +118,26 @@ window.PA_CONTENT = {
     { q: 'AI Tools පාවිච්චි කරන්න අමතරව සල්ලි ගෙවන්න වෙයිද?', a: 'අපි මේකට පාවිච්චි කරන්නේ නොමිලේ පාවිච්චි කරන්න පුළුවන් (Free versions) Tools. ඒ නිසා ඔයාට අමතර වියදමක් යන්නේ නෑ. සල්ලි ගෙවලා පාවිච්චි කරන Tools තිබුණත්, ඒවා ඔයාගේ කැමැත්ත මත විතරක් පාවිච්චි කරන්න පුළුවන් දේවල්.' },
   ],
 
+  /* ----------------------------------------------------------
+     FAQ — WHAT YOU WILL LEARN PAGE (separate list from the home
+     FAQ above). Edit these from the admin panel FAQ tab by
+     switching to the "What You Will Learn" set. {price} is
+     replaced live with the current course price.
+     ---------------------------------------------------------- */
+  faqsLearn: [
+    { q: 'පන්තිය කරන්නේ මොන භාෂාවෙන්ද?', a: 'සිංහලෙන්. AI Tools වල තියෙන දේවල් ඉංග්‍රීසියෙන් තිබුණට, මම හැමදේම පැහැදිලි කරන්නේ, උදාහරණ දෙන්නේ සිංහලෙන්.' },
+    { q: 'සම්පූර්ණ මුදලම එකවර ගෙවන්න ඕනෙද?', a: 'ඔව්, Course fee එක වෙන රු. {price} එකවර ගෙවිය යුතුයි.' },
+    { q: 'Live Session එකකට එන්න බැරි වුණොත්?', a: 'කිසිම ප්‍රශ්නයක් නෑ. හැම Session එකකම සම්පූර්ණ Recording එක ඔයාට ලැබෙනවා. WhatsApp Group එකෙන් ප්‍රශ්න අහන්නත් පුළුවන්.' },
+    { q: 'Computer එකක් අනිවාර්යද?', a: 'නෑ. Internet තියෙන Smart Phone එකක් තිබ්බම ඇති. Laptop/PC එකක් තියෙනවා නම් සමහර වැඩ තවත් ලේසියි, හැබැයි අත්‍යාවශ්‍ය නෑ.' },
+    { q: 'මම AI ගැන මුකුත්ම දන්නේ නෑ. මට මේක පුළුවන් වෙයිද?', a: 'අනිවාර්යයෙන්ම. මේක හදලා තියෙන්නේ මුල ඉඳන්ම ඉගෙන ගන්න කෙනෙක්ට. ඔයාට Smart Phone එකක් පාවිච්චි කරන්න පුළුවන් නම්, AI ඉගෙන ගන්නත් පුළුවන්.' },
+    { q: 'මම AI ගැන ටිකක් දන්නවා, මේක මට ගැලපෙයිද?', a: 'ඔයා ChatGPT හරි Gemini හරි පාවිච්චි කරලා තිබ්බත්, ඔයා තාම ඒවයින් 10%ක් වත් පාවිච්චි කරන්නේ නෑ කියලා මට විශ්වාසයි. මේකේ තියෙන Prompt engineering, Notebook LM, Deep research වගේ දේවල් වලින් ඔයාව සම්පූර්ණයෙන්ම වෙනස් මට්ටමකට ගෙනියනවා.' },
+    { q: 'මට මේකෙන් සල්ලි හොයන්න පුළුවන් වෙයිද?', a: 'මේකෙන් ඔයාගේ කාලය ඉතුරු කරන හැටි, කාර්යක්ෂමව වැඩ කරන හැටි කියලා දෙනවා. ඒ ඉතුරු වෙන කාලයෙන් සහ අලුත් Skill එකෙන් ඔයාට අනිවාර්යයෙන්ම Side hustle එකක් කරන්න, Freelance කරන්න පුළුවන්. හැබැයි මේක Skill එකක් උගන්වන Course එකක් මිසක් නිකන් ඉඳලා සල්ලි හොයන ක්‍රමයක් නෙවෙයි.' },
+    { q: 'පන්තිය ඉවර වුණාට පස්සේ ප්‍රශ්නයක් ආවොත්?', a: 'ඒකට තමයි Private WhatsApp Community එක තියෙන්නේ. ඕනෙම වෙලාවක ඒකෙන් අහන්න පුළුවන්.' },
+    { q: 'මට Certificate එකක් ලැබෙනවද?', a: 'ඔව්. Course එක සාර්ථකව ඉවර කළාම ඔයාගේ CV එකට, LinkedIn එකට දාන්න පුළුවන් AIYUBOVAN එකෙන් දෙන වටිනා Certificate එකක් ලැබෙනවා.' },
+    { q: 'පන්තිය ඉවර වුණාම මොකද වෙන්නේ?', a: 'Recordings, Notes, Infographics සහ Cheat sheet එක ජීවිත කාලෙටම ඔයා ගාව තියෙනවා. Group එකෙත් ඔයා දිගටම ඉන්නවා. අනාගතයේ එන Updates පවා නොමිලේම ඔයාට ලැබෙනවා.' },
+    { q: 'මට Course එක සෙට් වුණේ නැත්නම්?', a: 'මුල් සති 2ක පන්ති වලට එන්න. ඔයාට මේකෙන් වැඩක් නෑ කියලා හිතුණොත් මට Email එකක් දාන්න. කිසිම ප්‍රශ්නයක් අහන්නේ නැතුව සම්පූර්ණ මුදලම මම ආපසු දෙනවා.' },
+  ],
+
 };
 
 
@@ -143,11 +163,17 @@ window.PA_CONTENT = {
     get('site_settings?id=eq.1&limit=1'),
     get('weeks?select=n,title,line&order=sort.asc'),
     get('testimonials?select=initial,name,role,city,quote&order=sort.asc'),
-    get('faqs?select=q,a&order=sort.asc')
+    get('faqs?select=q,a,page&order=sort.asc')
   ]).then(function (res) {
     var st = res[0] && res[0][0];
     if (!st) return;
     var base = window.PA_CONTENT || {};
+    // One faqs table holds both pages, split by the 'page' column.
+    var allFaqs = res[3] || [];
+    var homeFaqs = allFaqs.filter(function (f) { return (f.page || 'home') === 'home'; })
+      .map(function (f) { return { q: f.q, a: f.a }; });
+    var learnFaqs = allFaqs.filter(function (f) { return f.page === 'learn'; })
+      .map(function (f) { return { q: f.q, a: f.a }; });
     window.PA_CONTENT = {
       settings: {
         registrationOpen: st.registration_open,
@@ -159,7 +185,8 @@ window.PA_CONTENT = {
       },
       weeks: (res[1] && res[1].length) ? res[1] : base.weeks,
       testimonials: (res[2] && res[2].length) ? res[2] : base.testimonials,
-      faqs: (res[3] && res[3].length) ? res[3] : base.faqs,
+      faqs: homeFaqs.length ? homeFaqs : base.faqs,
+      faqsLearn: learnFaqs.length ? learnFaqs : base.faqsLearn,
       included: base.included,
       pricingIncludes: base.pricingIncludes
     };
