@@ -27,7 +27,7 @@
       </sc-if>
       <sc-if value="{{ regClosed }}">
         <span style="display:inline-flex;align-items:center;justify-content:center;background:rgba(245,245,247,.06);color:rgba(245,245,247,.5);font-weight:800;font-size:clamp(18px,4.4vw,21px);border:1px solid rgba(245,245,247,.14);border-radius:999px;padding:19px 42px;cursor:not-allowed;">ලියාපදිංචිය දැන් වසා ඇත</span>
-        <p style="margin:20px 0 0;font-size:15.5px;font-weight:700;color:#FF7B72;">ඊළඟ කණ්ඩායම {{ closesOn }} පටන් ගන්නවා. ලියාපදිංචිය ළඟදීම යළි විවෘත වේ.</p>
+        <p style="margin:20px 0 0;font-size:15.5px;font-weight:700;color:#FF7B72;">ඊළඟ කණ්ඩායම {{ nextBatch }} පටන් ගන්නවා. ලියාපදිංචිය ළඟදීම යළි විවෘත වේ.</p>
       </sc-if>
     </div>
   </section>
@@ -52,7 +52,9 @@ class Component extends DCLogic {
     if (m) closesOn = m[1] + ' ' + months[parseInt(m[2], 10) - 1] + ' ' + parseInt(m[3], 10);
     const fmt = (n) => Number(n || 0).toLocaleString('en-US');
     const regOpen = S.registrationOpen !== false;
-    return { closesOn, regOpen, regClosed: !regOpen, coursePrice: fmt(S.coursePrice || 9900), courseValue: fmt(S.courseValue || 45000) };
+    // closesOn = when the registration WINDOW ends (shown while open).
+    // nextBatch = when the next batch actually STARTS (shown while closed).
+    return { closesOn, nextBatch: S.nextBatchDate || '', regOpen, regClosed: !regOpen, coursePrice: fmt(S.coursePrice || 9900), courseValue: fmt(S.courseValue || 45000) };
   }
 }
 </script>
