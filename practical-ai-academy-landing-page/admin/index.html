@@ -139,6 +139,7 @@
       <button class="tab" data-view="ordersView">🧾 Orders</button>
       <button class="tab" data-view="earningsView">💰 Earnings</button>
       <button class="tab" data-view="downloadsView">📊 Downloads</button>
+      <button class="tab" data-view="pagestatusView">🔌 Page Status</button>
       <button class="tab" data-view="securityView">🔐 Security</button>
     </div>
 
@@ -210,6 +211,17 @@
       <div id="downloadsSummary"></div>
       <div id="downloadsBreakdown"></div>
       <p class="muted" style="margin-top:12px;">Counts free product deliveries (each one is a captured lead with email and WhatsApp in the Orders tab).</p>
+    </div>
+
+    <div id="pagestatusView" class="view card hidden">
+      <h2>🔌 Page Status</h2>
+      <p class="muted">Turn a page OFF when its real website has a problem. Visitors then see a friendly "temporarily unavailable" message everywhere that page is linked (menu, footer, buttons), while your home page, Zoom class info and One-to-One Consultation stay fully online. Changes take effect on the live site within a few seconds.</p>
+
+      <div class="switch" id="shopSwitch" style="margin-top:16px;"><span class="knob"></span><span class="statusline" id="shopLabel"></span></div>
+      <p class="muted" style="margin:7px 2px 0;">Shop &mdash; when ON, visitors see your products at the shop. When OFF, they see the shop is temporarily unavailable.</p>
+
+      <div class="switch" id="coursesSwitch" style="margin-top:18px;"><span class="knob"></span><span class="statusline" id="coursesLabel"></span></div>
+      <p class="muted" style="margin:7px 2px 0;">Courses &mdash; when ON, Courses opens your course site (academy.aiyubovan.com). When OFF, visitors see the courses page is temporarily unavailable.</p>
     </div>
 
     <div id="securityView" class="view card hidden">
@@ -495,6 +507,7 @@ function renderSettings() {
   $('s_price').value = settings.course_price;
   $('s_value').value = settings.course_value;
   paintSwitch();
+  paintPageStatus();
 }
 function paintSwitch() {
   $('regSwitch').classList.toggle('on', !!settings.registration_open);
@@ -502,6 +515,27 @@ function paintSwitch() {
   $('regLabel').style.color = settings.registration_open ? '#FBD20A' : '#FF8F8A';
 }
 $('regSwitch').onclick = () => { settings.registration_open = !settings.registration_open; paintSwitch(); };
+
+/* ---- page status toggles (save immediately) ---- */
+function paintOneStatus(sw, lab, live, name) {
+  $(sw).classList.toggle('on', live);
+  $(lab).textContent = name + (live ? ' is LIVE' : ' is DOWN (temporarily unavailable)');
+  $(lab).style.color = live ? '#FBD20A' : '#FF8F8A';
+}
+function paintPageStatus() {
+  paintOneStatus('shopSwitch', 'shopLabel', (settings.shop_status || 'live') === 'live', 'Shop');
+  paintOneStatus('coursesSwitch', 'coursesLabel', (settings.courses_status || 'live') === 'live', 'Courses');
+}
+async function togglePageStatus(field) {
+  const next = (settings[field] || 'live') === 'live' ? 'down' : 'live';
+  settings[field] = next;
+  paintPageStatus();
+  const { error } = await db.from('site_settings').update({ [field]: next, updated_at: new Date().toISOString() }).eq('id', 1);
+  if (error) { settings[field] = next === 'live' ? 'down' : 'live'; paintPageStatus(); return toast(error.message, true); }
+  toast((field === 'shop_status' ? 'Shop' : 'Courses') + ' is now ' + (next === 'live' ? 'LIVE ✔' : 'DOWN'));
+}
+$('shopSwitch').onclick = () => togglePageStatus('shop_status');
+$('coursesSwitch').onclick = () => togglePageStatus('courses_status');
 
 async function saveSettings() {
   const patch = {
