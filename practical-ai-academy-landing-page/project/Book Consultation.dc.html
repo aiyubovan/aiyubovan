@@ -55,21 +55,21 @@ window.Cal("init", "consultation", { origin: "https://app.cal.com" });
   .pa-backlink:hover svg{transform:translateX(-3px);}
   .pa-backlink svg{transition:transform .2s;}
   @media(min-width:1020px){
-    .pa-book{grid-template-columns:minmax(0,420px) minmax(0,1fr) !important;gap:clamp(32px,4.5vw,64px) !important;align-items:start;}
-    .pa-book-copy{position:sticky;top:100px;}
+    .pa-book{grid-template-columns:minmax(0,380px) minmax(0,1fr) !important;gap:clamp(28px,3.5vw,52px) !important;align-items:start;}
+    .pa-book-copy{position:sticky;top:84px;}
     .pa-book-jump{display:none !important;}
   }
   @media(max-width:430px){
     .pa-book-jump{width:100%;}
   }
-  #cal-booking-embed{width:100%;min-height:620px;overflow:auto;}
+  #cal-booking-embed{width:100%;min-height:560px;overflow:auto;}
   #cal-booking-embed iframe{border-radius:18px;}
 </style>
 </helmet>
 <div style="min-height:100vh;display:flex;flex-direction:column;">
   <dc-import name="Nav" home-href="/#home" register-href="/apply#apply" hint-size="100%,64px"></dc-import>
 
-  <main style="flex:1;position:relative;overflow:hidden;padding:clamp(18px,4.5vw,64px) 20px 88px;">
+  <main style="flex:1;position:relative;overflow:hidden;padding:clamp(14px,2vw,26px) 20px 40px;">
     <div style="position:absolute;inset:0;pointer-events:none;background:radial-gradient(60% 55% at 50% 12%,rgba(133,0,0,.5),transparent 70%),radial-gradient(44% 42% at 14% 86%,rgba(101,10,52,.42),transparent 68%);"></div>
     <div style="position:absolute;left:22%;top:2%;width:520px;height:520px;max-width:92vw;transform:translateX(-50%);pointer-events:none;background:radial-gradient(circle,rgba(251,210,10,.12),rgba(251,210,10,.03) 42%,transparent 62%);"></div>
 
@@ -113,7 +113,7 @@ window.Cal("init", "consultation", { origin: "https://app.cal.com" });
       </div>
 
       <!-- ===== RIGHT: CAL.COM INLINE BOOKING ===== -->
-      <div style="position:relative;background:linear-gradient(155deg,rgba(101,10,52,.30),rgba(133,0,0,.14) 50%,rgba(12,12,15,.62));border:1px solid rgba(245,245,247,.18);border-radius:26px;box-shadow:inset 0 1px 0 rgba(255,255,255,.14),inset 0 -1px 1px rgba(0,0,0,.3),0 36px 84px -38px rgba(0,0,0,1);padding:clamp(14px,2.4vw,24px);">
+      <div style="position:relative;background:linear-gradient(155deg,rgba(101,10,52,.30),rgba(133,0,0,.14) 50%,rgba(12,12,15,.62));border:1px solid rgba(245,245,247,.18);border-radius:26px;box-shadow:inset 0 1px 0 rgba(255,255,255,.14),inset 0 -1px 1px rgba(0,0,0,.3),0 36px 84px -38px rgba(0,0,0,1);padding:clamp(10px,1.4vw,16px);">
         <div style="position:absolute;right:-50px;top:-50px;width:220px;height:220px;pointer-events:none;background:radial-gradient(circle,rgba(251,210,10,.14),transparent 62%);"></div>
         <div id="cal-booking-embed" style="position:relative;">
           <div id="cal-booking-loading" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;min-height:620px;color:rgba(245,245,247,.6);font-size:15px;">
