@@ -605,6 +605,73 @@ function addRow(table) {
   host.lastElementChild.scrollIntoView({ block: 'center' });
 }
 
+/* ================= IMAGE UPLOADS (auto WebP -> Supabase Storage) ================= */
+function fileToWebp(file) {
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.onload = () => {
+      const MAX_W = 1600;
+      const scale = Math.min(1, MAX_W / img.naturalWidth);
+      const c = document.createElement('canvas');
+      c.width = Math.round(img.naturalWidth * scale);
+      c.height = Math.round(img.naturalHeight * scale);
+      c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+      URL.revokeObjectURL(img.src);
+      c.toBlob((b) => resolve(b), 'image/webp', 0.85);
+    };
+    img.onerror = () => { URL.revokeObjectURL(img.src); resolve(null); };
+    img.src = URL.createObjectURL(file);
+  });
+}
+
+async function uploadImage(file, hint) {
+  let blob = await fileToWebp(file);
+  let ext = 'webp';
+  if (!blob) { // browser could not convert (rare) -> upload the original
+    blob = file;
+    ext = (file.name.split('.').pop() || 'png').toLowerCase();
+  }
+  const clean = String(hint || file.name.replace(/\.[^.]+$/, ''))
+    .toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || 'image';
+  const path = clean + '-' + Date.now() + '.' + ext;
+  const { error } = await db.storage.from('product-images')
+    .upload(path, blob, { contentType: blob.type || 'image/webp', cacheControl: '31536000' });
+  if (error) throw error;
+  return db.storage.from('product-images').getPublicUrl(path).data.publicUrl;
+}
+
+function attachUpload(input, hintFn) {
+  if (!input || input.__hasUpload) return;
+  input.__hasUpload = true;
+  const picker = document.createElement('input');
+  picker.type = 'file';
+  picker.accept = 'image/*';
+  picker.style.display = 'none';
+  const btn = document.createElement('button');
+  btn.type = 'button';
+  btn.className = 'btn ghost small';
+  btn.textContent = '⬆ Upload image from this device';
+  btn.style.margin = '6px 0 2px';
+  btn.onclick = () => picker.click();
+  picker.onchange = async () => {
+    const f = picker.files[0];
+    if (!f) return;
+    btn.disabled = true;
+    btn.textContent = 'Uploading…';
+    try {
+      input.value = await uploadImage(f, hintFn ? hintFn() : '');
+      toast('Image uploaded as WebP ✔ Now click Save.');
+    } catch (e) {
+      toast('Upload failed: ' + (e.message || e), true);
+    }
+    btn.disabled = false;
+    btn.textContent = '⬆ Upload image from this device';
+    picker.value = '';
+  };
+  input.insertAdjacentElement('afterend', picker);
+  picker.insertAdjacentElement('afterend', btn);
+}
+
 /* ================= SHOP PRODUCTS ================= */
 const slugify = (s) => String(s || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || ('product-' + Date.now());
 const pfld = (label, key, val) => `<label>${label}</label><input type="text" data-k="${key}" value="${esc(val == null ? '' : val)}">`;
@@ -612,10 +679,11 @@ const pfld = (label, key, val) => `<label>${label}</label><input type="text" dat
 function stepRow(s) {
   const d = document.createElement('div');
   d.className = 'steprow';
-  d.innerHTML = `<input type="text" data-sk="image" placeholder="Image URL" value="${esc(s.image || '')}">`
+  d.innerHTML = `<input type="text" data-sk="image" placeholder="Image URL (or use the upload button below)" value="${esc(s.image || '')}">`
     + `<textarea data-sk="text" placeholder="Caption / instruction shown under this image">${esc(s.text || '')}</textarea>`
     + `<button class="btn danger small" type="button">Remove step</button>`;
-  d.querySelector('button').onclick = () => d.remove();
+  d.querySelector('.btn.danger').onclick = () => d.remove();
+  attachUpload(d.querySelector('[data-sk="image"]'), () => 'step');
   return d;
 }
 
@@ -679,6 +747,10 @@ function renderProducts() {
     det.querySelector('[data-act="pdel"]').onclick = () => delProduct(p);
     det.querySelector('[data-act="pup"]').onclick = () => swapProduct(i, i - 1);
     det.querySelector('[data-act="pdown"]').onclick = () => swapProduct(i, i + 1);
+    attachUpload(det.querySelector('.accbody [data-k="banner_url"]'), () => {
+      const t = det.querySelector('.accbody [data-k="slug"]');
+      return (t && t.value.trim()) || 'banner';
+    });
     if (p.id) renderCoupons(det, p);
     host.appendChild(det);
   });
