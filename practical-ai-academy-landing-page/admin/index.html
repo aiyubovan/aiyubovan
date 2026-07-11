@@ -660,6 +660,7 @@ function renderProducts() {
              <button class="btn ghost small" data-act="addcoupon" type="button">+ Create coupon</button>
            </div>`
         : `<p class="muted" style="margin:0;">Save the product first, then coupons can be added here.</p>`)
+      + `<label style="display:flex;align-items:center;gap:10px;cursor:pointer;margin-top:14px;"><input type="checkbox" data-k="show_kofi"${p.show_kofi ? ' checked' : ''} style="width:auto;"> Show the Ko-fi "Support me" floating button on this product's page</label>`
       + `<label style="display:flex;align-items:center;gap:10px;cursor:pointer;margin-top:14px;"><input type="checkbox" data-k="published"${p.published !== false ? ' checked' : ''} style="width:auto;"> Visible in the shop</label>`
       + `<div class="row" style="margin-top:14px;">`
       + `<button class="btn small" data-act="psave">Save</button>`
@@ -738,7 +739,7 @@ async function swapProduct(i, j) {
 
 function addProduct() {
   const maxSort = Math.max(0, ...lists.products.map(r => r.sort || 0));
-  lists.products.push({ __open: true, title: '', slug: '', tagline: '', banner_url: '', price: 0, original_price: 0, video_url: '', description: '', steps: [], buy_url: '', download_url: '', published: true, sort: maxSort + 1 });
+  lists.products.push({ __open: true, title: '', slug: '', tagline: '', banner_url: '', price: 0, original_price: 0, video_url: '', description: '', steps: [], buy_url: '', download_url: '', show_kofi: false, published: true, sort: maxSort + 1 });
   renderProducts();
   $('productsList').lastElementChild.scrollIntoView({ block: 'center' });
 }

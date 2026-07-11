@@ -115,7 +115,27 @@ class Component extends DCLogic {
       const row = rows && rows[0];
       if (!row) { this.setState({ notFound: true }); return; }
       this.setState({ product: row });
+      if (row.show_kofi) this.mountKofi();
     }).catch(() => this.setState({ notFound: true }));
+  }
+
+  mountKofi() {
+    // Ko-fi appends its floating button to <body>, outside the managed
+    // template tree, so runtime re-renders leave it alone.
+    if (window.__kofiMounted) return;
+    window.__kofiMounted = true;
+    const s = document.createElement('script');
+    s.src = 'https://storage.ko-fi.com/cdn/scripts/overlay-widget.js';
+    s.onload = () => {
+      if (!window.kofiWidgetOverlay) return;
+      window.kofiWidgetOverlay.draw('aiyubovan', {
+        'type': 'floating-chat',
+        'floating-chat.donateButton.text': 'Support me',
+        'floating-chat.donateButton.background-color': '#FBD20A',
+        'floating-chat.donateButton.text-color': '#2A0512'
+      });
+    };
+    document.body.appendChild(s);
   }
   renderVals() {
     const raw = this.state.product;

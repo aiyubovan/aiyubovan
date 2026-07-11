@@ -128,7 +128,7 @@
         },
         {
           "key": "Content-Security-Policy",
-          "value": "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://app.cal.com https://tally.so; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://app.cal.com https://tally.so; frame-src https://app.cal.com https://cal.com https://tally.so; connect-src 'self' https://app.cal.com https://*.cal.com https://tally.so https://*.supabase.co; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'; upgrade-insecure-requests"
+          "value": "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://app.cal.com https://tally.so https://storage.ko-fi.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://app.cal.com https://tally.so https://storage.ko-fi.com https://ko-fi.com; frame-src https://app.cal.com https://cal.com https://tally.so https://ko-fi.com; connect-src 'self' https://app.cal.com https://*.cal.com https://tally.so https://*.supabase.co https://ko-fi.com; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'; upgrade-insecure-requests"
         }
       ]
     },
