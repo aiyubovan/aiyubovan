@@ -116,7 +116,10 @@ class Component extends DCLogic {
     }).then((r) => r.json()).then((rows) => {
       if (rows && rows[0] && rows[0].shop_status === 'down') { window.location.replace('/shop'); return; }
     }).catch(() => {});
-    fetch(URL + '/rest/v1/products?select=*&slug=eq.' + encodeURIComponent(slug) + '&published=eq.true&limit=1', {
+    // download_url / buy_url are intentionally NOT public columns (locked in
+    // the database), so request only the safe display columns here.
+    var PCOLS = 'id,slug,title,tagline,banner_url,price,original_price,video_url,description,steps,published,sort,status,show_kofi';
+    fetch(URL + '/rest/v1/products?select=' + PCOLS + '&slug=eq.' + encodeURIComponent(slug) + '&published=eq.true&limit=1', {
       headers: { apikey: KEY, Authorization: 'Bearer ' + KEY }
     }).then((r) => r.json()).then((rows) => {
       const row = rows && rows[0];

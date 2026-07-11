@@ -228,12 +228,26 @@ class Component extends DCLogic {
     }).then((r) => r.json()).then((rows) => {
       if (rows && rows[0] && rows[0].shop_status === 'down') { window.location.replace('/shop'); return; }
     }).catch(() => {});
-    fetch(URL + '/rest/v1/products?select=*&slug=eq.' + encodeURIComponent(slug) + '&published=eq.true&limit=1', {
+    // download_url / buy_url are NOT public columns (locked in the database so
+    // paid files can't be read for free). Read only the safe display columns.
+    const PCOLS = 'id,slug,title,tagline,banner_url,price,original_price,video_url,description,steps,published,sort,status,show_kofi';
+    fetch(URL + '/rest/v1/products?select=' + PCOLS + '&slug=eq.' + encodeURIComponent(slug) + '&published=eq.true&limit=1', {
       headers: { apikey: KEY, Authorization: 'Bearer ' + KEY }
     }).then((r) => r.json()).then((rows) => {
       const row = rows && rows[0];
       if (!row) { this.setState({ notFound: true }); return; }
       this.setState({ product: row });
+      // For FREE products, the delivery link is fetched through a locked RPC
+      // that only ever returns URLs for free/published/active products.
+      if (!(row.price > 0)) {
+        fetch(URL + '/rest/v1/rpc/free_download_url', {
+          method: 'POST',
+          headers: { apikey: KEY, Authorization: 'Bearer ' + KEY, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ p_slug: slug })
+        }).then((r) => r.json()).then((u) => {
+          if (typeof u === 'string' && u) this.setState({ downloadUrl: u });
+        }).catch(() => {});
+      }
     }).catch(() => this.setState({ notFound: true }));
 
     // Delegated listeners survive runtime re-renders (nodes get replaced).
@@ -422,7 +436,7 @@ class Component extends DCLogic {
       showUnavail: unavail,
       unavailTitle: status === 'coming_soon' ? 'ළඟදීම එනවා!' : 'තාවකාලිකව වසා ඇත',
       backHref: 'Product.dc.html?slug=' + encodeURIComponent(this._slug || raw.slug),
-      downloadHref: raw.download_url || raw.buy_url || '#',
+      downloadHref: this.state.downloadUrl || '#',
       formIntro: isPaid
         ? 'ගෙවීමට කලින් පහළ විස්තර පුරවන්න. Product එක එවන්නේ මේ විස්තර වලට යි.'
         : 'මේ product එක නොමිලේ! Download කරගන්න පහළ විස්තර පුරවන්න.',

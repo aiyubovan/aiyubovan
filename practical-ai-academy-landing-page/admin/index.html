@@ -473,7 +473,7 @@ async function loadAll() {
     db.from('weeks').select('*').order('sort'),
     db.from('testimonials').select('*').order('sort'),
     db.from('faqs').select('*').order('sort'),
-    db.from('products').select('*').order('sort'),
+    db.rpc('admin_products'),
     db.from('orders').select('*').order('created_at', { ascending: false }),
     db.from('coupons').select('*').order('created_at'),
   ]);
