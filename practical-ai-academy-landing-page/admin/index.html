@@ -170,7 +170,7 @@
 
     <div id="testimonialsView" class="view card hidden">
       <h2>⭐ Reviews (Testimonials)</h2>
-      <input type="text" class="filter" id="testimonialsFilter" placeholder="Search by name, city…">
+      <input type="text" class="filter" id="testimonialsFilter" placeholder="Search by name, role…">
       <div id="testimonialsList"></div>
       <button class="btn ghost small" onclick="addRow('testimonials')">+ Add a review</button>
     </div>
@@ -562,7 +562,7 @@ async function saveSettings() {
 /* ---------------- list editors ---------------- */
 const FIELDS = {
   weeks: [['n', 'No. (e.g. 01)', 'input'], ['title', 'Title', 'input'], ['line', 'Small line (English)', 'input']],
-  testimonials: [['name', 'Name', 'input'], ['role', 'Role', 'input'], ['city', 'City', 'input'], ['quote', 'Review text', 'textarea']],
+  testimonials: [['name', 'Name', 'input'], ['role', 'Role', 'input'], ['quote', 'Review text', 'textarea']],
   faqs: [['q', 'Question', 'input'], ['a', 'Answer', 'textarea']],
 };
 

@@ -94,14 +94,14 @@ window.PA_CONTENT = {
      so put your best 6 at the top of this list.
      ---------------------------------------------------------- */
   testimonials: [
-    { initial: 'N', name: 'Nadeesha Perera', role: 'School Teacher', city: 'Kandy', quote: 'I used to feel lost with technology. Now I plan a whole week of lessons in minutes and my students love the difference.' },
-    { initial: 'K', name: 'Kasun Fernando', role: 'Marketing Executive', city: 'Colombo', quote: 'The classes are simple and practical. I use these tools at work every single day now, and my manager has noticed.' },
-    { initial: 'D', name: 'Dilani Jayawardena', role: 'University Student', city: 'Galle', quote: 'Everything is explained in Sinhala, step by step. For the first time, AI actually makes sense to me.' },
-    { initial: 'R', name: 'Roshan Silva', role: 'Small Business Owner', city: 'Negombo', quote: 'I save at least two hours a day on emails and content. This course paid for itself in the first week.' },
-    { initial: 'I', name: 'Ishara Bandara', role: 'Government Officer', city: 'Kurunegala', quote: 'Friendly, patient teaching with real examples. I was nervous at first, but the community keeps me going.' },
-    { initial: 'T', name: 'Tharindu Wickramasinghe', role: 'Freelancer', city: 'Matara', quote: 'Worth every rupee. The notes and recordings mean I never miss anything, even on my busiest days.' },
-    { initial: 'S', name: 'Sanduni Rathnayake', role: 'Bank Officer', city: 'Anuradhapura', quote: 'I write reports and customer letters in half the time now. My colleagues keep asking me how I do it.' },
-    { initial: 'C', name: 'Chamara Gunasekara', role: 'Shop Owner', city: 'Ratnapura', quote: 'I never thought AI was for someone like me. Now I make all my product posts and price lists with it.' },
+    { initial: 'N', name: 'Nadeesha Perera', role: 'School Teacher', quote: 'I used to feel lost with technology. Now I plan a whole week of lessons in minutes and my students love the difference.' },
+    { initial: 'K', name: 'Kasun Fernando', role: 'Marketing Executive', quote: 'The classes are simple and practical. I use these tools at work every single day now, and my manager has noticed.' },
+    { initial: 'D', name: 'Dilani Jayawardena', role: 'University Student', quote: 'Everything is explained in Sinhala, step by step. For the first time, AI actually makes sense to me.' },
+    { initial: 'R', name: 'Roshan Silva', role: 'Small Business Owner', quote: 'I save at least two hours a day on emails and content. This course paid for itself in the first week.' },
+    { initial: 'I', name: 'Ishara Bandara', role: 'Government Officer', quote: 'Friendly, patient teaching with real examples. I was nervous at first, but the community keeps me going.' },
+    { initial: 'T', name: 'Tharindu Wickramasinghe', role: 'Freelancer', quote: 'Worth every rupee. The notes and recordings mean I never miss anything, even on my busiest days.' },
+    { initial: 'S', name: 'Sanduni Rathnayake', role: 'Bank Officer', quote: 'I write reports and customer letters in half the time now. My colleagues keep asking me how I do it.' },
+    { initial: 'C', name: 'Chamara Gunasekara', role: 'Shop Owner', quote: 'I never thought AI was for someone like me. Now I make all my product posts and price lists with it.' },
   ],
 
   /* ----------------------------------------------------------
@@ -162,7 +162,7 @@ window.PA_CONTENT = {
   Promise.all([
     get('site_settings?id=eq.1&limit=1'),
     get('weeks?select=n,title,line&order=sort.asc'),
-    get('testimonials?select=initial,name,role,city,quote&order=sort.asc'),
+    get('testimonials?select=initial,name,role,quote&order=sort.asc'),
     get('faqs?select=q,a,page&order=sort.asc')
   ]).then(function (res) {
     var st = res[0] && res[0][0];
